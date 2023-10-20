@@ -1,6 +1,6 @@
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
-import { baseColumns } from "./commonColumns";
+import { baseColumns, dictionaryColumns } from "./commonColumns";
 
 export const purchases = mysqlTable(
   "purchases",
@@ -13,5 +13,16 @@ export const purchases = mysqlTable(
   },
   (purchase) => ({
     idIdx: index("id_idx").on(purchase.id),
+  }),
+);
+
+export const purchaseTypes = mysqlTable(
+  "purchaseTypes",
+  {
+    ...dictionaryColumns,
+    ...baseColumns,
+  },
+  (purchaseType) => ({
+    idIdx: index("id_idx").on(purchaseType.id),
   }),
 );
