@@ -2,14 +2,14 @@ import { index, mysqlTable } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 
-export const ClientAppDictionaries = mysqlTable(
-  "ClientAppDictionaries",
+export const clientAppDictionaries = mysqlTable(
+  "clientAppDictionaries",
   {
     ...dictionaryColumns,
     ...baseColumns,
   },
-  (ClientAppDictionary) => ({
-    idIdx: index("id_idx").on(ClientAppDictionary.id),
+  (clientAppDictionary) => ({
+    idIdx: index("id_idx").on(clientAppDictionary.id),
   }),
 );
 
