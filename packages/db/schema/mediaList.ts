@@ -31,6 +31,7 @@ export const mediaListMedias = mysqlTable(
 export const meidaListTypes = mysqlTable(
   "meidaListTypes",
   {
+    ...dictionaryColumns,
     ...baseColumns,
   },
   (meidaListType) => ({
