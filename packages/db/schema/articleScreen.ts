@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
@@ -18,6 +19,13 @@ export const articleScreens = mysqlTable(
   }),
 );
 
+export const articleScreensRelations = relations(
+  articleScreens,
+  ({ many }) => ({
+    articleScreenImages: many(articleScreenImages),
+  }),
+);
+
 export const articleScreenImages = mysqlTable(
   "articleScreenImages",
   {
@@ -29,5 +37,15 @@ export const articleScreenImages = mysqlTable(
   },
   (articleScreenImage) => ({
     idIdx: index("id_idx").on(articleScreenImage.id),
+  }),
+);
+
+export const articleScreenImagesRelations = relations(
+  articleScreenImages,
+  ({ one }) => ({
+    articleScreen: one(articleScreens, {
+      fields: [articleScreenImages.articleScreenId],
+      references: [articleScreens.id],
+    }),
   }),
 );
