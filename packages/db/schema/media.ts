@@ -1,6 +1,8 @@
+import { relations } from "drizzle-orm";
 import { boolean, index, int, varchar } from "drizzle-orm/mysql-core";
 
 import { mySqlTable } from "./_table";
+import { mediaCastMembers } from "./cast";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 
 export const medias = mySqlTable(
@@ -20,6 +22,10 @@ export const medias = mySqlTable(
     idIdx: index("id_idx").on(media.id),
   }),
 );
+
+export const mediasRelations = relations(medias, ({ many }) => ({
+  mediaCastMembers: many(mediaCastMembers),
+}));
 
 export const videoContents = mySqlTable(
   "videoContents",

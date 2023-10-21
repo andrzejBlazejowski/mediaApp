@@ -4,16 +4,13 @@ import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { mySqlTable } from "./_table";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { countries } from "./dictionary";
+import { images } from "./image";
+import { medias } from "./media";
 
 export const castMembers = mySqlTable(
   "castMembers",
   {
-    firstName: varchar("firstName", { length: 255 }),
-    middleName: varchar("middleName", { length: 255 }),
-    lastName: varchar("lastName", { length: 255 }),
-    birthDate: varchar("birthDate", { length: 255 }),
-    sex: varchar("sex", { length: 255 }),
-
+    peopleId: varchar("peopleId", { length: 255 }),
     countryId: varchar("countryId", { length: 255 }),
     castRoleId: varchar("castRoleId", { length: 255 }),
 
@@ -24,9 +21,24 @@ export const castMembers = mySqlTable(
   }),
 );
 
-export const castMembersRelations = relations(castMembers, ({ many }) => ({
-  countries: many(countries),
-  castRoles: many(castRoles),
+export const castMembersRelations = relations(castMembers, ({ one, many }) => ({
+  countries: one(countries, {
+    fields: [castMembers.countryId],
+    references: [countries.id],
+  }),
+  castRoles: one(castRoles, {
+    fields: [castMembers.castRoleId],
+    references: [castRoles.id],
+  }),
+  castMemberImages: one(castMemberImages, {
+    fields: [castMembers.id],
+    references: [castMemberImages.id],
+  }),
+  people: one(people, {
+    fields: [castMembers.peopleId],
+    references: [people.id],
+  }),
+  mediaCastMembers: many(mediaCastMembers),
 }));
 
 export const castMemberImages = mysqlTable(
@@ -43,6 +55,20 @@ export const castMemberImages = mysqlTable(
   }),
 );
 
+export const castMemberImagesRelations = relations(
+  castMemberImages,
+  ({ one }) => ({
+    castMembers: one(castMembers, {
+      fields: [castMemberImages.castMemberId],
+      references: [castMembers.id],
+    }),
+    images: one(images, {
+      fields: [castMemberImages.imageId],
+      references: [images.id],
+    }),
+  }),
+);
+
 export const castRoles = mysqlTable(
   "castRoles",
   {
@@ -54,6 +80,10 @@ export const castRoles = mysqlTable(
   }),
 );
 
+export const castRolesRelations = relations(castRoles, ({ many }) => ({
+  castMembers: many(castMembers),
+}));
+
 export const mediaCastMembers = mysqlTable(
   "mediaCastMembers",
   {
@@ -64,6 +94,20 @@ export const mediaCastMembers = mysqlTable(
   },
   (mediaCastMember) => ({
     idIdx: index("id_idx").on(mediaCastMember.id),
+  }),
+);
+
+export const mediaCastMembersRelations = relations(
+  mediaCastMembers,
+  ({ one }) => ({
+    medias: one(medias, {
+      fields: [mediaCastMembers.mediaId],
+      references: [medias.id],
+    }),
+    castMembers: one(castMembers, {
+      fields: [mediaCastMembers.castMemberId],
+      references: [castMembers.id],
+    }),
   }),
 );
 
@@ -83,3 +127,10 @@ export const people = mySqlTable(
     idIdx: index("id_idx").on(person.id),
   }),
 );
+
+export const peopleRelations = relations(people, ({ one }) => ({
+  castMembers: one(castMembers, {
+    fields: [people.id],
+    references: [castMembers.peopleId],
+  }),
+}));

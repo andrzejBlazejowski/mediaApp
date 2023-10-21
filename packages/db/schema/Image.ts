@@ -3,6 +3,7 @@ import { index, varchar } from "drizzle-orm/mysql-core";
 
 import { mySqlTable } from "./_table";
 import { brandingImages } from "./branding";
+import { castMemberImages } from "./cast";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 
 export const images = mySqlTable(
@@ -21,4 +22,5 @@ export const images = mySqlTable(
 
 export const imagesRelations = relations(images, ({ many }) => ({
   brandingImages: many(brandingImages),
+  castMemberImages: many(castMemberImages),
 }));

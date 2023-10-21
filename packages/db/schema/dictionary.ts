@@ -1,5 +1,7 @@
+import { relations } from "drizzle-orm";
 import { index, mysqlTable } from "drizzle-orm/mysql-core";
 
+import { castMembers } from "./cast";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 
 export const clientAppDictionaries = mysqlTable(
@@ -34,3 +36,7 @@ export const countries = mysqlTable(
     idIdx: index("id_idx").on(country.id),
   }),
 );
+
+export const countriesRelations = relations(countries, ({ many }) => ({
+  castMembers: many(castMembers),
+}));
