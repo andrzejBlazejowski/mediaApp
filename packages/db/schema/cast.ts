@@ -45,3 +45,20 @@ export const mediaCastMembers = mysqlTable(
     idIdx: index("id_idx").on(mediaCastMember.id),
   }),
 );
+
+export const people = mySqlTable(
+  "people",
+  {
+    firstName: varchar("firstName", { length: 255 }),
+    middleName: varchar("middleName", { length: 255 }),
+    lastName: varchar("lastName", { length: 255 }),
+    birthDate: varchar("birthDate", { length: 255 }),
+    deathDate: varchar("deathDate", { length: 255 }),
+    sex: varchar("sex", { length: 255 }),
+
+    ...baseColumns,
+  },
+  (person) => ({
+    idIdx: index("id_idx").on(person.id),
+  }),
+);
