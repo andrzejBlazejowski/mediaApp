@@ -22,6 +22,20 @@ export const castMembers = mySqlTable(
   }),
 );
 
+export const castMemberImages = mysqlTable(
+  "castMemberImages",
+  {
+    castMemberId: varchar("castMemberId", { length: 255 }),
+    imageId: varchar("imageId", { length: 255 }),
+
+    ...dictionaryColumns,
+    ...baseColumns,
+  },
+  (castMemberImage) => ({
+    idIdx: index("id_idx").on(castMemberImage.id),
+  }),
+);
+
 export const castRoles = mysqlTable(
   "castRoles",
   {

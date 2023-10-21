@@ -41,13 +41,16 @@ export const menuTypes = mysqlTable(
   }),
 );
 
-export const menuImages = mysqlTable(
-  "menuImages",
+export const menuLinkImages = mysqlTable(
+  "menuLinkImages",
   {
+    menuLinkId: varchar("menuLinkId", { length: 255 }),
+    imageId: varchar("imageId", { length: 255 }),
+
     ...dictionaryColumns,
     ...baseColumns,
   },
-  (menuImage) => ({
-    idIdx: index("id_idx").on(menuImage.id),
+  (menuLinkImage) => ({
+    idIdx: index("id_idx").on(menuLinkImage.id),
   }),
 );

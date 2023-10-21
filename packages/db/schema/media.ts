@@ -6,8 +6,6 @@ import { baseColumns, dictionaryColumns } from "./commonColumns";
 export const medias = mySqlTable(
   "media",
   {
-    ...baseColumns,
-
     name: varchar("name", { length: 255 }),
     shortDescription: varchar("shortDescription", { length: 500 }),
     longDescription: varchar("longDescription", { length: 2500 }),
@@ -15,6 +13,8 @@ export const medias = mySqlTable(
     isFree: boolean("isFree").default(false),
 
     mediaCategoryId: varchar("mediaCategoryId", { length: 255 }),
+
+    ...baseColumns,
   },
   (media) => ({
     idIdx: index("id_idx").on(media.id),
@@ -24,12 +24,12 @@ export const medias = mySqlTable(
 export const videoContents = mySqlTable(
   "videoContents",
   {
-    ...baseColumns,
-
     url: varchar("url", { length: 1000 }),
 
     videoContentTypeId: varchar("videoContentTypeId", { length: 255 }),
     mediaId: varchar("mediaId", { length: 255 }),
+
+    ...baseColumns,
   },
   (videoContent) => ({
     idIdx: index("id_idx").on(videoContent.id),
@@ -61,14 +61,12 @@ export const mediaCategories = mySqlTable(
 export const mediaImages = mySqlTable(
   "mediaImages",
   {
-    ...baseColumns,
-    ...dictionaryColumns,
-
-    url: varchar("url", { length: 255 }),
-    alt: varchar("alt", { length: 255 }),
-
     mediaId: varchar("mediaId", { length: 255 }),
     mediaImageTypeId: varchar("mediaImageTypeId", { length: 255 }),
+    imageId: varchar("imageId", { length: 255 }),
+
+    ...baseColumns,
+    ...dictionaryColumns,
   },
   (mediaImage) => ({
     idIdx: index("id_idx").on(mediaImage.id),
