@@ -15,6 +15,11 @@ export const brandings = mysqlTable(
   }),
 );
 
+export const brandingsRelations = relations(brandings, ({ many }) => ({
+  brandingColors: many(brandingColors),
+  brandingImages: many(brandingImages),
+}));
+
 export const brandingColors = mysqlTable(
   "brandingColors",
   {
@@ -31,13 +36,16 @@ export const brandingColors = mysqlTable(
   }),
 );
 
-export const brandingColorsRelations = relations(
-  brandingColors,
-  ({ many }) => ({
-    brandings: many(brandings),
-    brandingColorTypes: many(brandingColorTypes),
+export const brandingColorsRelations = relations(brandingColors, ({ one }) => ({
+  branding: one(brandings, {
+    fields: [brandingColors.brandingId],
+    references: [brandings.id],
   }),
-);
+  brandingColorType: one(brandingColorTypes, {
+    fields: [brandingColors.brandingColorTypeId],
+    references: [brandingColorTypes.id],
+  }),
+}));
 
 export const brandingColorTypes = mysqlTable(
   "brandingColorTypes",
@@ -49,6 +57,13 @@ export const brandingColorTypes = mysqlTable(
   },
   (brandingColorType) => ({
     idIdx: index("id_idx").on(brandingColorType.id),
+  }),
+);
+
+export const brandingColorTypesRelations = relations(
+  brandingColorTypes,
+  ({ many }) => ({
+    brandingColors: many(brandingColors),
   }),
 );
 
@@ -67,14 +82,20 @@ export const brandingImages = mysqlTable(
   }),
 );
 
-export const brandingImagesRelations = relations(
-  brandingImages,
-  ({ many }) => ({
-    brandings: many(brandings),
-    brandingImageTypes: many(brandingImageTypes),
-    images: many(images),
+export const brandingImagesRelations = relations(brandingImages, ({ one }) => ({
+  branding: one(brandings, {
+    fields: [brandingImages.brandingId],
+    references: [brandings.id],
   }),
-);
+  image: one(images, {
+    fields: [brandingImages.imageId],
+    references: [images.id],
+  }),
+  brandingImageType: one(brandingImageTypes, {
+    fields: [brandingImages.brandingImageTypeId],
+    references: [brandingImageTypes.id],
+  }),
+}));
 
 export const brandingImageTypes = mysqlTable(
   "brandingImageTypes",
@@ -86,5 +107,12 @@ export const brandingImageTypes = mysqlTable(
   },
   (brandingImageType) => ({
     idIdx: index("id_idx").on(brandingImageType.id),
+  }),
+);
+
+export const brandingImageTypesRelations = relations(
+  brandingImageTypes,
+  ({ many }) => ({
+    brandingImages: many(brandingImages),
   }),
 );

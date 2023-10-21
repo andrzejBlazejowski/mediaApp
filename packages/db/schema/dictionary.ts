@@ -23,3 +23,14 @@ export const backOfficeDictionaries = mysqlTable(
     idIdx: index("id_idx").on(backOfficeDictionary.id),
   }),
 );
+
+export const countries = mysqlTable(
+  "countries",
+  {
+    ...dictionaryColumns,
+    ...baseColumns,
+  },
+  (country) => ({
+    idIdx: index("id_idx").on(country.id),
+  }),
+);
