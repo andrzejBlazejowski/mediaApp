@@ -33,6 +33,7 @@ export const brandingColorTypes = mysqlTable(
   "brandingColorTypes",
   {
     key: varchar("key", { length: 255 }),
+
     ...dictionaryColumns,
     ...baseColumns,
   },

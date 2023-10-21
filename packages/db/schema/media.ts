@@ -24,8 +24,7 @@ export const medias = mySqlTable(
 export const videoContents = mySqlTable(
   "videoContents",
   {
-    url: varchar("url", { length: 1000 }),
-
+    videoId: varchar("videoId", { length: 255 }),
     videoContentTypeId: varchar("videoContentTypeId", { length: 255 }),
     mediaId: varchar("mediaId", { length: 255 }),
 

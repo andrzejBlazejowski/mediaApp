@@ -6,11 +6,11 @@ import { baseColumns, dictionaryColumns } from "./commonColumns";
 export const images = mySqlTable(
   "images",
   {
-    ...baseColumns,
-    ...dictionaryColumns,
-
     url: varchar("url", { length: 255 }),
     alt: varchar("alt", { length: 255 }),
+
+    ...baseColumns,
+    ...dictionaryColumns,
   },
   (image) => ({
     idIdx: index("id_idx").on(image.id),
