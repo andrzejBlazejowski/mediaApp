@@ -22,19 +22,19 @@ export const castMembers = mySqlTable(
 );
 
 export const castMembersRelations = relations(castMembers, ({ one, many }) => ({
-  countries: one(countries, {
+  country: one(countries, {
     fields: [castMembers.countryId],
     references: [countries.id],
   }),
-  castRoles: one(castRoles, {
+  castRole: one(castRoles, {
     fields: [castMembers.castRoleId],
     references: [castRoles.id],
   }),
-  castMemberImages: one(castMemberImages, {
+  castMemberImage: one(castMemberImages, {
     fields: [castMembers.id],
     references: [castMemberImages.id],
   }),
-  people: one(people, {
+  person: one(people, {
     fields: [castMembers.peopleId],
     references: [people.id],
   }),
@@ -58,11 +58,11 @@ export const castMemberImages = mysqlTable(
 export const castMemberImagesRelations = relations(
   castMemberImages,
   ({ one }) => ({
-    castMembers: one(castMembers, {
+    castMember: one(castMembers, {
       fields: [castMemberImages.castMemberId],
       references: [castMembers.id],
     }),
-    images: one(images, {
+    image: one(images, {
       fields: [castMemberImages.imageId],
       references: [images.id],
     }),
@@ -100,11 +100,11 @@ export const mediaCastMembers = mysqlTable(
 export const mediaCastMembersRelations = relations(
   mediaCastMembers,
   ({ one }) => ({
-    medias: one(medias, {
+    media: one(medias, {
       fields: [mediaCastMembers.mediaId],
       references: [medias.id],
     }),
-    castMembers: one(castMembers, {
+    castMember: one(castMembers, {
       fields: [mediaCastMembers.castMemberId],
       references: [castMembers.id],
     }),
@@ -129,7 +129,7 @@ export const people = mySqlTable(
 );
 
 export const peopleRelations = relations(people, ({ one }) => ({
-  castMembers: one(castMembers, {
+  castMember: one(castMembers, {
     fields: [people.id],
     references: [castMembers.peopleId],
   }),
