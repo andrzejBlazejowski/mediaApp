@@ -4,6 +4,7 @@ import { boolean, index, int, varchar } from "drizzle-orm/mysql-core";
 import { mySqlTable } from "./_table";
 import { mediaCastMembers } from "./cast";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { videos } from "./video";
 
 export const medias = mySqlTable(
   "media",
@@ -23,8 +24,12 @@ export const medias = mySqlTable(
   }),
 );
 
-export const mediasRelations = relations(medias, ({ many }) => ({
+export const mediasRelations = relations(medias, ({ many, one }) => ({
   mediaCastMembers: many(mediaCastMembers),
+  mediaCategory: one(mediaCategories, {
+    fields: [medias.mediaCategoryId],
+    references: [mediaCategories.id],
+  }),
 }));
 
 export const videoContents = mySqlTable(
@@ -40,6 +45,10 @@ export const videoContents = mySqlTable(
     idIdx: index("id_idx").on(videoContent.id),
   }),
 );
+
+export const videoContentsRelations = relations(videoContents, ({ many }) => ({
+  video: many(videos),
+}));
 
 export const videoContentTypes = mySqlTable(
   "videoContentTypes",
@@ -60,6 +69,12 @@ export const mediaCategories = mySqlTable(
   },
   (mediaCategory) => ({
     idIdx: index("id_idx").on(mediaCategory.id),
+  }),
+);
+export const mediaCategoriesRelations = relations(
+  mediaCategories,
+  ({ many }) => ({
+    medias: many(medias),
   }),
 );
 
