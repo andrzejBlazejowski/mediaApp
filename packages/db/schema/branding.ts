@@ -1,6 +1,8 @@
+import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { images } from "./image";
 
 export const brandings = mysqlTable(
   "brandings",
@@ -29,6 +31,14 @@ export const brandingColors = mysqlTable(
   }),
 );
 
+export const brandingColorsRelations = relations(
+  brandingColors,
+  ({ many }) => ({
+    brandings: many(brandings),
+    brandingColorTypes: many(brandingColorTypes),
+  }),
+);
+
 export const brandingColorTypes = mysqlTable(
   "brandingColorTypes",
   {
@@ -54,6 +64,15 @@ export const brandingImages = mysqlTable(
   },
   (brandingImage) => ({
     idIdx: index("id_idx").on(brandingImage.id),
+  }),
+);
+
+export const brandingImagesRelations = relations(
+  brandingImages,
+  ({ many }) => ({
+    brandings: many(brandings),
+    brandingImageTypes: many(brandingImageTypes),
+    images: many(images),
   }),
 );
 
