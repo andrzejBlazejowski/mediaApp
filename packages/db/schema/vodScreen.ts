@@ -1,6 +1,8 @@
+import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { screens } from "./screen";
 
 export const vodScreens = mysqlTable(
   "vodScreens",
@@ -14,6 +16,14 @@ export const vodScreens = mysqlTable(
     idIdx: index("id_idx").on(vodScreen.id),
   }),
 );
+
+export const vodScreensRelations = relations(vodScreens, ({ many, one }) => ({
+  screens: many(screens),
+  vodScreenType: one(vodScreenTypes, {
+    fields: [vodScreens.vodScreenTypeId],
+    references: [vodScreenTypes.id],
+  }),
+}));
 
 export const vodScreenTypes = mysqlTable(
   "vodScreenTypes",

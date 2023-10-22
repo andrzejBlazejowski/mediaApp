@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { screens } from "./screen";
 
 export const articleScreens = mysqlTable(
   "articleScreens",
@@ -23,6 +24,7 @@ export const articleScreensRelations = relations(
   articleScreens,
   ({ many }) => ({
     articleScreenImages: many(articleScreenImages),
+    screens: many(screens),
   }),
 );
 

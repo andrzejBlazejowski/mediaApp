@@ -1,8 +1,10 @@
 import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
+import { articleScreens } from "./articleScreen";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { menuLinks } from "./menu";
+import { vodScreens } from "./vodScreen";
 
 export const screens = mysqlTable(
   "screens",
@@ -20,8 +22,16 @@ export const screens = mysqlTable(
   }),
 );
 
-export const screensRelations = relations(screens, ({ many }) => ({
+export const screensRelations = relations(screens, ({ many, one }) => ({
   menuLinks: many(menuLinks),
+  screenType: one(screenTypes, {
+    fields: [screens.screenTypeId],
+    references: [screenTypes.id],
+  }),
+  screenContent: one(articleScreens || vodScreens, {
+    fields: [screens.screenContentId],
+    references: [articleScreens.id || vodScreens.id],
+  }),
 }));
 
 export const screenTypes = mysqlTable(
@@ -34,3 +44,7 @@ export const screenTypes = mysqlTable(
     idIdx: index("id_idx").on(screenType.id),
   }),
 );
+
+export const screenTypesRelations = relations(screenTypes, ({ many }) => ({
+  screens: many(screens),
+}));
