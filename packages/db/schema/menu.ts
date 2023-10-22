@@ -1,11 +1,16 @@
+import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { images } from "./image";
+import { menuPlatforms } from "./platform";
+import { screens } from "./screen";
 
 export const menus = mysqlTable(
   "menus",
   {
-    platformId: varchar("platformId", { length: 255 }),
+    menuPlatformId: varchar("platformId", { length: 255 }),
+    menuTypeId: varchar("menuTypeId", { length: 255 }),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -15,10 +20,22 @@ export const menus = mysqlTable(
   }),
 );
 
+export const menusRelations = relations(menus, ({ many, one }) => ({
+  menuPlatform: one(menuPlatforms, {
+    fields: [menus.menuPlatformId],
+    references: [menuPlatforms.id],
+  }),
+  menuType: one(menuTypes, {
+    fields: [menus.menuTypeId],
+    references: [menuTypes.id],
+  }),
+  menuLinks: many(menuLinks),
+}));
+
 export const menuLinks = mysqlTable(
   "menuLinks",
   {
-    menuImageId: varchar("menuImageId", { length: 255 }),
+    menuLinkImageId: varchar("menuLinkImageId", { length: 255 }),
     destinationScreenId: varchar("destinationScreenId", { length: 255 }),
     menuId: varchar("menuId", { length: 255 }),
 
@@ -30,6 +47,18 @@ export const menuLinks = mysqlTable(
   }),
 );
 
+export const menuLinksRelations = relations(menuLinks, ({ one }) => ({
+  menu: one(menus, { fields: [menuLinks.menuId], references: [menus.id] }),
+  menuLinkImage: one(menuLinkImages, {
+    fields: [menuLinks.menuLinkImageId],
+    references: [menuLinkImages.id],
+  }),
+  destinationScreen: one(screens, {
+    fields: [menuLinks.destinationScreenId],
+    references: [screens.id],
+  }),
+}));
+
 export const menuTypes = mysqlTable(
   "menuTypes",
   {
@@ -40,6 +69,10 @@ export const menuTypes = mysqlTable(
     idIdx: index("id_idx").on(menuType.id),
   }),
 );
+
+export const menuTypesRelations = relations(menuTypes, ({ many }) => ({
+  menus: many(menus),
+}));
 
 export const menuLinkImages = mysqlTable(
   "menuLinkImages",
@@ -54,3 +87,14 @@ export const menuLinkImages = mysqlTable(
     idIdx: index("id_idx").on(menuLinkImage.id),
   }),
 );
+
+export const menuLinkImagesRelations = relations(menuLinkImages, ({ one }) => ({
+  menuLink: one(menuLinks, {
+    fields: [menuLinkImages.menuLinkId],
+    references: [menuLinks.id],
+  }),
+  image: one(images, {
+    fields: [menuLinkImages.imageId],
+    references: [images.id],
+  }),
+}));

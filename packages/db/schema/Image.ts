@@ -6,6 +6,7 @@ import { brandingImages } from "./branding";
 import { castMemberImages } from "./cast";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { mediaImages } from "./media";
+import { menuLinkImages } from "./menu";
 
 export const images = mySqlTable(
   "images",
@@ -25,4 +26,5 @@ export const imagesRelations = relations(images, ({ many }) => ({
   brandingImages: many(brandingImages),
   castMemberImages: many(castMemberImages),
   mediaImages: many(mediaImages),
+  menuLinkImages: many(menuLinkImages),
 }));

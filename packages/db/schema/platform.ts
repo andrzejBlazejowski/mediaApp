@@ -1,6 +1,8 @@
+import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { menus } from "./menu";
 
 export const platforms = mysqlTable(
   "platforms",
@@ -25,3 +27,7 @@ export const menuPlatforms = mysqlTable(
     idIdx: index("id_idx").on(menuPlatform.id),
   }),
 );
+
+export const menuPlatformsRelations = relations(menuPlatforms, ({ many }) => ({
+  menus: many(menus),
+}));
