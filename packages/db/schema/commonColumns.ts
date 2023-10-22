@@ -6,14 +6,18 @@ export const baseColumns = {
   createdAt: timestamp("createdAt", {
     mode: "date",
     fsp: 3,
-  }).default(sql`CURRENT_TIMESTAMP(3)`),
+  })
+    .default(sql`CURRENT_TIMESTAMP(3)`)
+    .notNull(),
   createdBy: varchar("createdBy", { length: 255 }),
   updatedAt: timestamp("updatedAt", {
     mode: "date",
     fsp: 3,
-  }).default(sql`CURRENT_TIMESTAMP(3)`),
+  })
+    .default(sql`CURRENT_TIMESTAMP(3)`)
+    .notNull(),
   updatedBy: varchar("updatedBy", { length: 255 }),
-  isDeleted: boolean("isDeleted").default(false),
+  isDeleted: boolean("isDeleted").default(false).notNull(),
 };
 
 export const dictionaryColumns = {
