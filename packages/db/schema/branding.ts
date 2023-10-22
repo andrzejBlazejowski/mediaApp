@@ -25,8 +25,10 @@ export const brandingColors = mysqlTable(
   {
     value: varchar("value", { length: 255 }),
 
-    brandingId: varchar("brandingId", { length: 255 }),
-    brandingColorTypeId: varchar("brandingColorTypeId", { length: 255 }),
+    brandingId: varchar("brandingId", { length: 255 }).notNull(),
+    brandingColorTypeId: varchar("brandingColorTypeId", {
+      length: 255,
+    }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -50,7 +52,7 @@ export const brandingColorsRelations = relations(brandingColors, ({ one }) => ({
 export const brandingColorTypes = mysqlTable(
   "brandingColorTypes",
   {
-    key: varchar("key", { length: 255 }),
+    key: varchar("key", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -70,9 +72,11 @@ export const brandingColorTypesRelations = relations(
 export const brandingImages = mysqlTable(
   "brandingImages",
   {
-    brandingImageTypeId: varchar("brandingImageTypeId", { length: 255 }),
-    brandingId: varchar("brandingId", { length: 255 }),
-    imageId: varchar("imageId", { length: 255 }),
+    brandingImageTypeId: varchar("brandingImageTypeId", {
+      length: 255,
+    }).notNull(),
+    brandingId: varchar("brandingId", { length: 255 }).notNull(),
+    imageId: varchar("imageId", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -100,7 +104,7 @@ export const brandingImagesRelations = relations(brandingImages, ({ one }) => ({
 export const brandingImageTypes = mysqlTable(
   "brandingImageTypes",
   {
-    key: varchar("key", { length: 255 }),
+    key: varchar("key", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
