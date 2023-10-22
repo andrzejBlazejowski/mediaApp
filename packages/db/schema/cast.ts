@@ -44,8 +44,8 @@ export const castMembersRelations = relations(castMembers, ({ one, many }) => ({
 export const castMemberImages = mysqlTable(
   "castMemberImages",
   {
-    castMemberId: varchar("castMemberId", { length: 255 }),
-    imageId: varchar("imageId", { length: 255 }),
+    castMemberId: varchar("castMemberId", { length: 255 }).notNull(),
+    imageId: varchar("imageId", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -87,8 +87,8 @@ export const castRolesRelations = relations(castRoles, ({ many }) => ({
 export const mediaCastMembers = mysqlTable(
   "mediaCastMembers",
   {
-    mediaId: varchar("mediaId", { length: 255 }),
-    castMemberId: varchar("castMemberId", { length: 255 }),
+    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    castMemberId: varchar("castMemberId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },
@@ -114,9 +114,9 @@ export const mediaCastMembersRelations = relations(
 export const people = mySqlTable(
   "people",
   {
-    firstName: varchar("firstName", { length: 255 }),
+    firstName: varchar("firstName", { length: 255 }).notNull(),
     middleName: varchar("middleName", { length: 255 }),
-    lastName: varchar("lastName", { length: 255 }),
+    lastName: varchar("lastName", { length: 255 }).notNull(),
     birthDate: varchar("birthDate", { length: 255 }),
     deathDate: varchar("deathDate", { length: 255 }),
     sex: varchar("sex", { length: 255 }),
