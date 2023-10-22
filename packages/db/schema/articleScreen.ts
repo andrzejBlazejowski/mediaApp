@@ -7,8 +7,8 @@ import { screens } from "./screen";
 export const articleScreens = mysqlTable(
   "articleScreens",
   {
-    title: varchar("title", { length: 255 }),
-    content: varchar("content", { length: 5000 }),
+    title: varchar("title", { length: 255 }).notNull(),
+    content: varchar("content", { length: 5000 }).notNull(),
 
     articleScreenImageId: varchar("articleScreenImageId", { length: 255 }),
 
@@ -31,8 +31,8 @@ export const articleScreensRelations = relations(
 export const articleScreenImages = mysqlTable(
   "articleScreenImages",
   {
-    articleScreenId: varchar("articleScreenId", { length: 255 }),
-    imageId: varchar("imageId", { length: 255 }),
+    articleScreenId: varchar("articleScreenId", { length: 255 }).notNull(),
+    imageId: varchar("imageId", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
