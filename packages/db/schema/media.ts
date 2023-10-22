@@ -4,6 +4,7 @@ import { boolean, index, int, varchar } from "drizzle-orm/mysql-core";
 import { mySqlTable } from "./_table";
 import { mediaCastMembers } from "./cast";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { images } from "./image";
 import { videos } from "./video";
 
 export const medias = mySqlTable(
@@ -30,6 +31,9 @@ export const mediasRelations = relations(medias, ({ many, one }) => ({
     fields: [medias.mediaCategoryId],
     references: [mediaCategories.id],
   }),
+  mediaImages: many(mediaImages),
+  mediaViewImpressions: many(mediaViewImpressions),
+  videoContents: many(videoContents),
 }));
 
 export const videoContents = mySqlTable(
@@ -46,8 +50,19 @@ export const videoContents = mySqlTable(
   }),
 );
 
-export const videoContentsRelations = relations(videoContents, ({ many }) => ({
-  video: many(videos),
+export const videoContentsRelations = relations(videoContents, ({ one }) => ({
+  video: one(videos, {
+    fields: [videoContents.videoId],
+    references: [videos.id],
+  }),
+  videoContentType: one(videoContentTypes, {
+    fields: [videoContents.videoContentTypeId],
+    references: [videoContentTypes.id],
+  }),
+  media: one(medias, {
+    fields: [videoContents.mediaId],
+    references: [medias.id],
+  }),
 }));
 
 export const videoContentTypes = mySqlTable(
@@ -61,6 +76,13 @@ export const videoContentTypes = mySqlTable(
   }),
 );
 
+export const videoContentTypesRelations = relations(
+  videoContentTypes,
+  ({ many }) => ({
+    videoContents: many(videoContents),
+  }),
+);
+
 export const mediaCategories = mySqlTable(
   "mediaCategories",
   {
@@ -71,6 +93,7 @@ export const mediaCategories = mySqlTable(
     idIdx: index("id_idx").on(mediaCategory.id),
   }),
 );
+
 export const mediaCategoriesRelations = relations(
   mediaCategories,
   ({ many }) => ({
@@ -93,6 +116,18 @@ export const mediaImages = mySqlTable(
   }),
 );
 
+export const mediaImagesRelations = relations(mediaImages, ({ many, one }) => ({
+  medias: many(medias),
+  mediaImageType: one(mediaImageTypes, {
+    fields: [mediaImages.mediaImageTypeId],
+    references: [mediaImageTypes.id],
+  }),
+  image: one(images, {
+    fields: [mediaImages.imageId],
+    references: [images.id],
+  }),
+}));
+
 export const mediaImageTypes = mySqlTable(
   "mediaImageTypes",
   {
@@ -101,6 +136,13 @@ export const mediaImageTypes = mySqlTable(
   },
   (mediaImageType) => ({
     idIdx: index("id_idx").on(mediaImageType.id),
+  }),
+);
+
+export const mediaImageTypesRelations = relations(
+  mediaImageTypes,
+  ({ many }) => ({
+    mediaImages: many(mediaImages),
   }),
 );
 
@@ -115,5 +157,15 @@ export const mediaViewImpressions = mySqlTable(
   },
   (mediaViewImpression) => ({
     idIdx: index("id_idx").on(mediaViewImpression.id),
+  }),
+);
+
+export const mediaViewImpressionsRelations = relations(
+  mediaViewImpressions,
+  ({ one }) => ({
+    media: one(medias, {
+      fields: [mediaViewImpressions.mediaId],
+      references: [medias.id],
+    }),
   }),
 );
