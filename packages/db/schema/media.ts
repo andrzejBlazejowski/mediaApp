@@ -119,7 +119,10 @@ export const mediaImages = mySqlTable(
 );
 
 export const mediaImagesRelations = relations(mediaImages, ({ many, one }) => ({
-  medias: many(medias),
+  media: one(medias, {
+    fields: [mediaImages.mediaId],
+    references: [medias.id],
+  }),
   mediaImageType: one(mediaImageTypes, {
     fields: [mediaImages.mediaImageTypeId],
     references: [mediaImageTypes.id],

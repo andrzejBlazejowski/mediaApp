@@ -12,7 +12,8 @@ export const screens = mysqlTable(
     screenTypeId: varchar("screenTypeId", { length: 255 }).notNull(),
     //TODO:  need to think about that more...
     //TODO: manage screen content I want to set video OR audio OR Article content
-    screenContentId: varchar("screenContentId", { length: 255 }).notNull(),
+    articleScreenId: varchar("screenContentId", { length: 255 }),
+    vodScreenId: varchar("screenContentId", { length: 255 }),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -28,9 +29,13 @@ export const screensRelations = relations(screens, ({ many, one }) => ({
     fields: [screens.screenTypeId],
     references: [screenTypes.id],
   }),
-  screenContent: one(articleScreens || vodScreens, {
-    fields: [screens.screenContentId],
-    references: [articleScreens.id || vodScreens.id],
+  articleScreen: one(articleScreens, {
+    fields: [screens.articleScreenId],
+    references: [articleScreens.id],
+  }),
+  vodScreen: one(vodScreens, {
+    fields: [screens.vodScreenId],
+    references: [vodScreens.id],
   }),
 }));
 

@@ -32,7 +32,13 @@ export const menuPlatforms = mysqlTable(
   }),
 );
 
-export const menuPlatformsRelations = relations(menuPlatforms, ({ many }) => ({
-  menus: many(menus),
-  platforms: many(platforms),
+export const menuPlatformsRelations = relations(menuPlatforms, ({ one }) => ({
+  menu: one(menus, {
+    fields: [menuPlatforms.menuId],
+    references: [menus.id],
+  }),
+  platform: one(platforms, {
+    fields: [menuPlatforms.platformId],
+    references: [platforms.id],
+  }),
 }));
