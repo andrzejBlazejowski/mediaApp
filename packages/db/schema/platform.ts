@@ -15,6 +15,10 @@ export const platforms = mysqlTable(
   }),
 );
 
+export const platformsRelations = relations(platforms, ({ many }) => ({
+  menuPlatforms: many(menuPlatforms),
+}));
+
 export const menuPlatforms = mysqlTable(
   "menuPlatforms",
   {
@@ -30,4 +34,5 @@ export const menuPlatforms = mysqlTable(
 
 export const menuPlatformsRelations = relations(menuPlatforms, ({ many }) => ({
   menus: many(menus),
+  platforms: many(platforms),
 }));
