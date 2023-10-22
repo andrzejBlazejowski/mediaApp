@@ -11,7 +11,7 @@ import { menuLinkImages } from "./menu";
 export const images = mySqlTable(
   "images",
   {
-    url: varchar("url", { length: 255 }),
+    url: varchar("url", { length: 255 }).notNull(),
     alt: varchar("alt", { length: 255 }),
 
     ...baseColumns,

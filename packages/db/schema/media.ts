@@ -10,13 +10,13 @@ import { videos } from "./video";
 export const medias = mySqlTable(
   "media",
   {
-    name: varchar("name", { length: 255 }),
-    shortDescription: varchar("shortDescription", { length: 500 }),
+    name: varchar("name", { length: 255 }).notNull(),
+    shortDescription: varchar("shortDescription", { length: 500 }).notNull(),
     longDescription: varchar("longDescription", { length: 2500 }),
-    type: varchar("type", { length: 255 }),
-    isFree: boolean("isFree").default(false),
+    type: varchar("type", { length: 255 }).notNull(),
+    isFree: boolean("isFree").default(false).default(true).notNull(),
 
-    mediaCategoryId: varchar("mediaCategoryId", { length: 255 }),
+    mediaCategoryId: varchar("mediaCategoryId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },
@@ -39,9 +39,11 @@ export const mediasRelations = relations(medias, ({ many, one }) => ({
 export const videoContents = mySqlTable(
   "videoContents",
   {
-    videoId: varchar("videoId", { length: 255 }),
-    videoContentTypeId: varchar("videoContentTypeId", { length: 255 }),
-    mediaId: varchar("mediaId", { length: 255 }),
+    videoId: varchar("videoId", { length: 255 }).notNull(),
+    videoContentTypeId: varchar("videoContentTypeId", {
+      length: 255,
+    }).notNull(),
+    mediaId: varchar("mediaId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },
@@ -104,9 +106,9 @@ export const mediaCategoriesRelations = relations(
 export const mediaImages = mySqlTable(
   "mediaImages",
   {
-    mediaId: varchar("mediaId", { length: 255 }),
-    mediaImageTypeId: varchar("mediaImageTypeId", { length: 255 }),
-    imageId: varchar("imageId", { length: 255 }),
+    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    mediaImageTypeId: varchar("mediaImageTypeId", { length: 255 }).notNull(),
+    imageId: varchar("imageId", { length: 255 }).notNull(),
 
     ...baseColumns,
     ...dictionaryColumns,
@@ -149,9 +151,9 @@ export const mediaImageTypesRelations = relations(
 export const mediaViewImpressions = mySqlTable(
   "mediaViewImpressions",
   {
-    progress: int("progress"),
+    progress: int("progress").notNull(),
 
-    mediaId: varchar("mediaId", { length: 255 }),
+    mediaId: varchar("mediaId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },

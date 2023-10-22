@@ -22,8 +22,8 @@ export const platformsRelations = relations(platforms, ({ many }) => ({
 export const menuPlatforms = mysqlTable(
   "menuPlatforms",
   {
-    menuId: varchar("menuId", { length: 255 }),
-    platformId: varchar("platformId", { length: 255 }),
+    menuId: varchar("menuId", { length: 255 }).notNull(),
+    platformId: varchar("platformId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },

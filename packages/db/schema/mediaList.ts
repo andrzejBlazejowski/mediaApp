@@ -7,7 +7,7 @@ import { medias } from "./media";
 export const mediaLists = mysqlTable(
   "mediaLists",
   {
-    mediaListTypeId: varchar("mediaListTypeId", { length: 255 }),
+    mediaListTypeId: varchar("mediaListTypeId", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -28,8 +28,8 @@ export const mediaListsRelations = relations(mediaLists, ({ many, one }) => ({
 export const mediaListMedias = mysqlTable(
   "mediaListMedias",
   {
-    mediaId: varchar("mediaId", { length: 255 }),
-    mediaListId: varchar("mediaListId", { length: 255 }),
+    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    mediaListId: varchar("mediaListId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },

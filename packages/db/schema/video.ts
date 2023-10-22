@@ -7,7 +7,7 @@ import { videoContents } from "./media";
 export const videos = mysqlTable(
   "videos",
   {
-    url: varchar("url", { length: 255 }),
+    url: varchar("url", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,

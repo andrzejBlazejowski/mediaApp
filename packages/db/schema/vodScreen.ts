@@ -47,8 +47,8 @@ export const vodScreenTypesRelations = relations(
 export const vodScreenMediaLists = mysqlTable(
   "vodScreenMediaLists",
   {
-    vodScreenId: varchar("vodScreenId", { length: 255 }),
-    mediaListId: varchar("mediaListId", { length: 255 }),
+    vodScreenId: varchar("vodScreenId", { length: 255 }).notNull(),
+    mediaListId: varchar("mediaListId", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,

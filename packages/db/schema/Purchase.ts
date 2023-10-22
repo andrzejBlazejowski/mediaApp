@@ -8,9 +8,9 @@ import { medias } from "./media";
 export const purchases = mysqlTable(
   "purchases",
   {
-    purchaseTypeId: varchar("purchaseTypeId", { length: 255 }),
-    mediaId: varchar("mediaId", { length: 255 }),
-    userId: varchar("userId", { length: 255 }),
+    purchaseTypeId: varchar("purchaseTypeId", { length: 255 }).notNull(),
+    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    userId: varchar("userId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },
@@ -31,8 +31,8 @@ export const purchasesRelations = relations(purchases, ({ many, one }) => ({
 export const purchaseItems = mysqlTable(
   "purchaseItems",
   {
-    purchaseId: varchar("purchaseId", { length: 255 }),
-    mediaId: varchar("mediaId", { length: 255 }),
+    purchaseId: varchar("purchaseId", { length: 255 }).notNull(),
+    mediaId: varchar("mediaId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },

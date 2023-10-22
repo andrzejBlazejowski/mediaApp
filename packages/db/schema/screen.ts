@@ -9,10 +9,10 @@ import { vodScreens } from "./vodScreen";
 export const screens = mysqlTable(
   "screens",
   {
-    screenTypeId: varchar("screenTypeId", { length: 255 }),
+    screenTypeId: varchar("screenTypeId", { length: 255 }).notNull(),
     //TODO:  need to think about that more...
     //TODO: manage screen content I want to set video OR audio OR Article content
-    screenContentId: varchar("screenContentId", { length: 255 }),
+    screenContentId: varchar("screenContentId", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,

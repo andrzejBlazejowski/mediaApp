@@ -7,9 +7,9 @@ import { baseColumns, dictionaryColumns } from "./commonColumns";
 export const invoices = mysqlTable(
   "invoices",
   {
-    invoiceTypeId: varchar("invoiceTypeId", { length: 255 }),
-    mediaId: varchar("mediaId", { length: 255 }),
-    userId: varchar("userId", { length: 255 }),
+    invoiceTypeId: varchar("invoiceTypeId", { length: 255 }).notNull(),
+    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    userId: varchar("userId", { length: 255 }).notNull(),
 
     ...baseColumns,
   },
@@ -44,7 +44,7 @@ export const invoiceTypesRelations = relations(invoiceTypes, ({ many }) => ({
 export const invoiceTemplates = mysqlTable(
   "invoiceTemplates",
   {
-    content: varchar("content", { length: 255 }),
+    content: varchar("content", { length: 255 }).notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
