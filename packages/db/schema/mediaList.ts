@@ -1,6 +1,8 @@
+import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { medias } from "./media";
 
 export const mediaLists = mysqlTable(
   "mediaLists",
@@ -15,6 +17,14 @@ export const mediaLists = mysqlTable(
   }),
 );
 
+export const mediaListsRelations = relations(mediaLists, ({ many, one }) => ({
+  mediaListMedias: many(mediaListMedias),
+  mediaListType: one(mediaListTypes, {
+    fields: [mediaLists.mediaListTypeId],
+    references: [mediaListTypes.id],
+  }),
+}));
+
 export const mediaListMedias = mysqlTable(
   "mediaListMedias",
   {
@@ -28,13 +38,34 @@ export const mediaListMedias = mysqlTable(
   }),
 );
 
-export const meidaListTypes = mysqlTable(
-  "meidaListTypes",
+export const mediaListMediasRelations = relations(
+  mediaListMedias,
+  ({ one }) => ({
+    media: one(medias, {
+      fields: [mediaListMedias.mediaId],
+      references: [medias.id],
+    }),
+    mediaList: one(mediaLists, {
+      fields: [mediaListMedias.mediaListId],
+      references: [mediaLists.id],
+    }),
+  }),
+);
+
+export const mediaListTypes = mysqlTable(
+  "mediaListTypes",
   {
     ...dictionaryColumns,
     ...baseColumns,
   },
-  (meidaListType) => ({
-    idIdx: index("id_idx").on(meidaListType.id),
+  (mediaListType) => ({
+    idIdx: index("id_idx").on(mediaListType.id),
+  }),
+);
+
+export const mediaListTypesRelations = relations(
+  mediaListTypes,
+  ({ many }) => ({
+    mediaLists: many(mediaLists),
   }),
 );
