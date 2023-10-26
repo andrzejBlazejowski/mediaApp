@@ -33,9 +33,12 @@ export const {
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
   ],
+  secret: process.env.AUTH_SECRET,
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
   callbacks: {
     session: ({ session, user }) => {
-      console.log("++++++++++++++++++++++++++++");
       return {
         ...session,
         user: {
@@ -44,19 +47,29 @@ export const {
         },
       };
     },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("user: ", user);
+      console.log("account: ", account);
+      console.log("profile: ", profile);
+      console.log("email: ", email);
+      console.log("credentials: ", credentials);
+      return true;
+    },
     // @TODO - if you wanna have auth on the edge
     jwt: ({ token, profile }) => {
-      console.log("=========================");
       if (profile?.id) {
         token.id = profile.id;
         token.image = profile.picture;
       }
       return token;
     },
-
     // @TODO
     authorized({ request, auth }) {
-      console.log("-------------------------22222", auth, auth?.user);
+      console.log("env.DISCORD_CLIENT_ID: ", env.DISCORD_CLIENT_ID);
+      console.log("env.DISCORD_CLIENT_SECRET: ", env.DISCORD_CLIENT_SECRET);
       return !!auth?.user;
     },
   },
