@@ -20,7 +20,6 @@ export const {
   ],
   callbacks: {
     session: ({ session, user }) => {
-      console.log("++++++++++++++++++++++++++++22222");
       return {
         ...session,
         user: {
@@ -31,7 +30,6 @@ export const {
     },
     // @TODO - if you wanna have auth on the edge
     jwt: ({ token, profile }) => {
-      console.log("==================+22222");
       if (profile?.id) {
         token.id = profile.id;
         token.image = profile.picture;
@@ -40,7 +38,6 @@ export const {
     },
     // @TODO
     authorized({ request, auth }) {
-      console.log("-------------------------22222", auth, auth?.user);
       return !!auth?.user;
     },
   },

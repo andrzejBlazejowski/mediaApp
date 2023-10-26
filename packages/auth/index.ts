@@ -39,7 +39,6 @@ export const {
   },
   callbacks: {
     session: ({ session, user }) => {
-      console.log("++++++++++++++++++++++++++++");
       return {
         ...session,
         user: {
@@ -61,7 +60,6 @@ export const {
     },
     // @TODO - if you wanna have auth on the edge
     jwt: ({ token, profile }) => {
-      console.log("=========================");
       if (profile?.id) {
         token.id = profile.id;
         token.image = profile.picture;
@@ -72,7 +70,6 @@ export const {
     authorized({ request, auth }) {
       console.log("env.DISCORD_CLIENT_ID: ", env.DISCORD_CLIENT_ID);
       console.log("env.DISCORD_CLIENT_SECRET: ", env.DISCORD_CLIENT_SECRET);
-      console.log("-------------------------22222", auth, auth?.user);
       return !!auth?.user;
     },
   },
