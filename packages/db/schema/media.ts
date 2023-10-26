@@ -4,7 +4,7 @@ import { boolean, index, int, varchar } from "drizzle-orm/mysql-core";
 import { mySqlTable } from "./_table";
 import { mediaCastMembers } from "./cast";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
-import { images } from "./picture";
+import { images } from "./image";
 import { videos } from "./video";
 
 export const medias = mySqlTable(
