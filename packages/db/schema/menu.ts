@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
-import { images } from "./image";
+import { images } from "./picture";
 import { menuPlatforms } from "./platform";
 import { screens } from "./screen";
 

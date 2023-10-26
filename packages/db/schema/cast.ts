@@ -4,8 +4,8 @@ import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { mySqlTable } from "./_table";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { countries } from "./dictionary";
-import { images } from "./image";
 import { medias } from "./media";
+import { images } from "./picture";
 
 export const castMembers = mySqlTable(
   "castMembers",
