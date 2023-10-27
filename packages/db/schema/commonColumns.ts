@@ -1,8 +1,8 @@
 import { sql } from "drizzle-orm";
-import { boolean, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { boolean, serial, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 export const baseColumns = {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  id: serial("id").primaryKey(),
   createdAt: timestamp("createdAt", {
     mode: "date",
     fsp: 3,
