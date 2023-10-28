@@ -254,6 +254,12 @@ importers:
       '@media/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/typescript
+      '@planetscale/database':
+        specifier: ^1.11.0
+        version: 1.11.0
+      drizzle-orm:
+        specifier: ^0.28.6
+        version: 0.28.6(@planetscale/database@1.11.0)(mysql2@3.6.2)(pg@8.11.3)
       eslint:
         specifier: ^8.50.0
         version: 8.50.0
@@ -3171,7 +3177,6 @@ packages:
   /@planetscale/database@1.11.0:
     resolution: {integrity: sha512-aWbU+D/IRHoDE9975y+Q4c+EwwAWxCPwFId+N1AhQVFXzbeJMkj6KN2iQtoi03elcLMRdfT+V3i9Z4WRw+/oIA==}
     engines: {node: '>=16'}
-    dev: false
 
   /@radix-ui/react-compose-refs@1.0.0(react@18.2.0):
     resolution: {integrity: sha512-0KaSv6sx787/hK3eF53iOkiSLwAGlFMx5lotrqD2pTjB18KbybKoEIgkNZTKC60YECDQTKGTRcDBILwZVqVKvA==}
@@ -5631,7 +5636,6 @@ packages:
       '@planetscale/database': 1.11.0
       mysql2: 3.6.2
       pg: 8.11.3
-    dev: false
 
   /duplexer3@0.1.5:
     resolution: {integrity: sha512-1A8za6ws41LQgv9HrE/66jyC5yuSjQ3L/KOpFtoBilsAK2iA2wuS5rTt1OCzIvtS2V7nVmedsUU+DGRcjBmOYA==}

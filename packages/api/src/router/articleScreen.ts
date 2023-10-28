@@ -1,40 +1,24 @@
 import { z } from "zod";
 
-import { eq, schema } from "@media/db";
+import { articleScreens } from "@media/db/schema/articleScreen";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter } from "../trpc";
+import {
+  createAllQuery,
+  createByIDQuery,
+  createCreateQuery,
+  createDeleteQuery,
+} from "./commonRouter";
 
 export const articleScreenRouter = createTRPCRouter({
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.articleScreens.findMany({
-      where: (articleScreens, { eq }) => eq(articleScreens.isDeleted, false),
-    });
-  }),
-  byId: protectedProcedure
-    .input(z.object({ id: z.number() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.query.articleScreens.findFirst({
-        where: (articleScreens, { eq, and }) =>
-          and(
-            eq(articleScreens.id, input.id),
-            eq(articleScreens.isDeleted, false),
-          ),
-      });
+  all: createAllQuery<typeof articleScreens>(articleScreens),
+  byId: createByIDQuery<typeof articleScreens>(articleScreens),
+  create: createCreateQuery<typeof articleScreens>(
+    articleScreens,
+    z.object({
+      title: z.string().min(1),
+      content: z.string().min(1),
     }),
-  create: protectedProcedure
-    .input(
-      z.object({
-        title: z.string().min(1),
-        content: z.string().min(1),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.insert(schema.articleScreens).values({ ...input });
-    }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
-    return ctx.db
-      .update(schema.articleScreens)
-      .set({ isDeleted: true })
-      .where(eq(schema.articleScreens.id, input));
-  }),
+  ),
+  delete: createDeleteQuery<typeof articleScreens>(articleScreens),
 });
