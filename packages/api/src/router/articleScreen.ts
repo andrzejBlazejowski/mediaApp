@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import { articleScreens } from "@media/db/schema/articleScreen";
+import {
+  articleScreenImages,
+  articleScreens,
+} from "@media/db/schema/articleScreen";
 
 import { createTRPCRouter } from "../trpc";
 import {
@@ -17,8 +20,19 @@ export const articleScreenRouter = createTRPCRouter({
     articleScreens,
     z.object({
       title: z.string().min(1),
-      content: z.string().min(1),
     }),
   ),
   delete: createDeleteQuery<typeof articleScreens>(articleScreens),
+});
+
+export const articleScreenImageRouter = createTRPCRouter({
+  all: createAllQuery<typeof articleScreenImages>(articleScreenImages),
+  byId: createByIDQuery<typeof articleScreenImages>(articleScreenImages),
+  create: createCreateQuery<typeof articleScreenImages>(
+    articleScreenImages,
+    z.object({
+      title: z.string().min(1),
+    }),
+  ),
+  delete: createDeleteQuery<typeof articleScreenImages>(articleScreenImages),
 });

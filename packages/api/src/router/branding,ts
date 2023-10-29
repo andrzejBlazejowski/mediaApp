@@ -1,0 +1,77 @@
+import { z } from "zod";
+
+import {
+  brandingColors,
+  brandingColorTypes,
+  brandingImages,
+  brandingImageTypes,
+  brandings,
+} from "@media/db/schema/branding";
+
+import { createTRPCRouter } from "../trpc";
+import {
+  createAllQuery,
+  createByIDQuery,
+  createCreateQuery,
+  createDeleteQuery,
+} from "./commonRouter";
+
+export const brandingRouter = createTRPCRouter({
+  all: createAllQuery<typeof brandings>(brandings),
+  byId: createByIDQuery<typeof brandings>(brandings),
+  create: createCreateQuery<typeof brandings>(
+    brandings,
+    z.object({
+      title: z.string().min(1),
+    }),
+  ),
+  delete: createDeleteQuery<typeof brandings>(brandings),
+});
+
+export const brandingColorRouter = createTRPCRouter({
+  all: createAllQuery<typeof brandingColors>(brandingColors),
+  byId: createByIDQuery<typeof brandingColors>(brandingColors),
+  create: createCreateQuery<typeof brandingColors>(
+    brandingColors,
+    z.object({
+      title: z.string().min(1),
+    }),
+  ),
+  delete: createDeleteQuery<typeof brandingColors>(brandingColors),
+});
+
+export const brandingColorTypeRouter = createTRPCRouter({
+  all: createAllQuery<typeof brandingColorTypes>(brandingColorTypes),
+  byId: createByIDQuery<typeof brandingColorTypes>(brandingColorTypes),
+  create: createCreateQuery<typeof brandingColorTypes>(
+    brandingColorTypes,
+    z.object({
+      title: z.string().min(1),
+    }),
+  ),
+  delete: createDeleteQuery<typeof brandingColorTypes>(brandingColorTypes),
+});
+
+export const brandingImageRouter = createTRPCRouter({
+  all: createAllQuery<typeof brandingImages>(brandingImages),
+  byId: createByIDQuery<typeof brandingImages>(brandingImages),
+  create: createCreateQuery<typeof brandingImages>(
+    brandingImages,
+    z.object({
+      title: z.string().min(1),
+    }),
+  ),
+  delete: createDeleteQuery<typeof brandingImages>(brandingImages),
+});
+
+export const brandingImageTypeRouter = createTRPCRouter({
+  all: createAllQuery<typeof brandingImageTypes>(brandingImageTypes),
+  byId: createByIDQuery<typeof brandingImageTypes>(brandingImageTypes),
+  create: createCreateQuery<typeof brandingImageTypes>(
+    brandingImageTypes,
+    z.object({
+      title: z.string().min(1),
+    }),
+  ),
+  delete: createDeleteQuery<typeof brandingImageTypes>(brandingImageTypes),
+});
