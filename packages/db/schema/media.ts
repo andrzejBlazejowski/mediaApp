@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, int, varchar } from "drizzle-orm/mysql-core";
+import { boolean, index, int, serial, varchar } from "drizzle-orm/mysql-core";
 
 import { mySqlTable } from "./_table";
 import { mediaCastMembers } from "./cast";
@@ -16,7 +16,7 @@ export const medias = mySqlTable(
     type: varchar("type", { length: 255 }).notNull(),
     isFree: boolean("isFree").default(false).default(true).notNull(),
 
-    mediaCategoryId: varchar("mediaCategoryId", { length: 255 }).notNull(),
+    mediaCategoryId: serial("mediaCategoryId").notNull(),
 
     ...baseColumns,
   },
@@ -39,11 +39,9 @@ export const mediasRelations = relations(medias, ({ many, one }) => ({
 export const videoContents = mySqlTable(
   "videoContents",
   {
-    videoId: varchar("videoId", { length: 255 }).notNull(),
-    videoContentTypeId: varchar("videoContentTypeId", {
-      length: 255,
-    }).notNull(),
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    videoId: serial("videoId").notNull(),
+    videoContentTypeId: serial("videoContentTypeId").notNull(),
+    mediaId: serial("mediaId").notNull(),
 
     ...baseColumns,
   },
@@ -106,9 +104,9 @@ export const mediaCategoriesRelations = relations(
 export const mediaImages = mySqlTable(
   "mediaImages",
   {
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
-    mediaImageTypeId: varchar("mediaImageTypeId", { length: 255 }).notNull(),
-    imageId: varchar("imageId", { length: 255 }).notNull(),
+    mediaId: serial("mediaId").notNull(),
+    mediaImageTypeId: serial("mediaImageTypeId").notNull(),
+    imageId: serial("imageId").notNull(),
 
     ...baseColumns,
     ...dictionaryColumns,
@@ -156,7 +154,7 @@ export const mediaViewImpressions = mySqlTable(
   {
     progress: int("progress").notNull(),
 
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    mediaId: serial("mediaId").notNull(),
 
     ...baseColumns,
   },

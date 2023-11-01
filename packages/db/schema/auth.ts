@@ -4,6 +4,7 @@ import {
   index,
   int,
   primaryKey,
+  serial,
   text,
   timestamp,
   varchar,
@@ -12,7 +13,7 @@ import {
 import { mySqlTable } from "./_table";
 
 export const users = mySqlTable("user", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  id: serial("id").notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("emailVerified", {
@@ -29,12 +30,12 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const accounts = mySqlTable(
   "account",
   {
-    userId: varchar("userId", { length: 255 }).notNull(),
+    userId: serial("userId").notNull(),
     type: varchar("type", { length: 255 })
       .$type<AdapterAccount["type"]>()
       .notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    providerAccountId: serial("providerAccountId").notNull(),
     refresh_token: varchar("refresh_token", { length: 255 }),
     access_token: varchar("access_token", { length: 255 }),
     expires_at: int("expires_at"),
@@ -59,7 +60,7 @@ export const sessions = mySqlTable(
     sessionToken: varchar("sessionToken", { length: 255 })
       .notNull()
       .primaryKey(),
-    userId: varchar("userId", { length: 255 }).notNull(),
+    userId: serial("userId").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (session) => ({

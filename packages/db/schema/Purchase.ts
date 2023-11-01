@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { index, mysqlTable, serial } from "drizzle-orm/mysql-core";
 
 import { users } from "./auth";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
@@ -8,9 +8,9 @@ import { medias } from "./media";
 export const purchases = mysqlTable(
   "purchases",
   {
-    purchaseTypeId: varchar("purchaseTypeId", { length: 255 }).notNull(),
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
-    userId: varchar("userId", { length: 255 }).notNull(),
+    purchaseTypeId: serial("purchaseTypeId").notNull(),
+    mediaId: serial("mediaId").notNull(),
+    userId: serial("userId").notNull(),
 
     ...baseColumns,
   },
@@ -31,8 +31,8 @@ export const purchasesRelations = relations(purchases, ({ many, one }) => ({
 export const purchaseItems = mysqlTable(
   "purchaseItems",
   {
-    purchaseId: varchar("purchaseId", { length: 255 }).notNull(),
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    purchaseId: serial("purchaseId").notNull(),
+    mediaId: serial("mediaId").notNull(),
 
     ...baseColumns,
   },
