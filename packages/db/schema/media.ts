@@ -16,7 +16,7 @@ export const medias = mySqlTable(
     type: varchar("type", { length: 255 }).notNull(),
     isFree: boolean("isFree").default(false).default(true).notNull(),
 
-    mediaCategoryId: varchar("mediaCategoryId", { length: 255 }).notNull(),
+    mediaCategoryId: int("mediaCategoryId").notNull(),
 
     ...baseColumns,
   },
@@ -39,11 +39,9 @@ export const mediasRelations = relations(medias, ({ many, one }) => ({
 export const videoContents = mySqlTable(
   "videoContents",
   {
-    videoId: varchar("videoId", { length: 255 }).notNull(),
-    videoContentTypeId: varchar("videoContentTypeId", {
-      length: 255,
-    }).notNull(),
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    videoId: int("videoId").notNull(),
+    videoContentTypeId: int("videoContentTypeId").notNull(),
+    mediaId: int("mediaId").notNull(),
 
     ...baseColumns,
   },
@@ -106,9 +104,9 @@ export const mediaCategoriesRelations = relations(
 export const mediaImages = mySqlTable(
   "mediaImages",
   {
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
-    mediaImageTypeId: varchar("mediaImageTypeId", { length: 255 }).notNull(),
-    imageId: varchar("imageId", { length: 255 }).notNull(),
+    mediaId: int("mediaId").notNull(),
+    mediaImageTypeId: int("mediaImageTypeId").notNull(),
+    imageId: int("imageId").notNull(),
 
     ...baseColumns,
     ...dictionaryColumns,
@@ -156,7 +154,7 @@ export const mediaViewImpressions = mySqlTable(
   {
     progress: int("progress").notNull(),
 
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
+    mediaId: int("mediaId").notNull(),
 
     ...baseColumns,
   },

@@ -1,5 +1,11 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import {
+  index,
+  int,
+  mysqlTable,
+  serial,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { images } from "./image";
@@ -25,10 +31,8 @@ export const brandingColors = mysqlTable(
   {
     value: varchar("value", { length: 255 }),
 
-    brandingId: varchar("brandingId", { length: 255 }).notNull(),
-    brandingColorTypeId: varchar("brandingColorTypeId", {
-      length: 255,
-    }).notNull(),
+    brandingId: int("brandingId"),
+    brandingColorTypeId: int("brandingColorTypeId"),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -72,11 +76,9 @@ export const brandingColorTypesRelations = relations(
 export const brandingImages = mysqlTable(
   "brandingImages",
   {
-    brandingImageTypeId: varchar("brandingImageTypeId", {
-      length: 255,
-    }).notNull(),
-    brandingId: varchar("brandingId", { length: 255 }).notNull(),
-    imageId: varchar("imageId", { length: 255 }).notNull(),
+    brandingImageTypeId: int("brandingImageTypeId"),
+    brandingId: int("brandingId"),
+    imageId: int("imageId"),
 
     ...dictionaryColumns,
     ...baseColumns,

@@ -20,6 +20,8 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "drizzle-orm": "^0.28.6",
+    "@planetscale/database": "^1.11.0",
     "@media/eslint-config": "^0.2.0",
     "@media/prettier-config": "^0.1.0",
     "@media/tsconfig": "^0.1.0",

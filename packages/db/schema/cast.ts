@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { index, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { mySqlTable } from "./_table";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
@@ -10,9 +10,9 @@ import { medias } from "./media";
 export const castMembers = mySqlTable(
   "castMembers",
   {
-    peopleId: varchar("peopleId", { length: 255 }),
-    countryId: varchar("countryId", { length: 255 }),
-    castRoleId: varchar("castRoleId", { length: 255 }),
+    peopleId: int("peopleId"),
+    countryId: int("countryId"),
+    castRoleId: int("castRoleId"),
 
     ...baseColumns,
   },
@@ -44,8 +44,8 @@ export const castMembersRelations = relations(castMembers, ({ one, many }) => ({
 export const castMemberImages = mysqlTable(
   "castMemberImages",
   {
-    castMemberId: varchar("castMemberId", { length: 255 }).notNull(),
-    imageId: varchar("imageId", { length: 255 }).notNull(),
+    castMemberId: int("castMemberId").notNull(),
+    imageId: int("imageId").notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -87,8 +87,8 @@ export const castRolesRelations = relations(castRoles, ({ many }) => ({
 export const mediaCastMembers = mysqlTable(
   "mediaCastMembers",
   {
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
-    castMemberId: varchar("castMemberId", { length: 255 }).notNull(),
+    mediaId: int("mediaId").notNull(),
+    castMemberId: int("castMemberId").notNull(),
 
     ...baseColumns,
   },

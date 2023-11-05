@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { index, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { users } from "./auth";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
@@ -7,9 +7,9 @@ import { baseColumns, dictionaryColumns } from "./commonColumns";
 export const invoices = mysqlTable(
   "invoices",
   {
-    invoiceTypeId: varchar("invoiceTypeId", { length: 255 }).notNull(),
-    mediaId: varchar("mediaId", { length: 255 }).notNull(),
-    userId: varchar("userId", { length: 255 }).notNull(),
+    invoiceTypeId: int("invoiceTypeId").notNull(),
+    mediaId: int("mediaId").notNull(),
+    userId: int("userId").notNull(),
 
     ...baseColumns,
   },

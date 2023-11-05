@@ -1,8 +1,9 @@
 import { sql } from "drizzle-orm";
-import { boolean, timestamp, varchar } from "drizzle-orm/mysql-core";
+import type { AnyMySqlTable } from "drizzle-orm/mysql-core";
+import { boolean, serial, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 export const baseColumns = {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  id: serial("id").primaryKey(),
   createdAt: timestamp("createdAt", {
     mode: "date",
     fsp: 3,
@@ -14,6 +15,15 @@ export const baseColumns = {
   updatedBy: varchar("updatedBy", { length: 255 }),
   isDeleted: boolean("isDeleted").default(false).notNull(),
 };
+
+export interface BaseTable extends AnyMySqlTable {
+  id: number;
+  createdAt: number;
+  createdBy: string;
+  updatedAt: number;
+  updatedBy: string;
+  isDeleted: boolean;
+}
 
 export const dictionaryColumns = {
   name: varchar("name", { length: 255 }),

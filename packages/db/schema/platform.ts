@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { menus } from "./menu";
@@ -22,8 +22,8 @@ export const platformsRelations = relations(platforms, ({ many }) => ({
 export const menuPlatforms = mysqlTable(
   "menuPlatforms",
   {
-    menuId: varchar("menuId", { length: 255 }).notNull(),
-    platformId: varchar("platformId", { length: 255 }).notNull(),
+    menuId: int("menuId").notNull(),
+    platformId: int("platformId").notNull(),
 
     ...baseColumns,
   },
