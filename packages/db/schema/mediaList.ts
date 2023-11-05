@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, serial } from "drizzle-orm/mysql-core";
+import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { medias } from "./media";
@@ -7,7 +7,7 @@ import { medias } from "./media";
 export const mediaLists = mysqlTable(
   "mediaLists",
   {
-    mediaListTypeId: serial("mediaListTypeId").notNull(),
+    mediaListTypeId: int("mediaListTypeId").notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -28,8 +28,8 @@ export const mediaListsRelations = relations(mediaLists, ({ many, one }) => ({
 export const mediaListMedias = mysqlTable(
   "mediaListMedias",
   {
-    mediaId: serial("mediaId").notNull(),
-    mediaListId: serial("mediaListId").notNull(),
+    mediaId: int("mediaId").notNull(),
+    mediaListId: int("mediaListId").notNull(),
 
     ...baseColumns,
   },

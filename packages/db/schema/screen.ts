@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, serial } from "drizzle-orm/mysql-core";
+import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
 
 import { articleScreens } from "./articleScreen";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
@@ -9,11 +9,11 @@ import { vodScreens } from "./vodScreen";
 export const screens = mysqlTable(
   "screens",
   {
-    screenTypeId: serial("screenTypeId").notNull(),
+    screenTypeId: int("screenTypeId").notNull(),
     //TODO:  need to think about that more...
     //TODO: manage screen content I want to set video OR audio OR Article content
-    articleScreenId: serial("screenContentId"),
-    vodScreenId: serial("screenContentId"),
+    articleScreenId: int("screenContentId"),
+    vodScreenId: int("screenContentId"),
 
     ...dictionaryColumns,
     ...baseColumns,

@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, serial } from "drizzle-orm/mysql-core";
+import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { mediaLists } from "./mediaList";
@@ -8,7 +8,7 @@ import { screens } from "./screen";
 export const vodScreens = mysqlTable(
   "vodScreens",
   {
-    vodScreenTypeId: serial("vodScreenTypeId"),
+    vodScreenTypeId: int("vodScreenTypeId"),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -47,8 +47,8 @@ export const vodScreenTypesRelations = relations(
 export const vodScreenMediaLists = mysqlTable(
   "vodScreenMediaLists",
   {
-    vodScreenId: serial("vodScreenId").notNull(),
-    mediaListId: serial("mediaListId").notNull(),
+    vodScreenId: int("vodScreenId").notNull(),
+    mediaListId: int("mediaListId").notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,

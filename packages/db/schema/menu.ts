@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, mysqlTable, serial } from "drizzle-orm/mysql-core";
+import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { images } from "./image";
@@ -9,8 +9,8 @@ import { screens } from "./screen";
 export const menus = mysqlTable(
   "menus",
   {
-    menuPlatformId: serial("platformId").notNull(),
-    menuTypeId: serial("menuTypeId").notNull(),
+    menuPlatformId: int("platformId").notNull(),
+    menuTypeId: int("menuTypeId").notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -35,9 +35,9 @@ export const menusRelations = relations(menus, ({ many, one }) => ({
 export const menuLinks = mysqlTable(
   "menuLinks",
   {
-    menuLinkImageId: serial("menuLinkImageId").notNull(),
-    destinationScreenId: serial("destinationScreenId").notNull(),
-    menuId: serial("menuId").notNull(),
+    menuLinkImageId: int("menuLinkImageId").notNull(),
+    destinationScreenId: int("destinationScreenId").notNull(),
+    menuId: int("menuId").notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
@@ -77,8 +77,8 @@ export const menuTypesRelations = relations(menuTypes, ({ many }) => ({
 export const menuLinkImages = mysqlTable(
   "menuLinkImages",
   {
-    menuLinkId: serial("menuLinkId").notNull(),
-    imageId: serial("imageId").notNull(),
+    menuLinkId: int("menuLinkId").notNull(),
+    imageId: int("imageId").notNull(),
 
     ...dictionaryColumns,
     ...baseColumns,
