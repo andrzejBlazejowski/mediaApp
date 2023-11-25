@@ -1,0 +1,10 @@
+{
+  "extends": "@media/tsconfig/web-ui.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
