@@ -27,6 +27,9 @@
     "eslint-plugin-react-hooks": "^4.6.0"
   },
   "devDependencies": {
+    "@vercel/style-guide": "^5.0.0",
+    "eslint-plugin-mdx": "^2.2.0",
+    "eslint-plugin-storybook": "^0.6.13",
     "@media/prettier-config": "^0.1.0",
     "@media/tsconfig": "^0.1.0",
     "eslint": "^8.50.0",

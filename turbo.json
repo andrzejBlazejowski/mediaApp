@@ -7,11 +7,22 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "next-env.d.ts", ".expo/**"]
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "next-env.d.ts",
+        ".expo/**",
+        "dist/**",
+        "storybook-static/**"
+      ]
     },
     "dev": {
       "persistent": true,
       "cache": false
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": []
     },
     "format": {
       "outputs": ["node_modules/.cache/.prettiercache"],
