@@ -2,9 +2,9 @@
   "name": "@media/web-ui",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "type": "module",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "scripts": {
     "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
     "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
@@ -15,6 +15,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@media/tailwind-config": "^0.1.0",
+    "tailwindcss": "3.3.2"
+  },
   "devDependencies": {
     "@media/tsconfig": "^0.1.0",
     "@types/react": "^18.2.38",
