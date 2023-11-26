@@ -6,29 +6,34 @@
   "type": "module",
   "module": "./dist/index.js",
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "build": "pnpm tailwind && tsup src/index.tsx --format esm,cjs --dts --external react",
+    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react && pnpm tailwind-watch",
     "lint": "eslint src/",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "tailwind": "pnpx tailwindcss -i ./src/styles/global.css -o ./dist/index.css",
+    "tailwind-watch": "pnpx tailwindcss -i ./src/styles/global.css -o ./dist/index.css --watch"
   },
   "types": "./dist/index.d.ts",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@media/tailwind-config": "^0.1.0",
-    "tailwindcss": "3.3.2"
+    "@media/tailwind-config": "^0.1.0"
   },
   "devDependencies": {
     "@media/tsconfig": "^0.1.0",
     "@types/react": "^18.2.38",
     "@types/react-dom": "^18.2.10",
     "@types/styled-components": "^5.1.32",
+    "autoprefixer": "^10.4.16",
+    "postcss": "8.4.31",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "^6.1.1",
+    "tailwindcss": "3.3.2",
     "tsup": "^6.0.1",
     "turbo": "^1.10.16",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "vite": "^5.0.0"
   }
 }

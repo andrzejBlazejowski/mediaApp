@@ -1,7 +1,7 @@
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | undefined;
   disabled?: boolean;
 }
 
@@ -15,15 +15,13 @@ export const Button: React.FC<ButtonProps> = ({
 
   switch (variant) {
     case "primary":
-      buttonClasses += " bg-blue-800 text-blue-700 hover:bg-blue-600";
+      buttonClasses += " bg-slate-800 text-white hover:bg-primary";
       break;
     case "secondary":
-      buttonClasses +=
-        " bg-secondary-800 text-textSecondary-700 hover:bg-secondary-600";
+      buttonClasses += "bg-secondary text-gray-700 hover:bg-secondary";
       break;
     default:
-      buttonClasses +=
-        " bg-ternitary-800 text-textTernitary-700 hover:bg-ternitary-600";
+      buttonClasses += " bg-blue-500 text-white hover:bg-blue-600";
       break;
   }
 
