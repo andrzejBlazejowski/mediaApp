@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "@media/tailwind-config": "^0.1.0"
   },
   "devDependencies": {
