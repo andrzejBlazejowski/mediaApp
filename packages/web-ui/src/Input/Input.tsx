@@ -1,6 +1,3 @@
-import { FieldProps, useFormik } from "formik";
-import * as Yup from "yup";
-
 interface InputProps {
   fullWidth?: boolean;
   id: string;
@@ -11,6 +8,7 @@ interface InputProps {
   onBlur?: (e: React.FocusEvent<any>) => void;
   error?: boolean;
   helperText: string;
+  variant?: "primary" | "secondary" | "ternitary";
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -23,12 +21,50 @@ export const Input: React.FC<InputProps> = ({
   onBlur,
   error,
   helperText = "invalid value",
+  variant = "primary",
 }) => {
-  let InputClasses = `bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-200 focus:border-primary-200 block p-2.5 `;
-  let ErrorClasses = `py-2 px-4 focus:outline-none `;
-  let LabelClasses = `py-2 px-4 focus:outline-none `;
-  let LabelWrapperClasses = `py-2 px-4 focus:outline-none `;
-  let WrappweClasses = `py-2 px-4 focus:outline-none `;
+  let InputClasses = `rounded-md block p-2 `;
+  let ErrorClasses = `p-0 m-0 ml-2 `;
+  let LabelClasses = `p-0 m-0 ml-2  `;
+  let WrappweClasses = `p-0 m-0 `;
+  const usedClasses = [
+    "text-text-primary-500 text-text-primary-800 text-text-secondary-500 text-text-secondary-800 text-text-ternitary-500 text-text-ternitary-800",
+    "ring-primary-200 focus:ring-primary-400 ring-secondary-200 focus:ring-secondary-400 ring-ternitary-200 focus:ring-ternitary-400 ",
+  ];
+
+  // backgrounds
+  switch (variant) {
+    case "primary":
+      InputClasses += `bg-primary-50 focus:bg-primary-100 `;
+      break;
+
+    case "secondary":
+      InputClasses += `bg-secondary-50 focus:bg-secondary-100 `;
+      break;
+
+    case "ternitary":
+      InputClasses += `bg-ternitary-50 focus:bg-ternitary-100 `;
+      break;
+
+    default:
+      InputClasses += `bg-primary-50 focus:bg-primary-100 `;
+      break;
+  }
+
+  // borders
+  InputClasses += `border border-gray-300 ring-1 ring-${variant}-200 focus:ring-${variant}-400  focus:outline-none `;
+
+  // text
+  InputClasses += `text-sm text-text-${variant}-500 focus:text-text-${variant}-800 `;
+  ErrorClasses += "text-danger-primary-300 text-xs ";
+  LabelClasses += ` text-text-${variant}-500 text-sm leading-tight `;
+
+  if (error) {
+    ErrorClasses += "visible ";
+    InputClasses += "ring-danger-primary-400 focus:ring-danger-primary-500 ";
+  } else {
+    ErrorClasses += "invisible ";
+  }
 
   if (fullWidth) {
     InputClasses += "w-full";
@@ -38,10 +74,11 @@ export const Input: React.FC<InputProps> = ({
 
   return (
     <div className={WrappweClasses} key={id}>
-      <label className={LabelWrapperClasses} htmlFor={id}>
-        {label && <p className={LabelClasses}> {label}</p>}
-        {error && <p className={ErrorClasses}> {helperText}</p>}
-      </label>
+      {label && (
+        <label className={LabelClasses} htmlFor={id}>
+          {label}
+        </label>
+      )}
       <input
         id={id}
         name={name}
@@ -52,6 +89,7 @@ export const Input: React.FC<InputProps> = ({
         value={value}
         className={InputClasses}
       />
+      <p className={ErrorClasses}> {helperText}</p>
     </div>
   );
 };

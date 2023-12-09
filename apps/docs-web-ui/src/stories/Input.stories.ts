@@ -9,10 +9,15 @@ const meta = {
     layout: "centered",
   },
   argTypes: {
-    variant: {
-      options: ["primary", "secondary", "ternitary", undefined],
-      control: { type: "radio" },
-    },
+    fullWidth: { type: "boolean" },
+    id: { type: "string" },
+    name: { type: "string" },
+    label: { type: "string" },
+    value: { type: "string" },
+    onChange: { type: "function" },
+    onBlur: { type: "function" },
+    error: { type: "boolean" },
+    helperText: { type: "string" },
   },
 } satisfies Meta<typeof Input>;
 
