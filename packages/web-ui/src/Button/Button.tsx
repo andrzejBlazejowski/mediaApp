@@ -162,6 +162,10 @@ export const Button: React.FC<ButtonProps> = ({
       break;
   }
 
+  // TODO: add styles for disabled state
+  // TODO: add animating hover state etc.
+  // TODO: add styles for dark mode
+
   return (
     <button className={buttonClasses} onClick={onClick} disabled={disabled}>
       {isTextVisible && children}
