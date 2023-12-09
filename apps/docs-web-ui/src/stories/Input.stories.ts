@@ -32,7 +32,6 @@ export const stock: Story = {
 
 export const Error: Story = {
   args: {
-  args: {
     id: "email",
     name: "email",
     label: "email",

@@ -2,7 +2,7 @@ import { FieldProps, useFormik } from "formik";
 import * as Yup from "yup";
 
 interface InputProps {
-  fullWidth: boolean;
+  fullWidth?: boolean;
   id: string;
   name: string;
   label?: string;
@@ -24,7 +24,7 @@ export const Input: React.FC<InputProps> = ({
   error,
   helperText = "invalid value",
 }) => {
-  let InputClasses = `bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`;
+  let InputClasses = `bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-200 focus:border-primary-200 block p-2.5 `;
   let ErrorClasses = `py-2 px-4 focus:outline-none `;
   let LabelClasses = `py-2 px-4 focus:outline-none `;
   let LabelWrapperClasses = `py-2 px-4 focus:outline-none `;
@@ -52,7 +52,6 @@ export const Input: React.FC<InputProps> = ({
         value={value}
         className={InputClasses}
       />
-      ;
     </div>
   );
 };
