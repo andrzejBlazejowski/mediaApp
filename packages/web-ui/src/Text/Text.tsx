@@ -1,7 +1,11 @@
 import { TextProps } from ".";
 import { cn } from "../utils";
 
-export const Input: React.FC<TextProps> = ({ variant, children, type }) => {
+export const Text: React.FC<TextProps> = ({
+  variant = "primary",
+  children,
+  type,
+}) => {
   let clasNames = `p-0 m-0 `;
   const usedClasses = [
     "prose-sm prose-base prose-lg prose-xl prose-2xl",

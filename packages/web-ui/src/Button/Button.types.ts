@@ -4,9 +4,18 @@ export type ButtonLayouts =
   | "plain-text"
   | "icon-text"
   | "icon"
-  | "icon-rounded";
+  | "icon-rounded"
+  | "navigation"
+  | "icon-navigation";
 
-export type ButtonIcons = "add" | "edit" | "delete" | "search" | "filter";
+export type ButtonIcons =
+  | "add"
+  | "edit"
+  | "delete"
+  | "search"
+  | "filter"
+  | "chevronDown"
+  | "chevronUp";
 
 export interface ButtonProps {
   children: React.ReactNode;

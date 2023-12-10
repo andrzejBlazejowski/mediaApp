@@ -14,4 +14,5 @@ export default {
     },
   },
   presets: [baseConfig],
+  plugins: [require("@tailwindcss/typography")],
 } satisfies Config;

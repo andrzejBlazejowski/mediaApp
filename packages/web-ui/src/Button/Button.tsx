@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import {
   AcademicCapIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   FunnelIcon,
   MagnifyingGlassIcon,
   PencilIcon,
@@ -26,7 +28,15 @@ export const Button: React.FC<ButtonProps> = ({
   // TODO: refactor and align to input (const class names used in component and string literal to create actual classes)
 
   const isIconVisible = useMemo(() => layout?.indexOf("icon") !== -1, [layout]);
-  const isTextVisible = useMemo(() => layout?.indexOf("text") !== -1, [layout]);
+  const isTextVisible = useMemo(
+    () =>
+      layout?.indexOf("text") !== -1 || layout?.indexOf("navigation") !== -1,
+    [layout],
+  );
+  const isNavigationItem = useMemo(
+    () => layout?.indexOf("navigation") !== -1,
+    [layout],
+  );
 
   let Icon = AcademicCapIcon;
   let buttonClasses = `py-2 px-4 focus:outline-none ${
@@ -49,6 +59,12 @@ export const Button: React.FC<ButtonProps> = ({
       break;
     case "filter":
       Icon = FunnelIcon;
+      break;
+    case "chevronDown":
+      Icon = ChevronDownIcon;
+      break;
+    case "chevronUp":
+      Icon = ChevronUpIcon;
       break;
     default:
       Icon = AcademicCapIcon;
@@ -194,6 +210,17 @@ export const Button: React.FC<ButtonProps> = ({
           break;
       }
       break;
+  }
+
+  if (isNavigationItem) {
+    buttonClasses = cn(
+      cn(
+        buttonClasses,
+        "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group ",
+      ),
+      ` text-text-${variant}-800 `,
+    );
+    iconClasses = cn(iconClasses, ` text-text-${variant}-800 `);
   }
 
   return (

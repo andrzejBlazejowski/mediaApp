@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "@media/web-ui";
 
 const meta = {
-  title: "Web-ui/Button",
+  title: "components/Button",
   component: Button,
   parameters: {
     layout: "centered",
@@ -14,7 +14,15 @@ const meta = {
       control: { type: "radio" },
     },
     layout: {
-      options: ["plain-text", "icon-text", "icon", "icon-rounded", undefined],
+      options: [
+        "plain-text",
+        "icon-text",
+        "icon",
+        "icon-rounded",
+        "navigation-icon",
+        "navigation",
+        undefined,
+      ],
       control: { type: "radio" },
     },
     icon: {

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Input } from "@media/web-ui";
 
 const meta = {
-  title: "Web-ui/Input",
+  title: "components/Input",
   component: Input,
   parameters: {
     layout: "centered",
