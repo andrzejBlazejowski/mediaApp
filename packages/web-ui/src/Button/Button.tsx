@@ -8,18 +8,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
-import { ComponentTypes, ComponentVariants } from "../types";
-import { ButtonIcons, ButtonLayouts } from "./index";
-
-interface ButtonProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-  variant?: ComponentVariants;
-  type?: ComponentTypes;
-  layout?: ButtonLayouts;
-  icon?: ButtonIcons;
-  disabled?: boolean;
-}
+import { ButtonProps } from "./index";
 
 export const Button: React.FC<ButtonProps> = ({
   children,
@@ -30,6 +19,11 @@ export const Button: React.FC<ButtonProps> = ({
   icon,
   disabled = false,
 }) => {
+  // TODO: add styles for disabled state
+  // TODO: add animating hover state etc.
+  // TODO: add styles for dark mode
+  // TODO: refactor and align to input (const class names used in component and string literal to create actual classes)
+
   const isIconVisible = useMemo(() => layout?.indexOf("icon") !== -1, [layout]);
   const isTextVisible = useMemo(() => layout?.indexOf("text") !== -1, [layout]);
 
@@ -164,10 +158,6 @@ export const Button: React.FC<ButtonProps> = ({
       }
       break;
   }
-
-  // TODO: add styles for disabled state
-  // TODO: add animating hover state etc.
-  // TODO: add styles for dark mode
 
   return (
     <button className={buttonClasses} onClick={onClick} disabled={disabled}>
