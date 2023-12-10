@@ -8,6 +8,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
+import { cn } from "../utils";
 import { ButtonProps } from "./index";
 
 export const Button: React.FC<ButtonProps> = ({
@@ -58,78 +59,105 @@ export const Button: React.FC<ButtonProps> = ({
     case "danger":
       switch (variant) {
         case "primary":
-          iconClasses += " text-primary-300";
-          buttonClasses +=
-            " bg-danger-primary-600 text-primary-300 hover:bg-danger-primary-500";
+          iconClasses = cn(iconClasses, " text-primary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-danger-primary-600 text-primary-300 hover:bg-danger-primary-500",
+          );
           break;
 
         case "secondary":
-          iconClasses += " text-secondary-300";
-          buttonClasses +=
-            " bg-danger-secondary-600 text-secondary-300 hover:bg-danger-secondary-500";
+          iconClasses = cn(iconClasses, " text-secondary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-danger-secondary-600 text-secondary-300 hover:bg-danger-secondary-500",
+          );
           break;
 
         case "ternitary":
-          iconClasses += " text-ternitary-300";
-          buttonClasses +=
-            " bg-danger-ternitary-600 text-ternitary-300 hover:bg-danger-ternitary-500";
+          iconClasses = cn(iconClasses, " text-ternitary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-danger-ternitary-600 text-ternitary-300 hover:bg-danger-ternitary-500",
+          );
           break;
 
         default:
-          iconClasses += " text-red-300";
-          buttonClasses += " bg-red-600 text-white hover:bg-red-500";
+          iconClasses = cn(iconClasses, " text-red-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-red-600 text-white hover:bg-red-500",
+          );
           break;
       }
       break;
     case "info":
       switch (variant) {
         case "primary":
-          iconClasses += " text-primary-300";
-          buttonClasses +=
-            " bg-info-primary-600 text-primary-300 hover:bg-info-primary-500";
+          iconClasses = cn(iconClasses, " text-primary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-info-primary-600 text-primary-300 hover:bg-info-primary-500",
+          );
           break;
 
         case "secondary":
-          iconClasses += " text-secondary-300";
-          buttonClasses +=
-            " bg-info-secondary-600 text-secondary-300 hover:bg-info-secondary-500";
+          iconClasses = cn(iconClasses, " text-secondary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-info-secondary-600 text-secondary-300 hover:bg-info-secondary-500",
+          );
           break;
 
         case "ternitary":
-          iconClasses += " text-ternitary-300";
-          buttonClasses +=
-            " bg-info-ternitary-600 text-ternitary-300 hover:bg-info-ternitary-500";
+          iconClasses = cn(iconClasses, " text-ternitary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-info-ternitary-600 text-ternitary-300 hover:bg-info-ternitary-500",
+          );
           break;
 
         default:
-          iconClasses += " text-cyan-300";
-          buttonClasses += " bg-cyan-600 text-white hover:bg-cyan-500";
+          iconClasses = cn(iconClasses, " text-cyan-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-cyan-600 text-white hover:bg-cyan-500",
+          );
           break;
       }
       break;
     case "warning":
       switch (variant) {
         case "primary":
-          iconClasses += " text-primary-300";
-          buttonClasses +=
-            " bg-warning-primary-600 text-primary-300 hover:bg-warning-primary-500";
+          iconClasses = cn(iconClasses, " text-primary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-warning-primary-600 text-primary-300 hover:bg-warning-primary-500",
+          );
           break;
 
         case "secondary":
-          iconClasses += " text-secondary-300";
-          buttonClasses +=
-            " bg-warning-secondary-600 text-secondary-300 hover:bg-warning-secondary-500";
+          iconClasses = cn(iconClasses, " text-secondary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-warning-secondary-600 text-secondary-300 hover:bg-warning-secondary-500",
+          );
           break;
 
         case "ternitary":
-          iconClasses += " text-ternitary-300";
-          buttonClasses +=
-            " bg-warning-ternitary-600 text-ternitary-300 hover:bg-warning-ternitary-500";
+          iconClasses = cn(iconClasses, " text-ternitary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-warning-ternitary-600 text-ternitary-300 hover:bg-warning-ternitary-500",
+          );
           break;
 
         default:
-          iconClasses += " text-yellow-300";
-          buttonClasses += " bg-yellow-600 text-white hover:bg-yellow-500";
+          iconClasses = cn(iconClasses, " text-yellow-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-yellow-600 text-white hover:bg-yellow-500",
+          );
           break;
       }
       break;
@@ -137,23 +165,32 @@ export const Button: React.FC<ButtonProps> = ({
     default:
       switch (variant) {
         case "primary":
-          iconClasses += " text-primary-300";
-          buttonClasses +=
-            " bg-primary-600 text-primary-300 hover:bg-primary-500";
+          iconClasses = cn(iconClasses, " text-primary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-primary-600 text-primary-300 hover:bg-primary-500",
+          );
           break;
         case "secondary":
-          iconClasses += " text-secondary-300";
-          buttonClasses +=
-            " bg-secondary-600 text-secondary-300 hover:bg-secondary-500";
+          iconClasses = cn(iconClasses, " text-secondary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-secondary-600 text-secondary-300 hover:bg-secondary-500",
+          );
           break;
         case "ternitary":
-          iconClasses += " text-ternitary-300";
-          buttonClasses +=
-            " bg-ternitary-600 text-ternitary-300 hover:bg-ternitary-500";
+          iconClasses = cn(iconClasses, " text-ternitary-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-ternitary-600 text-ternitary-300 hover:bg-ternitary-500",
+          );
           break;
         default:
-          iconClasses += " text-blue-300";
-          buttonClasses += " bg-blue-600 text-white hover:bg-blue-500";
+          iconClasses = cn(iconClasses, " text-blue-300");
+          buttonClasses = cn(
+            buttonClasses,
+            " bg-blue-600 text-white hover:bg-blue-500",
+          );
           break;
       }
       break;

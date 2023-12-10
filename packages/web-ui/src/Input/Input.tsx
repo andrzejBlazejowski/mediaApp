@@ -1,4 +1,5 @@
 import { InputProps } from ".";
+import { cn } from "../utils";
 
 export const Input: React.FC<InputProps> = ({
   fullWidth = true,
@@ -25,27 +26,39 @@ export const Input: React.FC<InputProps> = ({
   ];
 
   // backgrounds
-  InputClasses += `bg-${variant}-50 focus:bg-${variant}-100 `;
+  InputClasses = cn(InputClasses, `bg-${variant}-50 focus:bg-${variant}-100 `);
 
   // borders
-  InputClasses += `border border-gray-300 ring-1 ring-${variant}-200 focus:ring-${variant}-400  focus:outline-none `;
+  InputClasses = cn(
+    InputClasses,
+    `border border-gray-300 ring-1 ring-${variant}-200 focus:ring-${variant}-400  focus:outline-none `,
+  );
 
   // text
-  InputClasses += `text-sm text-text-${variant}-500 focus:text-text-${variant}-800 `;
-  ErrorClasses += `text-danger-${variant}-300 text-xs `;
-  LabelClasses += ` text-text-${variant}-500 text-sm leading-tight `;
+  InputClasses = cn(
+    InputClasses,
+    `text-sm text-text-${variant}-500 focus:text-text-${variant}-800 `,
+  );
+  ErrorClasses = cn(ErrorClasses, `text-danger-${variant}-300 text-xs `);
+  LabelClasses = cn(
+    LabelClasses,
+    ` text-text-${variant}-500 text-sm leading-tight `,
+  );
 
   if (error) {
-    ErrorClasses += "visible ";
-    InputClasses += `ring-danger-${variant}-400 focus:ring-danger-${variant}-500 `;
+    ErrorClasses = cn(ErrorClasses, "visible ");
+    InputClasses = cn(
+      InputClasses,
+      `ring-danger-${variant}-400 focus:ring-danger-${variant}-500 `,
+    );
   } else {
-    ErrorClasses += "invisible ";
+    ErrorClasses = cn(ErrorClasses, "invisible ");
   }
 
   if (fullWidth) {
-    InputClasses += "w-full";
+    InputClasses = cn(InputClasses, "w-full");
   } else {
-    InputClasses += "w-1/2";
+    InputClasses = cn(InputClasses, "w-1/2");
   }
 
   return (
