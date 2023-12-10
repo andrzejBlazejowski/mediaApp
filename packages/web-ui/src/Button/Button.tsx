@@ -8,13 +8,16 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
+import { ComponentTypes, ComponentVariants } from "../types";
+import { ButtonIcons, ButtonLayouts } from "./index";
+
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  variant?: "primary" | "secondary" | "ternitary";
-  type?: "normal" | "danger" | "info" | "warning";
-  layout?: "plain-text" | "icon-text" | "icon" | "icon-rounded";
-  icon?: "add" | "edit" | "delete" | "search" | "filter";
+  variant?: ComponentVariants;
+  type?: ComponentTypes;
+  layout?: ButtonLayouts;
+  icon?: ButtonIcons;
   disabled?: boolean;
 }
 

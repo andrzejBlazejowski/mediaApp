@@ -1,3 +1,5 @@
+import { ComponentVariants } from "../types";
+
 interface InputProps {
   fullWidth?: boolean;
   id: string;
@@ -8,7 +10,7 @@ interface InputProps {
   onBlur?: (e: React.FocusEvent<any>) => void;
   error?: boolean;
   helperText: string;
-  variant?: "primary" | "secondary" | "ternitary";
+  variant?: ComponentVariants;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -30,38 +32,25 @@ export const Input: React.FC<InputProps> = ({
   const usedClasses = [
     "text-text-primary-500 text-text-primary-800 text-text-secondary-500 text-text-secondary-800 text-text-ternitary-500 text-text-ternitary-800",
     "ring-primary-200 focus:ring-primary-400 ring-secondary-200 focus:ring-secondary-400 ring-ternitary-200 focus:ring-ternitary-400 ",
+    "bg-primary-50 focus:bg-primary-100 bg-secondary-50 focus:bg-secondary-100 bg-ternitary-50 focus:bg-ternitary-100",
+    "text-danger-primary-300 text-xs text-danger-secondary-300 text-xs text-danger-ternitary-300 text-xs ",
+    "ring-danger-primary-400 focus:ring-danger-primary-500 ring-danger-secondary-400 focus:ring-danger-secondary-500 ring-danger-ternitary-400 focus:ring-danger-ternitary-500 ",
   ];
 
   // backgrounds
-  switch (variant) {
-    case "primary":
-      InputClasses += `bg-primary-50 focus:bg-primary-100 `;
-      break;
-
-    case "secondary":
-      InputClasses += `bg-secondary-50 focus:bg-secondary-100 `;
-      break;
-
-    case "ternitary":
-      InputClasses += `bg-ternitary-50 focus:bg-ternitary-100 `;
-      break;
-
-    default:
-      InputClasses += `bg-primary-50 focus:bg-primary-100 `;
-      break;
-  }
+  InputClasses += `bg-${variant}-50 focus:bg-${variant}-100 `;
 
   // borders
   InputClasses += `border border-gray-300 ring-1 ring-${variant}-200 focus:ring-${variant}-400  focus:outline-none `;
 
   // text
   InputClasses += `text-sm text-text-${variant}-500 focus:text-text-${variant}-800 `;
-  ErrorClasses += "text-danger-primary-300 text-xs ";
+  ErrorClasses += `text-danger-${variant}-300 text-xs `;
   LabelClasses += ` text-text-${variant}-500 text-sm leading-tight `;
 
   if (error) {
     ErrorClasses += "visible ";
-    InputClasses += "ring-danger-primary-400 focus:ring-danger-primary-500 ";
+    InputClasses += `ring-danger-${variant}-400 focus:ring-danger-${variant}-500 `;
   } else {
     ErrorClasses += "invisible ";
   }
