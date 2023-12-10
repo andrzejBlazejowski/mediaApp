@@ -1,4 +1,5 @@
 import { TextProps } from ".";
+import { cn } from "../utils";
 
 export const Input: React.FC<TextProps> = ({ variant, children, type }) => {
   let clasNames = `p-0 m-0 `;
@@ -11,16 +12,34 @@ export const Input: React.FC<TextProps> = ({ variant, children, type }) => {
     "text-info-primary-700 text-info-secondary-700 text-info-ternitary-700 ",
   ];
 
-  clasNames += `text-text-${variant}-700`;
+  clasNames = cn(clasNames, `text-text-${variant}-700`);
 
-  // backgrounds
-  //   TextClasses += `bg-${variant}-50 focus:bg-${variant}-100 `;
+  clasNames = cn(clasNames, `prose-${type}`);
+  let element = <p className={cn(clasNames, "")}>{children}</p>;
+  switch (type) {
+    case "lead":
+    case "h1":
+      element = <h1 className={clasNames}>{children}</h1>;
+      break;
+    case "h2":
+      element = <h2 className={clasNames}>{children}</h2>;
+      break;
+    case "h3":
+      element = <h3 className={clasNames}>{children}</h3>;
+      break;
+    case "h4":
+      element = <h4 className={clasNames}>{children}</h4>;
+      break;
+    case "base":
+    case "sm":
+    case "lg":
+    case "xl":
+    case "2xl":
+    case "p":
+    default:
+      element = <p className={clasNames}>{children}</p>;
+      break;
+  }
 
-  //   if (fullWidth) {
-  //     TextClasses += "w-full";
-  //   } else {
-  //     TextClasses += "w-1/2";
-  //   }
-
-  return <div className={clasNames}></div>;
+  return element;
 };
