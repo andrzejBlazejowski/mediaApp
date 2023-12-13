@@ -1,31 +1,30 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "~/styles/globals.css";
 
 import { headers } from "next/headers";
 
-import { TRPCReactProvider } from "./providers";
+import { TopMenu } from "./_components/";
+import { ThemeProvider } from "./_providers/themeProvider";
+import { TRPCReactProvider } from "./_providers/trpcProviders";
 
 const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-/**
- * Since we're passing `headers()` to the `TRPCReactProvider` we need to
- * make the entire app dynamic. You can move the `TRPCReactProvider` further
- * down the tree (e.g. /dashboard and onwards) to make part of the app statically rendered.
- */
 export const dynamic = "force-dynamic";
 
 export default function Layout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={["font-sans", fontSans.variable].join(" ")}>
-        <TRPCReactProvider headers={headers()}>
-          {props.children}
-        </TRPCReactProvider>
+        <ThemeProvider attribute="class" defaultTheme="system">
+          <TRPCReactProvider headers={headers()}>
+            <TopMenu />
+            {props.children}
+          </TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
