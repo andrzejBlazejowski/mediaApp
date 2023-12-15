@@ -19,7 +19,7 @@ export default function Layout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={["font-sans", fontSans.variable].join(" ")}>
-        <ThemeProvider attribute="class" defaultTheme="system">
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <TRPCReactProvider headers={headers()}>
             <TopMenu />
             {props.children}

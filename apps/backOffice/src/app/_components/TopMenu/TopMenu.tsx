@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 
+import { ThemeToggle } from "../ThemeToggle";
+
 type MenuComponents = Record<string, MenuComponent[]>;
 
 interface MenuComponent {
@@ -58,8 +60,17 @@ const menuComponents = {
       href: "/media/media-view-impressions",
       description: "loream ipsum",
     },
+    {
+      title: "media list medias",
+      href: "/media/list/medias",
+      description: "loream ipsum",
+    },
+    {
+      title: "media list medias type",
+      href: "/media/list/medias-type",
+      description: "loream ipsum",
+    },
   ],
-
   branding: [
     {
       title: "brandings",
@@ -116,6 +127,16 @@ const menuComponents = {
   ],
   screens: [
     {
+      title: "screens",
+      href: "/screens",
+      description: "loream ipsum",
+    },
+    {
+      title: "screens types",
+      href: "/screens/types",
+      description: "loream ipsum",
+    },
+    {
       title: "article screens",
       href: "/screens/article",
       description: "loream ipsum",
@@ -141,6 +162,105 @@ const menuComponents = {
       description: "loream ipsum",
     },
   ],
+  dictionary: [
+    {
+      title: "client app",
+      href: "/dictionary/clientApp",
+      description: "loream ipsum",
+    },
+    {
+      title: "back office",
+      href: "/dictionary/clientApp",
+      description: "loream ipsum",
+    },
+    {
+      title: "countries",
+      href: "/dictionary/countries",
+      description: "loream ipsum",
+    },
+    {
+      title: "genres",
+      href: "/dictionary/genres",
+      description: "loream ipsum",
+    },
+  ],
+  image: [
+    {
+      title: "image",
+      href: "/dictionary/image",
+      description: "loream ipsum",
+    },
+  ],
+  invoice: [
+    {
+      title: "invoice",
+      href: "/invoice",
+      description: "loream ipsum",
+    },
+    {
+      title: "invoice types",
+      href: "/invoice/type",
+      description: "loream ipsum",
+    },
+    {
+      title: "invoice templates",
+      href: "/invoice/templates",
+      description: "loream ipsum",
+    },
+  ],
+  menu: [
+    {
+      title: "menu",
+      href: "/menu",
+      description: "loream ipsum",
+    },
+    {
+      title: "menu links",
+      href: "/menu/links",
+      description: "loream ipsum",
+    },
+    {
+      title: "menu types",
+      href: "/menu/types",
+      description: "loream ipsum",
+    },
+    {
+      title: "menu link images",
+      href: "/menu/link-images",
+      description: "loream ipsum",
+    },
+  ],
+  platforms: [
+    {
+      title: "platforms",
+      href: "/platforms",
+      description: "loream ipsum",
+    },
+  ],
+  purcchase: [
+    {
+      title: "purcchase",
+      href: "/purcchase",
+      description: "loream ipsum",
+    },
+    {
+      title: "purcchase items",
+      href: "/purcchase/items",
+      description: "loream ipsum",
+    },
+    {
+      title: "purcchase types",
+      href: "/purcchase/types",
+      description: "loream ipsum",
+    },
+  ],
+  video: [
+    {
+      title: "video",
+      href: "/video",
+      description: "loream ipsum",
+    },
+  ],
 };
 
 export function TopMenu() {
@@ -148,10 +268,10 @@ export function TopMenu() {
     <NavigationMenu>
       <NavigationMenuList>
         {Object.entries(menuComponents).map(([key, components]) => (
-          <NavigationMenuItem key={key}>
+          <NavigationMenuItem className="left-auto" key={key}>
             <NavigationMenuTrigger>{key}</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+              <ul className="grid w-[400px] gap-3 bg-zinc-200 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {components.map((component) => (
                   <ListItem
                     key={component.title}
@@ -165,6 +285,7 @@ export function TopMenu() {
             </NavigationMenuContent>
           </NavigationMenuItem>
         ))}
+        <ThemeToggle />
       </NavigationMenuList>
     </NavigationMenu>
   );
@@ -174,22 +295,24 @@ const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
+  const href = props.href || "/";
   return (
     <li>
       <NavigationMenuLink asChild>
-        <a
+        <Link
           ref={ref}
           className={cn(
             "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
             className,
           )}
           {...props}
+          href={href}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
           <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
             {children}
           </p>
-        </a>
+        </Link>
       </NavigationMenuLink>
     </li>
   );
