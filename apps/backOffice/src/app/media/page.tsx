@@ -39,5 +39,10 @@ export default function page() {
     },
   };
   const [medias] = api.media.all.useSuspenseQuery();
+
+  if (medias.length === 0) {
+    mediaIndexProps.data = medias.map((media) => {name: media.name, type: media.type, isFree: media.isFree, category: media.mediaCategoryId});
+  }
+
   return <TableView {...mediaIndexProps} />;
 }
