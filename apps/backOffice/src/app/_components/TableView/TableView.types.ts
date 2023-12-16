@@ -2,23 +2,13 @@ interface FieldCommon {
   name?: string;
 }
 
-type FieldText = FieldCommon & {
+interface FieldText {
   value: string;
-  type: "text";
-};
+  name?: string;
+  type?: "text";
+}
 
-type FieldDate = FieldCommon & {
-  value: number;
-  type: "date";
-};
-
-type FieldNumber = FieldCommon & {
-  value: number;
-  type: "number";
-  format: "price" | "smthElse";
-};
-
-type Field = FieldText | FieldDate | FieldNumber;
+type Field = FieldText;
 
 export type Row = Record<string, Field>;
 export type Rows = Row[];

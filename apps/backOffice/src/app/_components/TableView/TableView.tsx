@@ -1,8 +1,6 @@
-import { useMemo } from "react";
-import { Table } from "lucide-react";
-
 import { Row, TableViewProps } from ".";
 import {
+  Table,
   TableBody,
   TableCaption,
   TableCell,
@@ -13,7 +11,7 @@ import {
 } from "../ui/table";
 
 export function TableView({ title, data, headersConfig }: TableViewProps) {
-  const orderedHeaderElements = useMemo(() => {
+  const getOrderedHeaderElements = () => {
     if (headersConfig) {
       return Object.entries(headersConfig)
         .sort(([aKey, aValue], [bKey, bValue]) => {
@@ -33,7 +31,7 @@ export function TableView({ title, data, headersConfig }: TableViewProps) {
     } else {
       return null;
     }
-  }, [headersConfig, data[0]]);
+  };
 
   const getHeaderOrder = (key: string) =>
     headersConfig ? headersConfig[key]?.orderNumber || 0 : 0;
@@ -49,20 +47,24 @@ export function TableView({ title, data, headersConfig }: TableViewProps) {
   };
 
   return (
-    <Table>
-      <TableCaption>{title}</TableCaption>
-      <TableHeader>
-        <TableRow>{orderedHeaderElements}</TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((row, index) => (
-          <TableRow key={index}>
-            {getOrderedTableCells(row).map((field) => (
-              <TableCell className="font-medium">{field.value}</TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <h2 className="mt-6 scroll-m-20 border-b pb-2 text-center text-3xl font-semibold tracking-tight first:mt-0">
+        {title}
+      </h2>
+      <Table>
+        <TableHeader>
+          <TableRow>{getOrderedHeaderElements()}</TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((row, index) => (
+            <TableRow key={index}>
+              {getOrderedTableCells(row).map((field) => (
+                <TableCell className="font-medium">{field.value}</TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   );
 }

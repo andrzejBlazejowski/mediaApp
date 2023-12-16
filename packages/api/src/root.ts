@@ -71,7 +71,7 @@ export const appRouter = createTRPCRouter({
   media: mediaRouter,
   videoContent: videoContentRouter,
   videoContentType: videoContentTypeRouter,
-  mediaCategoy: mediaCategoyRouter,
+  mediaCategory: mediaCategoyRouter,
   mediaImage: mediaImageRouter,
   mediaImageType: mediaImageTypeRouter,
   mediaViewImpression: mediaViewImpressionRouter,

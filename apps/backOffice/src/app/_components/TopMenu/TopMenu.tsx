@@ -271,7 +271,7 @@ export function TopMenu() {
           <NavigationMenuItem className="left-auto" key={key}>
             <NavigationMenuTrigger>{key}</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 bg-zinc-200 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <ul className="bg-background text-foreground grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {components.map((component) => (
                   <ListItem
                     key={component.title}
