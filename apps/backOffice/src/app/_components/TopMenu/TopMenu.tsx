@@ -10,6 +10,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
+  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 
@@ -68,6 +69,16 @@ const menuComponents = {
     {
       title: "media list medias type",
       href: "/media/list/medias-type",
+      description: "loream ipsum",
+    },
+    {
+      title: "video",
+      href: "/video",
+      description: "loream ipsum",
+    },
+    {
+      title: "image",
+      href: "/dictionary/image",
       description: "loream ipsum",
     },
   ],
@@ -183,28 +194,9 @@ const menuComponents = {
       href: "/dictionary/genres",
       description: "loream ipsum",
     },
-  ],
-  image: [
     {
-      title: "image",
-      href: "/dictionary/image",
-      description: "loream ipsum",
-    },
-  ],
-  invoice: [
-    {
-      title: "invoice",
-      href: "/invoice",
-      description: "loream ipsum",
-    },
-    {
-      title: "invoice types",
-      href: "/invoice/type",
-      description: "loream ipsum",
-    },
-    {
-      title: "invoice templates",
-      href: "/invoice/templates",
+      title: "platforms",
+      href: "/platforms",
       description: "loream ipsum",
     },
   ],
@@ -230,13 +222,6 @@ const menuComponents = {
       description: "loream ipsum",
     },
   ],
-  platforms: [
-    {
-      title: "platforms",
-      href: "/platforms",
-      description: "loream ipsum",
-    },
-  ],
   purcchase: [
     {
       title: "purcchase",
@@ -253,11 +238,19 @@ const menuComponents = {
       href: "/purcchase/types",
       description: "loream ipsum",
     },
-  ],
-  video: [
     {
-      title: "video",
-      href: "/video",
+      title: "invoice",
+      href: "/invoice",
+      description: "loream ipsum",
+    },
+    {
+      title: "invoice types",
+      href: "/invoice/type",
+      description: "loream ipsum",
+    },
+    {
+      title: "invoice templates",
+      href: "/invoice/templates",
       description: "loream ipsum",
     },
   ],
@@ -268,10 +261,12 @@ export function TopMenu() {
     <NavigationMenu>
       <NavigationMenuList>
         {Object.entries(menuComponents).map(([key, components]) => (
-          <NavigationMenuItem className="left-auto" key={key}>
-            <NavigationMenuTrigger>{key}</NavigationMenuTrigger>
+          <NavigationMenuItem key={key}>
+            <NavigationMenuTrigger className="text-foreground">
+              {key}
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="bg-background text-foreground grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {components.map((component) => (
                   <ListItem
                     key={component.title}
@@ -302,16 +297,14 @@ const ListItem = React.forwardRef<
         <Link
           ref={ref}
           className={cn(
-            "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
+            "text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
             className,
           )}
           {...props}
           href={href}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-            {children}
-          </p>
+          <p className="line-clamp-2 text-sm leading-snug">{children}</p>
         </Link>
       </NavigationMenuLink>
     </li>

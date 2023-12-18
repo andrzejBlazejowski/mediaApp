@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { boolean, index, int, varchar } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { mySqlTable } from "./_table";
 import { mediaCastMembers } from "./cast";
@@ -36,6 +37,8 @@ export const mediasRelations = relations(medias, ({ many, one }) => ({
   videoContents: many(videoContents),
 }));
 
+export const mediasInsertSchema = createInsertSchema(medias);
+
 export const videoContents = mySqlTable(
   "videoContents",
   {
@@ -65,6 +68,8 @@ export const videoContentsRelations = relations(videoContents, ({ one }) => ({
   }),
 }));
 
+export const videoContentsInsertSchema = createInsertSchema(videoContents);
+
 export const videoContentTypes = mySqlTable(
   "videoContentTypes",
   {
@@ -83,6 +88,9 @@ export const videoContentTypesRelations = relations(
   }),
 );
 
+export const videoContentTypesInsertSchema =
+  createInsertSchema(videoContentTypes);
+
 export const mediaCategories = mySqlTable(
   "mediaCategories",
   {
@@ -100,6 +108,8 @@ export const mediaCategoriesRelations = relations(
     medias: many(medias),
   }),
 );
+
+export const mediaCategoriesInsertSchema = createInsertSchema(mediaCategories);
 
 export const mediaImages = mySqlTable(
   "mediaImages",
@@ -131,6 +141,8 @@ export const mediaImagesRelations = relations(mediaImages, ({ many, one }) => ({
   }),
 }));
 
+export const mediaImagesInsertSchema = createInsertSchema(mediaImages);
+
 export const mediaImageTypes = mySqlTable(
   "mediaImageTypes",
   {
@@ -148,6 +160,8 @@ export const mediaImageTypesRelations = relations(
     mediaImages: many(mediaImages),
   }),
 );
+
+export const mediaImageTypesInsertSchema = createInsertSchema(mediaImageTypes);
 
 export const mediaViewImpressions = mySqlTable(
   "mediaViewImpressions",
@@ -172,3 +186,6 @@ export const mediaViewImpressionsRelations = relations(
     }),
   }),
 );
+
+export const mediaViewImpressionsInsertSchema =
+  createInsertSchema(mediaViewImpressions);
