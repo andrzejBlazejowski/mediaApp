@@ -10,7 +10,8 @@ import { protectedProcedure } from "../trpc";
 export function createAllQuery<TTable extends AnyMySqlTable>(table: TTable) {
   return protectedProcedure.query(({ ctx }) => {
     const tableQuery = ctx.db.query[
-      table._.name as keyof typeof ctx.db.query
+      //@ts-ignore
+      table.name as keyof typeof ctx.db.query
     ] as unknown as { findMany: any };
     if (!tableQuery) {
       throw new TRPCError({
