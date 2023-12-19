@@ -65,6 +65,15 @@ export default function Page() {
     }
   };
 
+  const hiddenFeilds = [
+    "isDeleted",
+    "updatedBy",
+    "updatedAt",
+    "createdBy",
+    "createdAt",
+    "id",
+  ];
+
   const uiSchema = {
     name: {
       clases: "w-1/4 ",
@@ -93,10 +102,18 @@ export default function Page() {
   };
 
   const Item = (field: IFeield) => (
-    <FormItem>
+    <FormItem
+      className={
+        //@ts-ignore
+        typeof uiSchema[field.name] === "string"
+          ? //@ts-ignore
+            uiSchema[field.name].clases
+          : ""
+      }
+    >
       <FormLabel>{field.name}</FormLabel>
       <FormControl>
-        <Input placeholder="shadcn" {...field} />
+        <Input {...field} />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -106,11 +123,9 @@ export default function Page() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {Object.entries(media.mediasInsertSchema.shape).map(([key, value]) => {
-          console.log("==============================");
-          console.log(value);
-          console.log(key);
-          console.log(value._def.typeName);
-          console.log(getTypeBasedOnZod(value._def.typeName, value._def));
+          if (hiddenFeilds.includes(key)) {
+            return null;
+          }
 
           return (
             <FormField
