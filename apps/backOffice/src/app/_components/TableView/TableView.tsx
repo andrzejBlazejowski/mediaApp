@@ -59,7 +59,12 @@ export function TableView({ title, data, headersConfig }: TableViewProps) {
           {data.map((row, index) => (
             <TableRow key={index}>
               {getOrderedTableCells(row).map((field) => (
-                <TableCell className="font-medium">{field.value}</TableCell>
+                <TableCell
+                  key={index + (field.name || field.value)}
+                  className="font-medium"
+                >
+                  {field.value}
+                </TableCell>
               ))}
             </TableRow>
           ))}

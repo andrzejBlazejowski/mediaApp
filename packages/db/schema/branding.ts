@@ -1,11 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  index,
-  int,
-  mysqlTable,
-  serial,
-  varchar,
-} from "drizzle-orm/mysql-core";
+import { index, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { images } from "./image";
