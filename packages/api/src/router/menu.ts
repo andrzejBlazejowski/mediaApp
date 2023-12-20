@@ -1,5 +1,7 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
   menuLinkImages,
   menuLinks,
@@ -7,16 +9,17 @@ import {
   menuTypes,
 } from "@media/db/schema/menu";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const menuRouter = createTRPCRouter({
-  all: createAllQuery<typeof menus>(menus),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menus.findMany({ orderBy: desc(schema.menus.id) });
+  }),
   byId: createByIDQuery<typeof menus>(menus),
   create: createCreateQuery<typeof menus>(
     menus,
@@ -28,7 +31,11 @@ export const menuRouter = createTRPCRouter({
 });
 
 export const menuLinkRouter = createTRPCRouter({
-  all: createAllQuery<typeof menuLinks>(menuLinks),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menuLinks.findMany({
+      orderBy: desc(schema.menuLinks.id),
+    });
+  }),
   byId: createByIDQuery<typeof menuLinks>(menuLinks),
   create: createCreateQuery<typeof menuLinks>(
     menuLinks,
@@ -40,7 +47,11 @@ export const menuLinkRouter = createTRPCRouter({
 });
 
 export const menuTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof menuTypes>(menuTypes),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menuTypes.findMany({
+      orderBy: desc(schema.menuTypes.id),
+    });
+  }),
   byId: createByIDQuery<typeof menuTypes>(menuTypes),
   create: createCreateQuery<typeof menuTypes>(
     menuTypes,
@@ -52,7 +63,11 @@ export const menuTypeRouter = createTRPCRouter({
 });
 
 export const menuLinkImageRouter = createTRPCRouter({
-  all: createAllQuery<typeof menuLinkImages>(menuLinkImages),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menuLinkImages.findMany({
+      orderBy: desc(schema.menuLinkImages.id),
+    });
+  }),
   byId: createByIDQuery<typeof menuLinkImages>(menuLinkImages),
   create: createCreateQuery<typeof menuLinkImages>(
     menuLinkImages,

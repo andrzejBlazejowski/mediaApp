@@ -1,17 +1,20 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import { images } from "@media/db/schema/image";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const imageRouter = createTRPCRouter({
-  all: createAllQuery<typeof images>(images),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.images.findMany({ orderBy: desc(schema.images.id) });
+  }),
   byId: createByIDQuery<typeof images>(images),
   create: createCreateQuery<typeof images>(
     images,

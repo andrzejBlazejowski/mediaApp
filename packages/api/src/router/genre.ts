@@ -1,17 +1,20 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import { genres } from "@media/db/schema/genre";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const genreRouter = createTRPCRouter({
-  all: createAllQuery<typeof genres>(genres),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.genres.findMany({ orderBy: desc(schema.genres.id) });
+  }),
   byId: createByIDQuery<typeof genres>(genres),
   create: createCreateQuery<typeof genres>(
     genres,

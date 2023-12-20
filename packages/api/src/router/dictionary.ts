@@ -1,21 +1,26 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
   backOfficeDictionaries,
   clientAppDictionaries,
   countries,
 } from "@media/db/schema/dictionary";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const clientAppDictionaryRouter = createTRPCRouter({
-  all: createAllQuery<typeof clientAppDictionaries>(clientAppDictionaries),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.clientAppDictionaries.findMany({
+      orderBy: desc(schema.clientAppDictionaries.id),
+    });
+  }),
   byId: createByIDQuery<typeof clientAppDictionaries>(clientAppDictionaries),
   create: createCreateQuery<typeof clientAppDictionaries>(
     clientAppDictionaries,
@@ -29,7 +34,11 @@ export const clientAppDictionaryRouter = createTRPCRouter({
 });
 
 export const backOfficeDictionaryRouter = createTRPCRouter({
-  all: createAllQuery<typeof backOfficeDictionaries>(backOfficeDictionaries),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.backOfficeDictionaries.findMany({
+      orderBy: desc(schema.backOfficeDictionaries.id),
+    });
+  }),
   byId: createByIDQuery<typeof backOfficeDictionaries>(backOfficeDictionaries),
   create: createCreateQuery<typeof backOfficeDictionaries>(
     backOfficeDictionaries,
@@ -43,7 +52,11 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
 });
 
 export const countryRouter = createTRPCRouter({
-  all: createAllQuery<typeof countries>(countries),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.countries.findMany({
+      orderBy: desc(schema.countries.id),
+    });
+  }),
   byId: createByIDQuery<typeof countries>(countries),
   create: createCreateQuery<typeof countries>(
     countries,

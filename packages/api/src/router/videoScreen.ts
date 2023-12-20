@@ -1,21 +1,26 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
   vodScreenMediaLists,
   vodScreens,
   vodScreenTypes,
 } from "@media/db/schema/vodScreen";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const vodScreenRouter = createTRPCRouter({
-  all: createAllQuery<typeof vodScreens>(vodScreens),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.vodScreens.findMany({
+      orderBy: desc(schema.vodScreens.id),
+    });
+  }),
   byId: createByIDQuery<typeof vodScreens>(vodScreens),
   create: createCreateQuery<typeof vodScreens>(
     vodScreens,
@@ -27,7 +32,11 @@ export const vodScreenRouter = createTRPCRouter({
 });
 
 export const vodScreenTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof vodScreenTypes>(vodScreenTypes),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.vodScreenTypes.findMany({
+      orderBy: desc(schema.vodScreenTypes.id),
+    });
+  }),
   byId: createByIDQuery<typeof vodScreenTypes>(vodScreenTypes),
   create: createCreateQuery<typeof vodScreenTypes>(
     vodScreenTypes,
@@ -39,7 +48,11 @@ export const vodScreenTypeRouter = createTRPCRouter({
 });
 
 export const vodScreenMediaListRouter = createTRPCRouter({
-  all: createAllQuery<typeof vodScreenMediaLists>(vodScreenMediaLists),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.vodScreenMediaLists.findMany({
+      orderBy: desc(schema.vodScreenMediaLists.id),
+    });
+  }),
   byId: createByIDQuery<typeof vodScreenMediaLists>(vodScreenMediaLists),
   create: createCreateQuery<typeof vodScreenMediaLists>(
     vodScreenMediaLists,

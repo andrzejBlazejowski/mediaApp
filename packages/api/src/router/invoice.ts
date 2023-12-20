@@ -1,21 +1,27 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
   invoices,
   invoiceTemplates,
   invoiceTypes,
 } from "@media/db/schema/invoice";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const invoiceRouter = createTRPCRouter({
-  all: createAllQuery<typeof invoices>(invoices),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.invoices.findMany({
+      orderBy: desc(schema.invoices.id),
+    });
+  }),
+
   byId: createByIDQuery<typeof invoices>(invoices),
   create: createCreateQuery<typeof invoices>(
     invoices,
@@ -27,7 +33,12 @@ export const invoiceRouter = createTRPCRouter({
 });
 
 export const invoiceTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof invoiceTypes>(invoiceTypes),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.invoiceTypes.findMany({
+      orderBy: desc(schema.invoiceTypes.id),
+    });
+  }),
+
   byId: createByIDQuery<typeof invoiceTypes>(invoiceTypes),
   create: createCreateQuery<typeof invoiceTypes>(
     invoiceTypes,
@@ -39,7 +50,12 @@ export const invoiceTypeRouter = createTRPCRouter({
 });
 
 export const invoiceTemplateRouter = createTRPCRouter({
-  all: createAllQuery<typeof invoiceTemplates>(invoiceTemplates),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.invoiceTemplates.findMany({
+      orderBy: desc(schema.invoiceTemplates.id),
+    });
+  }),
+
   byId: createByIDQuery<typeof invoiceTemplates>(invoiceTemplates),
   create: createCreateQuery<typeof invoiceTemplates>(
     invoiceTemplates,

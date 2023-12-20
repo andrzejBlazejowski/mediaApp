@@ -1,17 +1,20 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import { videos } from "@media/db/schema/video";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const videoRouter = createTRPCRouter({
-  all: createAllQuery<typeof videos>(videos),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.videos.findMany({ orderBy: desc(schema.videos.id) });
+  }),
   byId: createByIDQuery<typeof videos>(videos),
   create: createCreateQuery<typeof videos>(
     videos,

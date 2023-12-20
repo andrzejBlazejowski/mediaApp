@@ -1,5 +1,7 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
   brandingColors,
   brandingColorTypes,
@@ -8,16 +10,20 @@ import {
   brandings,
 } from "@media/db/schema/branding";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const brandingRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandings>(brandings),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandings.findMany({
+      orderBy: desc(schema.brandings.id),
+    });
+  }),
+
   byId: createByIDQuery<typeof brandings>(brandings),
   create: createCreateQuery<typeof brandings>(
     brandings,
@@ -29,7 +35,12 @@ export const brandingRouter = createTRPCRouter({
 });
 
 export const brandingColorRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandingColors>(brandingColors),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandingColors.findMany({
+      orderBy: desc(schema.brandingColors.id),
+    });
+  }),
+
   byId: createByIDQuery<typeof brandingColors>(brandingColors),
   create: createCreateQuery<typeof brandingColors>(
     brandingColors,
@@ -41,7 +52,12 @@ export const brandingColorRouter = createTRPCRouter({
 });
 
 export const brandingColorTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandingColorTypes>(brandingColorTypes),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandingColorTypes.findMany({
+      orderBy: desc(schema.brandingColorTypes.id),
+    });
+  }),
+
   byId: createByIDQuery<typeof brandingColorTypes>(brandingColorTypes),
   create: createCreateQuery<typeof brandingColorTypes>(
     brandingColorTypes,
@@ -53,7 +69,12 @@ export const brandingColorTypeRouter = createTRPCRouter({
 });
 
 export const brandingImageRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandingImages>(brandingImages),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandingImages.findMany({
+      orderBy: desc(schema.brandingImages.id),
+    });
+  }),
+
   byId: createByIDQuery<typeof brandingImages>(brandingImages),
   create: createCreateQuery<typeof brandingImages>(
     brandingImages,
@@ -65,7 +86,12 @@ export const brandingImageRouter = createTRPCRouter({
 });
 
 export const brandingImageTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandingImageTypes>(brandingImageTypes),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandingImageTypes.findMany({
+      orderBy: desc(schema.brandingImageTypes.id),
+    });
+  }),
+
   byId: createByIDQuery<typeof brandingImageTypes>(brandingImageTypes),
   create: createCreateQuery<typeof brandingImageTypes>(
     brandingImageTypes,

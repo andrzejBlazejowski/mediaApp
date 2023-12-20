@@ -1,17 +1,22 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import { menuPlatforms, platforms } from "@media/db/schema/platform";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const platformRouter = createTRPCRouter({
-  all: createAllQuery<typeof platforms>(platforms),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.platforms.findMany({
+      orderBy: desc(schema.platforms.id),
+    });
+  }),
   byId: createByIDQuery<typeof platforms>(platforms),
   create: createCreateQuery<typeof platforms>(
     platforms,
@@ -23,7 +28,11 @@ export const platformRouter = createTRPCRouter({
 });
 
 export const menuPlatformRouter = createTRPCRouter({
-  all: createAllQuery<typeof menuPlatforms>(menuPlatforms),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menuPlatforms.findMany({
+      orderBy: desc(schema.menuPlatforms.id),
+    });
+  }),
   byId: createByIDQuery<typeof menuPlatforms>(menuPlatforms),
   create: createCreateQuery<typeof menuPlatforms>(
     menuPlatforms,

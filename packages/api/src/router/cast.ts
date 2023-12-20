@@ -1,5 +1,7 @@
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
   castMemberImages,
   castMembers,
@@ -8,16 +10,19 @@ import {
   people,
 } from "@media/db/schema/cast";
 
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createAllQuery,
   createByIDQuery,
   createCreateQuery,
   createDeleteQuery,
 } from "./commonRouter";
 
 export const castMemberRouter = createTRPCRouter({
-  all: createAllQuery<typeof castMembers>(castMembers),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.castMembers.findMany({
+      orderBy: desc(schema.castMembers.id),
+    });
+  }),
   byId: createByIDQuery<typeof castMembers>(castMembers),
   create: createCreateQuery<typeof castMembers>(
     castMembers,
@@ -29,7 +34,11 @@ export const castMemberRouter = createTRPCRouter({
 });
 
 export const castMemberImageRouter = createTRPCRouter({
-  all: createAllQuery<typeof castMemberImages>(castMemberImages),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.castMemberImages.findMany({
+      orderBy: desc(schema.castMemberImages.id),
+    });
+  }),
   byId: createByIDQuery<typeof castMemberImages>(castMemberImages),
   create: createCreateQuery<typeof castMemberImages>(
     castMemberImages,
@@ -41,7 +50,11 @@ export const castMemberImageRouter = createTRPCRouter({
 });
 
 export const castRoleRouter = createTRPCRouter({
-  all: createAllQuery<typeof castRoles>(castRoles),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.castRoles.findMany({
+      orderBy: desc(schema.castRoles.id),
+    });
+  }),
   byId: createByIDQuery<typeof castRoles>(castRoles),
   create: createCreateQuery<typeof castRoles>(
     castRoles,
@@ -53,7 +66,11 @@ export const castRoleRouter = createTRPCRouter({
 });
 
 export const mediaCastMemberRouter = createTRPCRouter({
-  all: createAllQuery<typeof mediaCastMembers>(mediaCastMembers),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.mediaCastMembers.findMany({
+      orderBy: desc(schema.mediaCastMembers.id),
+    });
+  }),
   byId: createByIDQuery<typeof mediaCastMembers>(mediaCastMembers),
   create: createCreateQuery<typeof mediaCastMembers>(
     mediaCastMembers,
@@ -65,7 +82,9 @@ export const mediaCastMemberRouter = createTRPCRouter({
 });
 
 export const peopleRouter = createTRPCRouter({
-  all: createAllQuery<typeof people>(people),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.people.findMany({ orderBy: desc(schema.people.id) });
+  }),
   byId: createByIDQuery<typeof people>(people),
   create: createCreateQuery<typeof people>(
     people,
