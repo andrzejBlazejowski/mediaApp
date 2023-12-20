@@ -1,15 +1,11 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
 import { menuPlatforms, platforms } from "@media/db/schema/platform";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createCreateQuery, createDeleteQuery } from "./commonRouter";
 
 export const platformRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -17,7 +13,13 @@ export const platformRouter = createTRPCRouter({
       orderBy: desc(schema.platforms.id),
     });
   }),
-  byId: createByIDQuery<typeof platforms>(platforms),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.platforms.findFirst({
+        where: eq(schema.platforms.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof platforms>(
     platforms,
     z.object({
@@ -33,7 +35,13 @@ export const menuPlatformRouter = createTRPCRouter({
       orderBy: desc(schema.menuPlatforms.id),
     });
   }),
-  byId: createByIDQuery<typeof menuPlatforms>(menuPlatforms),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menuPlatforms.findFirst({
+        where: eq(schema.menuPlatforms.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof menuPlatforms>(
     menuPlatforms,
     z.object({

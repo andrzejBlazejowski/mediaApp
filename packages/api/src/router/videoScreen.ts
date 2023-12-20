@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -9,11 +9,7 @@ import {
 } from "@media/db/schema/vodScreen";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createCreateQuery, createDeleteQuery } from "./commonRouter";
 
 export const vodScreenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -21,7 +17,13 @@ export const vodScreenRouter = createTRPCRouter({
       orderBy: desc(schema.vodScreens.id),
     });
   }),
-  byId: createByIDQuery<typeof vodScreens>(vodScreens),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.vodScreens.findFirst({
+        where: eq(schema.vodScreens.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof vodScreens>(
     vodScreens,
     z.object({
@@ -37,7 +39,13 @@ export const vodScreenTypeRouter = createTRPCRouter({
       orderBy: desc(schema.vodScreenTypes.id),
     });
   }),
-  byId: createByIDQuery<typeof vodScreenTypes>(vodScreenTypes),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.vodScreenTypes.findFirst({
+        where: eq(schema.vodScreenTypes.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof vodScreenTypes>(
     vodScreenTypes,
     z.object({
@@ -53,7 +61,13 @@ export const vodScreenMediaListRouter = createTRPCRouter({
       orderBy: desc(schema.vodScreenMediaLists.id),
     });
   }),
-  byId: createByIDQuery<typeof vodScreenMediaLists>(vodScreenMediaLists),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.vodScreenMediaLists.findFirst({
+        where: eq(schema.vodScreenMediaLists.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof vodScreenMediaLists>(
     vodScreenMediaLists,
     z.object({

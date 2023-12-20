@@ -17,6 +17,14 @@ import {
 export const purchaseRouter = createTRPCRouter({
   // TODO: fix it - change to specific query not generic
   all: createAllQuery<typeof purchases>(purchases),
+
+  // byId: publicProcedure
+  //   .input(z.object({ id: z.number() }))
+  //   .query(({ ctx, input }) => {
+  //     return ctx.db.query.purchases.findFirst({
+  //       where: eq(schema.purchases.id, input.id),
+  //     });
+  //   }),
   byId: createByIDQuery<typeof purchases>(purchases),
   create: createCreateQuery<typeof purchases>(
     purchases,
@@ -30,6 +38,14 @@ export const purchaseRouter = createTRPCRouter({
 export const purchaseItemRouter = createTRPCRouter({
   // TODO: fix it - change to specific query not generic
   all: createAllQuery<typeof purchaseItems>(purchaseItems),
+
+  // byId: publicProcedure
+  //   .input(z.object({ id: z.number() }))
+  //   .query(({ ctx, input }) => {
+  //     return ctx.db.query.purchaseItems.findFirst({
+  //       where: eq(schema.purchaseItems.id, input.id),
+  //     });
+  //   }),
   byId: createByIDQuery<typeof purchaseItems>(purchaseItems),
   create: createCreateQuery<typeof purchaseItems>(
     purchaseItems,
@@ -43,6 +59,14 @@ export const purchaseItemRouter = createTRPCRouter({
 export const purchaseTypeRouter = createTRPCRouter({
   // TODO: fix it - change to specific query not generic
   all: createAllQuery<typeof purchaseTypes>(purchaseTypes),
+
+  // byId: publicProcedure
+  //   .input(z.object({ id: z.number() }))
+  //   .query(({ ctx, input }) => {
+  //     return ctx.db.query.purchaseTypes.findFirst({
+  //       where: eq(schema.purchaseTypes.id, input.id),
+  //     });
+  //   }),
   byId: createByIDQuery<typeof purchaseTypes>(purchaseTypes),
   create: createCreateQuery<typeof purchaseTypes>(
     purchaseTypes,

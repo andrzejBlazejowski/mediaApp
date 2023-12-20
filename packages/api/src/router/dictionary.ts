@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -21,7 +21,14 @@ export const clientAppDictionaryRouter = createTRPCRouter({
       orderBy: desc(schema.clientAppDictionaries.id),
     });
   }),
-  byId: createByIDQuery<typeof clientAppDictionaries>(clientAppDictionaries),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.clientAppDictionaries.findFirst({
+        where: eq(schema.clientAppDictionaries.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof clientAppDictionaries>(
     clientAppDictionaries,
     z.object({
@@ -39,7 +46,14 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
       orderBy: desc(schema.backOfficeDictionaries.id),
     });
   }),
-  byId: createByIDQuery<typeof backOfficeDictionaries>(backOfficeDictionaries),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.backOfficeDictionaries.findFirst({
+        where: eq(schema.backOfficeDictionaries.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof backOfficeDictionaries>(
     backOfficeDictionaries,
     z.object({
@@ -57,7 +71,14 @@ export const countryRouter = createTRPCRouter({
       orderBy: desc(schema.countries.id),
     });
   }),
-  byId: createByIDQuery<typeof countries>(countries),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.countries.findFirst({
+        where: eq(schema.countries.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof countries>(
     countries,
     z.object({

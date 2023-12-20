@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -11,11 +11,7 @@ import {
 } from "@media/db/schema/cast";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createCreateQuery, createDeleteQuery } from "./commonRouter";
 
 export const castMemberRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -23,7 +19,14 @@ export const castMemberRouter = createTRPCRouter({
       orderBy: desc(schema.castMembers.id),
     });
   }),
-  byId: createByIDQuery<typeof castMembers>(castMembers),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.castMembers.findFirst({
+        where: eq(schema.castMembers.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof castMembers>(
     castMembers,
     z.object({
@@ -39,7 +42,14 @@ export const castMemberImageRouter = createTRPCRouter({
       orderBy: desc(schema.castMemberImages.id),
     });
   }),
-  byId: createByIDQuery<typeof castMemberImages>(castMemberImages),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.castMemberImages.findFirst({
+        where: eq(schema.castMemberImages.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof castMemberImages>(
     castMemberImages,
     z.object({
@@ -55,7 +65,14 @@ export const castRoleRouter = createTRPCRouter({
       orderBy: desc(schema.castRoles.id),
     });
   }),
-  byId: createByIDQuery<typeof castRoles>(castRoles),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.castRoles.findFirst({
+        where: eq(schema.castRoles.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof castRoles>(
     castRoles,
     z.object({
@@ -71,7 +88,14 @@ export const mediaCastMemberRouter = createTRPCRouter({
       orderBy: desc(schema.mediaCastMembers.id),
     });
   }),
-  byId: createByIDQuery<typeof mediaCastMembers>(mediaCastMembers),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.mediaCastMembers.findFirst({
+        where: eq(schema.mediaCastMembers.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof mediaCastMembers>(
     mediaCastMembers,
     z.object({
@@ -85,7 +109,14 @@ export const peopleRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.people.findMany({ orderBy: desc(schema.people.id) });
   }),
-  byId: createByIDQuery<typeof people>(people),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.people.findFirst({
+        where: eq(schema.people.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof people>(
     people,
     z.object({

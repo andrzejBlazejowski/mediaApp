@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -10,17 +10,20 @@ import {
 } from "@media/db/schema/menu";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createCreateQuery, createDeleteQuery } from "./commonRouter";
 
 export const menuRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.menus.findMany({ orderBy: desc(schema.menus.id) });
   }),
-  byId: createByIDQuery<typeof menus>(menus),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menus.findFirst({
+        where: eq(schema.menus.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof menus>(
     menus,
     z.object({
@@ -36,7 +39,14 @@ export const menuLinkRouter = createTRPCRouter({
       orderBy: desc(schema.menuLinks.id),
     });
   }),
-  byId: createByIDQuery<typeof menuLinks>(menuLinks),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menuLinks.findFirst({
+        where: eq(schema.menuLinks.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof menuLinks>(
     menuLinks,
     z.object({
@@ -52,7 +62,14 @@ export const menuTypeRouter = createTRPCRouter({
       orderBy: desc(schema.menuTypes.id),
     });
   }),
-  byId: createByIDQuery<typeof menuTypes>(menuTypes),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menuTypes.findFirst({
+        where: eq(schema.menuTypes.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof menuTypes>(
     menuTypes,
     z.object({
@@ -68,7 +85,14 @@ export const menuLinkImageRouter = createTRPCRouter({
       orderBy: desc(schema.menuLinkImages.id),
     });
   }),
-  byId: createByIDQuery<typeof menuLinkImages>(menuLinkImages),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menuLinkImages.findFirst({
+        where: eq(schema.menuLinkImages.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof menuLinkImages>(
     menuLinkImages,
     z.object({

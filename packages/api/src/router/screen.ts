@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -16,7 +16,13 @@ export const screenRouter = createTRPCRouter({
     return ctx.db.query.screens.findMany({ orderBy: desc(schema.screens.id) });
   }),
 
-  byId: createByIDQuery<typeof screens>(screens),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.screens.findFirst({
+        where: eq(schema.screens.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof screens>(
     screens,
     z.object({
@@ -33,7 +39,13 @@ export const screenTypeRouter = createTRPCRouter({
     });
   }),
 
-  byId: createByIDQuery<typeof screenTypes>(screenTypes),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.screenTypes.findFirst({
+        where: eq(schema.screenTypes.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof screenTypes>(
     screenTypes,
     z.object({

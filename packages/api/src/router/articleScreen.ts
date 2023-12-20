@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -8,11 +8,7 @@ import {
 } from "@media/db/schema/articleScreen";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createCreateQuery, createDeleteQuery } from "./commonRouter";
 
 export const articleScreenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -20,8 +16,13 @@ export const articleScreenRouter = createTRPCRouter({
       orderBy: desc(schema.articleScreens.id),
     });
   }),
-
-  byId: createByIDQuery<typeof articleScreens>(articleScreens),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.articleScreens.findFirst({
+        where: eq(schema.articleScreens.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof articleScreens>(
     articleScreens,
     z.object({
@@ -37,7 +38,13 @@ export const articleScreenImageRouter = createTRPCRouter({
       orderBy: desc(schema.articleScreenImages.id),
     });
   }),
-  byId: createByIDQuery<typeof articleScreenImages>(articleScreenImages),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.articleScreenImages.findFirst({
+        where: eq(schema.articleScreenImages.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof articleScreenImages>(
     articleScreenImages,
     z.object({

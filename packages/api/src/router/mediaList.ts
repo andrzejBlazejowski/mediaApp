@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -17,12 +17,17 @@ import {
 
 export const mediaListRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    // return ctx.db.select().from(schema.post).orderBy(desc(schema.post.id));
     return ctx.db.query.mediaLists.findMany({
       orderBy: desc(schema.mediaLists.id),
     });
   }),
-  byId: createByIDQuery<typeof mediaLists>(mediaLists),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.mediaLists.findFirst({
+        where: eq(schema.mediaLists.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof mediaLists>(
     mediaLists,
     z.object({
@@ -34,12 +39,17 @@ export const mediaListRouter = createTRPCRouter({
 
 export const mediaListTypeRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    // return ctx.db.select().from(schema.post).orderBy(desc(schema.post.id));
     return ctx.db.query.mediaListTypes.findMany({
       orderBy: desc(schema.mediaListTypes.id),
     });
   }),
-  byId: createByIDQuery<typeof mediaListTypes>(mediaListTypes),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.mediaListTypes.findFirst({
+        where: eq(schema.mediaListTypes.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof mediaListTypes>(
     mediaListTypes,
     z.object({
@@ -51,12 +61,17 @@ export const mediaListTypeRouter = createTRPCRouter({
 
 export const mediaListMediaRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    // return ctx.db.select().from(schema.post).orderBy(desc(schema.post.id));
     return ctx.db.query.mediaListMedias.findMany({
       orderBy: desc(schema.mediaListMedias.id),
     });
   }),
-  byId: createByIDQuery<typeof mediaListMedias>(mediaListMedias),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.mediaListMedias.findFirst({
+        where: eq(schema.mediaListMedias.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof mediaListMedias>(
     mediaListMedias,
     z.object({

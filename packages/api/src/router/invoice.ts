@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -9,11 +9,7 @@ import {
 } from "@media/db/schema/invoice";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createCreateQuery, createDeleteQuery } from "./commonRouter";
 
 export const invoiceRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -22,7 +18,13 @@ export const invoiceRouter = createTRPCRouter({
     });
   }),
 
-  byId: createByIDQuery<typeof invoices>(invoices),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.invoices.findFirst({
+        where: eq(schema.invoices.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof invoices>(
     invoices,
     z.object({
@@ -39,7 +41,13 @@ export const invoiceTypeRouter = createTRPCRouter({
     });
   }),
 
-  byId: createByIDQuery<typeof invoiceTypes>(invoiceTypes),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.invoiceTypes.findFirst({
+        where: eq(schema.invoiceTypes.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof invoiceTypes>(
     invoiceTypes,
     z.object({
@@ -56,7 +64,13 @@ export const invoiceTemplateRouter = createTRPCRouter({
     });
   }),
 
-  byId: createByIDQuery<typeof invoiceTemplates>(invoiceTemplates),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.invoiceTemplates.findFirst({
+        where: eq(schema.invoiceTemplates.id, input.id),
+      });
+    }),
   create: createCreateQuery<typeof invoiceTemplates>(
     invoiceTemplates,
     z.object({
