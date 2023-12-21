@@ -4,13 +4,18 @@ import { z } from "zod";
 import { schema } from "@media/db";
 import {
   brandingColors,
+  brandingColorsInsertSchema,
   brandingColorTypes,
+  brandingColorTypesInsertSchema,
   brandingImages,
+  brandingImagesInsertSchema,
   brandingImageTypes,
+  brandingImageTypesInsertSchema,
   brandings,
+  brandingsInsertSchema,
 } from "@media/db/schema/branding";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { createCreateQuery, createDeleteQuery } from "./commonRouter";
 
 export const brandingRouter = createTRPCRouter({
@@ -28,12 +33,12 @@ export const brandingRouter = createTRPCRouter({
       });
     }),
 
-  create: createCreateQuery<typeof brandings>(
-    brandings,
-    z.object({
-      title: z.string().min(1),
+  create: protectedProcedure
+    .input(brandingsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandings).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof brandings>(brandings),
 });
 
@@ -52,12 +57,12 @@ export const brandingColorRouter = createTRPCRouter({
       });
     }),
 
-  create: createCreateQuery<typeof brandingColors>(
-    brandingColors,
-    z.object({
-      title: z.string().min(1),
+  create: protectedProcedure
+    .input(brandingColorsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandingColors).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof brandingColors>(brandingColors),
 });
 
@@ -76,12 +81,12 @@ export const brandingColorTypeRouter = createTRPCRouter({
       });
     }),
 
-  create: createCreateQuery<typeof brandingColorTypes>(
-    brandingColorTypes,
-    z.object({
-      title: z.string().min(1),
+  create: protectedProcedure
+    .input(brandingColorTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandingColorTypes).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof brandingColorTypes>(brandingColorTypes),
 });
 
@@ -100,12 +105,12 @@ export const brandingImageRouter = createTRPCRouter({
       });
     }),
 
-  create: createCreateQuery<typeof brandingImages>(
-    brandingImages,
-    z.object({
-      title: z.string().min(1),
+  create: protectedProcedure
+    .input(brandingImagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandingImages).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof brandingImages>(brandingImages),
 });
 
@@ -124,11 +129,11 @@ export const brandingImageTypeRouter = createTRPCRouter({
       });
     }),
 
-  create: createCreateQuery<typeof brandingImageTypes>(
-    brandingImageTypes,
-    z.object({
-      title: z.string().min(1),
+  create: protectedProcedure
+    .input(brandingImageTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandingImageTypes).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof brandingImageTypes>(brandingImageTypes),
 });

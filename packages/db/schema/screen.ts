@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { articleScreens } from "./articleScreen";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
@@ -39,6 +40,8 @@ export const screensRelations = relations(screens, ({ many, one }) => ({
   }),
 }));
 
+export const screensInsertSchema = createInsertSchema(screens);
+
 export const screenTypes = mysqlTable(
   "screenTypes",
   {
@@ -53,3 +56,5 @@ export const screenTypes = mysqlTable(
 export const screenTypesRelations = relations(screenTypes, ({ many }) => ({
   screens: many(screens),
 }));
+
+export const screenTypesInsertSchema = createInsertSchema(screenTypes);

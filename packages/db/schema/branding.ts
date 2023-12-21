@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { images } from "./image";
@@ -19,6 +20,8 @@ export const brandingsRelations = relations(brandings, ({ many }) => ({
   brandingColors: many(brandingColors),
   brandingImages: many(brandingImages),
 }));
+
+export const brandingsInsertSchema = createInsertSchema(brandings);
 
 export const brandingColors = mysqlTable(
   "brandingColors",
@@ -47,6 +50,8 @@ export const brandingColorsRelations = relations(brandingColors, ({ one }) => ({
   }),
 }));
 
+export const brandingColorsInsertSchema = createInsertSchema(brandingColors);
+
 export const brandingColorTypes = mysqlTable(
   "brandingColorTypes",
   {
@@ -66,6 +71,9 @@ export const brandingColorTypesRelations = relations(
     brandingColors: many(brandingColors),
   }),
 );
+
+export const brandingColorTypesInsertSchema =
+  createInsertSchema(brandingColorTypes);
 
 export const brandingImages = mysqlTable(
   "brandingImages",
@@ -97,6 +105,8 @@ export const brandingImagesRelations = relations(brandingImages, ({ one }) => ({
   }),
 }));
 
+export const brandingImagesInsertSchema = createInsertSchema(brandingImages);
+
 export const brandingImageTypes = mysqlTable(
   "brandingImageTypes",
   {
@@ -116,3 +126,6 @@ export const brandingImageTypesRelations = relations(
     brandingImages: many(brandingImages),
   }),
 );
+
+export const brandingImageTypesInsertSchema =
+  createInsertSchema(brandingImageTypes);

@@ -4,11 +4,13 @@ import { z } from "zod";
 import { schema } from "@media/db";
 import {
   articleScreenImages,
+  articleScreenImagesInsertSchema,
   articleScreens,
+  articleScreensInsertSchema,
 } from "@media/db/schema/articleScreen";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import { createCreateQuery, createDeleteQuery } from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const articleScreenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -23,12 +25,13 @@ export const articleScreenRouter = createTRPCRouter({
         where: eq(schema.articleScreens.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof articleScreens>(
-    articleScreens,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(articleScreensInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.articleScreens).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof articleScreens>(articleScreens),
 });
 
@@ -45,11 +48,12 @@ export const articleScreenImageRouter = createTRPCRouter({
         where: eq(schema.articleScreenImages.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof articleScreenImages>(
-    articleScreenImages,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(articleScreenImagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.articleScreenImages).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof articleScreenImages>(articleScreenImages),
 });

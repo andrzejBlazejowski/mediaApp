@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { mediaLists } from "./mediaList";
@@ -26,6 +27,8 @@ export const vodScreensRelations = relations(vodScreens, ({ many, one }) => ({
   }),
 }));
 
+export const vodScreensInsertSchema = createInsertSchema(vodScreens);
+
 export const vodScreenTypes = mysqlTable(
   "vodScreenTypes",
   {
@@ -43,6 +46,8 @@ export const vodScreenTypesRelations = relations(
     vodScreens: many(vodScreens),
   }),
 );
+
+export const vodScreenTypesInsertSchema = createInsertSchema(vodScreenTypes);
 
 export const vodScreenMediaLists = mysqlTable(
   "vodScreenMediaLists",
@@ -71,3 +76,6 @@ export const vodScreenMediaListsRelations = relations(
     }),
   }),
 );
+
+export const vodScreenMediaListsInsertSchema =
+  createInsertSchema(vodScreenMediaLists);

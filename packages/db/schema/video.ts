@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { videoContents } from "./media";
@@ -20,3 +21,5 @@ export const videos = mysqlTable(
 export const videosRelations = relations(videos, ({ many }) => ({
   videoContents: many(videoContents),
 }));
+
+export const videosInsertSchema = createInsertSchema(videos);

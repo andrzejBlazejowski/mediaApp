@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, mysqlTable } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { castMembers } from "./cast";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
@@ -15,6 +16,10 @@ export const clientAppDictionaries = mysqlTable(
   }),
 );
 
+export const clientAppDictionariesInsertSchema = createInsertSchema(
+  clientAppDictionaries,
+);
+
 export const backOfficeDictionaries = mysqlTable(
   "backOfficeDictionaries",
   {
@@ -24,6 +29,10 @@ export const backOfficeDictionaries = mysqlTable(
   (backOfficeDictionary) => ({
     idIdx: index("id_idx").on(backOfficeDictionary.id),
   }),
+);
+
+export const backOfficeDictionariesInsertSchema = createInsertSchema(
+  backOfficeDictionaries,
 );
 
 export const countries = mysqlTable(
@@ -40,3 +49,5 @@ export const countries = mysqlTable(
 export const countriesRelations = relations(countries, ({ many }) => ({
   castMembers: many(castMembers),
 }));
+
+export const countriesInsertSchema = createInsertSchema(countries);
