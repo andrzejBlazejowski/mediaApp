@@ -1,7 +1,9 @@
-import { ControllerRenderProps } from "react-hook-form";
+import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 
 export interface FormViewProps {
   type: "add" | "edit";
+  title?: string;
+  form: UseFormReturn<any>;
   onSubmit: (values: any) => void;
   uiSchema: IuiSchema;
 }
