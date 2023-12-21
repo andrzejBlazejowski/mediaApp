@@ -23,5 +23,8 @@ export const videoRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.videos).values(input);
     }),
-  delete: createDeleteQuery<typeof videos>(videos),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.videos).where(eq(schema.videos.id, input));
+  }),
 });

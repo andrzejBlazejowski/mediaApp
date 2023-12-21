@@ -3,14 +3,11 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  screens,
   screensInsertSchema,
-  screenTypes,
   screenTypesInsertSchema,
 } from "@media/db/schema/screen";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const screenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -30,7 +27,9 @@ export const screenRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.screens).values(input);
     }),
-  delete: createDeleteQuery<typeof screens>(screens),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.screens).where(eq(schema.screens.id, input));
+  }),
 });
 
 export const screenTypeRouter = createTRPCRouter({
@@ -53,5 +52,9 @@ export const screenTypeRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.screenTypes).values(input);
     }),
-  delete: createDeleteQuery<typeof screenTypes>(screenTypes),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.screenTypes)
+      .where(eq(schema.screenTypes.id, input));
+  }),
 });

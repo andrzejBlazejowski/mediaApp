@@ -3,16 +3,12 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  backOfficeDictionaries,
   backOfficeDictionariesInsertSchema,
-  clientAppDictionaries,
   clientAppDictionariesInsertSchema,
-  countries,
   countriesInsertSchema,
 } from "@media/db/schema/dictionary";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const clientAppDictionaryRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -35,9 +31,11 @@ export const clientAppDictionaryRouter = createTRPCRouter({
       return ctx.db.insert(schema.clientAppDictionaries).values(input);
     }),
 
-  delete: createDeleteQuery<typeof clientAppDictionaries>(
-    clientAppDictionaries,
-  ),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.clientAppDictionaries)
+      .where(eq(schema.clientAppDictionaries.id, input));
+  }),
 });
 
 export const backOfficeDictionaryRouter = createTRPCRouter({
@@ -61,9 +59,11 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
       return ctx.db.insert(schema.backOfficeDictionaries).values(input);
     }),
 
-  delete: createDeleteQuery<typeof backOfficeDictionaries>(
-    backOfficeDictionaries,
-  ),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.backOfficeDictionaries)
+      .where(eq(schema.backOfficeDictionaries.id, input));
+  }),
 });
 
 export const countryRouter = createTRPCRouter({
@@ -87,5 +87,9 @@ export const countryRouter = createTRPCRouter({
       return ctx.db.insert(schema.countries).values(input);
     }),
 
-  delete: createDeleteQuery<typeof countries>(countries),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.countries)
+      .where(eq(schema.countries.id, input));
+  }),
 });

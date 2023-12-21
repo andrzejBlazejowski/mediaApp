@@ -3,20 +3,14 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  brandingColors,
   brandingColorsInsertSchema,
-  brandingColorTypes,
   brandingColorTypesInsertSchema,
-  brandingImages,
   brandingImagesInsertSchema,
-  brandingImageTypes,
   brandingImageTypesInsertSchema,
-  brandings,
   brandingsInsertSchema,
 } from "@media/db/schema/branding";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createCreateQuery, createDeleteQuery } from "./commonRouter";
 
 export const brandingRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -39,7 +33,11 @@ export const brandingRouter = createTRPCRouter({
       return ctx.db.insert(schema.brandings).values(input);
     }),
 
-  delete: createDeleteQuery<typeof brandings>(brandings),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandings)
+      .where(eq(schema.brandings.id, input));
+  }),
 });
 
 export const brandingColorRouter = createTRPCRouter({
@@ -63,7 +61,11 @@ export const brandingColorRouter = createTRPCRouter({
       return ctx.db.insert(schema.brandingColors).values(input);
     }),
 
-  delete: createDeleteQuery<typeof brandingColors>(brandingColors),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandingColors)
+      .where(eq(schema.brandingColors.id, input));
+  }),
 });
 
 export const brandingColorTypeRouter = createTRPCRouter({
@@ -87,7 +89,11 @@ export const brandingColorTypeRouter = createTRPCRouter({
       return ctx.db.insert(schema.brandingColorTypes).values(input);
     }),
 
-  delete: createDeleteQuery<typeof brandingColorTypes>(brandingColorTypes),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandingColorTypes)
+      .where(eq(schema.brandingColorTypes.id, input));
+  }),
 });
 
 export const brandingImageRouter = createTRPCRouter({
@@ -111,7 +117,11 @@ export const brandingImageRouter = createTRPCRouter({
       return ctx.db.insert(schema.brandingImages).values(input);
     }),
 
-  delete: createDeleteQuery<typeof brandingImages>(brandingImages),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandingImages)
+      .where(eq(schema.brandingImages.id, input));
+  }),
 });
 
 export const brandingImageTypeRouter = createTRPCRouter({
@@ -135,5 +145,9 @@ export const brandingImageTypeRouter = createTRPCRouter({
       return ctx.db.insert(schema.brandingImageTypes).values(input);
     }),
 
-  delete: createDeleteQuery<typeof brandingImageTypes>(brandingImageTypes),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandingImageTypes)
+      .where(eq(schema.brandingImageTypes.id, input));
+  }),
 });

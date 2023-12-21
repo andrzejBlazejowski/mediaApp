@@ -3,16 +3,12 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  mediaListMedias,
   mediaListMediasInsertSchema,
-  mediaLists,
   mediaListsInsertSchema,
-  mediaListTypes,
   mediaListTypesInsertSchema,
 } from "@media/db/schema/mediaList";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const mediaListRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -33,7 +29,11 @@ export const mediaListRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaLists).values(input);
     }),
-  delete: createDeleteQuery<typeof mediaLists>(mediaLists),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaLists)
+      .where(eq(schema.mediaLists.id, input));
+  }),
 });
 
 export const mediaListTypeRouter = createTRPCRouter({
@@ -55,7 +55,11 @@ export const mediaListTypeRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaListTypes).values(input);
     }),
-  delete: createDeleteQuery<typeof mediaListTypes>(mediaListTypes),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaListTypes)
+      .where(eq(schema.mediaListTypes.id, input));
+  }),
 });
 
 export const mediaListMediaRouter = createTRPCRouter({
@@ -77,5 +81,9 @@ export const mediaListMediaRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaListMedias).values(input);
     }),
-  delete: createDeleteQuery<typeof mediaListMedias>(mediaListMedias),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaListMedias)
+      .where(eq(schema.mediaListMedias.id, input));
+  }),
 });

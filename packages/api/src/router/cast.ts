@@ -3,20 +3,14 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  castMemberImages,
   castMemberImagesInsertSchema,
-  castMembers,
   castMembersInsertSchema,
-  castRoles,
   castRolesInsertSchema,
-  mediaCastMembers,
   mediaCastMembersInsertSchema,
-  people,
   peopleInsertSchema,
 } from "@media/db/schema/cast";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const castMemberRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -38,7 +32,12 @@ export const castMemberRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.castMembers).values(input);
     }),
-  delete: createDeleteQuery<typeof castMembers>(castMembers),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.castMembers)
+      .where(eq(schema.castMembers.id, input));
+  }),
 });
 
 export const castMemberImageRouter = createTRPCRouter({
@@ -61,7 +60,12 @@ export const castMemberImageRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.castMemberImages).values(input);
     }),
-  delete: createDeleteQuery<typeof castMemberImages>(castMemberImages),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.castMemberImages)
+      .where(eq(schema.castMemberImages.id, input));
+  }),
 });
 
 export const castRoleRouter = createTRPCRouter({
@@ -84,7 +88,12 @@ export const castRoleRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.castRoles).values(input);
     }),
-  delete: createDeleteQuery<typeof castRoles>(castRoles),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.castRoles)
+      .where(eq(schema.castRoles.id, input));
+  }),
 });
 
 export const mediaCastMemberRouter = createTRPCRouter({
@@ -107,7 +116,12 @@ export const mediaCastMemberRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaCastMembers).values(input);
     }),
-  delete: createDeleteQuery<typeof mediaCastMembers>(mediaCastMembers),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaCastMembers)
+      .where(eq(schema.mediaCastMembers.id, input));
+  }),
 });
 
 export const peopleRouter = createTRPCRouter({
@@ -128,5 +142,8 @@ export const peopleRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.people).values(input);
     }),
-  delete: createDeleteQuery<typeof people>(people),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.people).where(eq(schema.people.id, input));
+  }),
 });

@@ -24,5 +24,7 @@ export const genreRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.genres).values(input);
     }),
-  delete: createDeleteQuery<typeof genres>(genres),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.genres).where(eq(schema.genres.id, input));
+  }),
 });

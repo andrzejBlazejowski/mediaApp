@@ -3,16 +3,12 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  invoices,
   invoicesInsertSchema,
-  invoiceTemplates,
   invoiceTemplatesInsertSchema,
-  invoiceTypes,
   invoiceTypesInsertSchema,
 } from "@media/db/schema/invoice";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const invoiceRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -34,7 +30,10 @@ export const invoiceRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoices).values(input);
     }),
-  delete: createDeleteQuery<typeof invoices>(invoices),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.invoices).where(eq(schema.invoices.id, input));
+  }),
 });
 
 export const invoiceTypeRouter = createTRPCRouter({
@@ -57,7 +56,12 @@ export const invoiceTypeRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoiceTypes).values(input);
     }),
-  delete: createDeleteQuery<typeof invoiceTypes>(invoiceTypes),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.invoiceTypes)
+      .where(eq(schema.invoiceTypes.id, input));
+  }),
 });
 
 export const invoiceTemplateRouter = createTRPCRouter({
@@ -80,5 +84,10 @@ export const invoiceTemplateRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoiceTemplates).values(input);
     }),
-  delete: createDeleteQuery<typeof invoiceTemplates>(invoiceTemplates),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.invoiceTemplates)
+      .where(eq(schema.invoiceTemplates.id, input));
+  }),
 });

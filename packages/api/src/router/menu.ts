@@ -3,18 +3,13 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  menuLinkImages,
   menuLinkImagesInsertSchema,
-  menuLinks,
   menuLinksInsertSchema,
-  menus,
   menusInsertSchema,
-  menuTypes,
   menuTypesInsertSchema,
 } from "@media/db/schema/menu";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const menuRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -34,7 +29,10 @@ export const menuRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menus).values(input);
     }),
-  delete: createDeleteQuery<typeof menus>(menus),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.menus).where(eq(schema.menus.id, input));
+  }),
 });
 
 export const menuLinkRouter = createTRPCRouter({
@@ -57,7 +55,12 @@ export const menuLinkRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menuLinks).values(input);
     }),
-  delete: createDeleteQuery<typeof menuLinks>(menuLinks),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.menuLinks)
+      .where(eq(schema.menuLinks.id, input));
+  }),
 });
 
 export const menuTypeRouter = createTRPCRouter({
@@ -80,7 +83,12 @@ export const menuTypeRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menuTypes).values(input);
     }),
-  delete: createDeleteQuery<typeof menuTypes>(menuTypes),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.menuTypes)
+      .where(eq(schema.menuTypes.id, input));
+  }),
 });
 
 export const menuLinkImageRouter = createTRPCRouter({
@@ -103,5 +111,10 @@ export const menuLinkImageRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menuLinkImages).values(input);
     }),
-  delete: createDeleteQuery<typeof menuLinkImages>(menuLinkImages),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.menuLinkImages)
+      .where(eq(schema.menuLinkImages.id, input));
+  }),
 });

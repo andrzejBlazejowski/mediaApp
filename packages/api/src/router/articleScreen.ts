@@ -3,14 +3,11 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  articleScreenImages,
   articleScreenImagesInsertSchema,
-  articleScreens,
   articleScreensInsertSchema,
 } from "@media/db/schema/articleScreen";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const articleScreenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -32,7 +29,11 @@ export const articleScreenRouter = createTRPCRouter({
       return ctx.db.insert(schema.articleScreens).values(input);
     }),
 
-  delete: createDeleteQuery<typeof articleScreens>(articleScreens),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.articleScreens)
+      .where(eq(schema.articleScreens.id, input));
+  }),
 });
 
 export const articleScreenImageRouter = createTRPCRouter({
@@ -55,5 +56,9 @@ export const articleScreenImageRouter = createTRPCRouter({
       return ctx.db.insert(schema.articleScreenImages).values(input);
     }),
 
-  delete: createDeleteQuery<typeof articleScreenImages>(articleScreenImages),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.articleScreenImages)
+      .where(eq(schema.articleScreenImages.id, input));
+  }),
 });

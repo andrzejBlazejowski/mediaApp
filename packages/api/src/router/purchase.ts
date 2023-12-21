@@ -40,6 +40,12 @@ export const purchaseRouter = createTRPCRouter({
     }),
   ),
   delete: createDeleteQuery<typeof purchases>(purchases),
+
+  // delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  //   return ctx.db
+  //     .delete(schema.purchases)
+  //     .where(eq(schema.purchases.id, input));
+  // }),
 });
 
 export const purchaseItemRouter = createTRPCRouter({
@@ -68,6 +74,12 @@ export const purchaseItemRouter = createTRPCRouter({
     }),
   ),
   delete: createDeleteQuery<typeof purchaseItems>(purchaseItems),
+
+  // delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  //   return ctx.db
+  //     .delete(schema.purchaseItems)
+  //     .where(eq(schema.purchaseItems.id, input));
+  // }),
 });
 
 export const purchaseTypeRouter = createTRPCRouter({
@@ -96,4 +108,10 @@ export const purchaseTypeRouter = createTRPCRouter({
     }),
   ),
   delete: createDeleteQuery<typeof purchaseTypes>(purchaseTypes),
+
+  // delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  //   return ctx.db
+  //     .delete(schema.purchaseTypes)
+  //     .where(eq(schema.purchaseTypes.id, input));
+  // }),
 });

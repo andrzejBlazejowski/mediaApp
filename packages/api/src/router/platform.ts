@@ -3,14 +3,11 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  menuPlatforms,
   menuPlatformsInsertSchema,
-  platforms,
   platformsInsertSchema,
 } from "@media/db/schema/platform";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const platformRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -31,7 +28,11 @@ export const platformRouter = createTRPCRouter({
       return ctx.db.insert(schema.platforms).values(input);
     }),
 
-  delete: createDeleteQuery<typeof platforms>(platforms),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.platforms)
+      .where(eq(schema.platforms.id, input));
+  }),
 });
 
 export const menuPlatformRouter = createTRPCRouter({
@@ -54,5 +55,9 @@ export const menuPlatformRouter = createTRPCRouter({
       return ctx.db.insert(schema.menuPlatforms).values(input);
     }),
 
-  delete: createDeleteQuery<typeof menuPlatforms>(menuPlatforms),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.menuPlatforms)
+      .where(eq(schema.menuPlatforms.id, input));
+  }),
 });

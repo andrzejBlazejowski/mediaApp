@@ -3,16 +3,12 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  vodScreenMediaLists,
   vodScreenMediaListsInsertSchema,
-  vodScreens,
   vodScreensInsertSchema,
-  vodScreenTypes,
   vodScreenTypesInsertSchema,
 } from "@media/db/schema/vodScreen";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const vodScreenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -33,7 +29,11 @@ export const vodScreenRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.vodScreens).values(input);
     }),
-  delete: createDeleteQuery<typeof vodScreens>(vodScreens),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.vodScreens)
+      .where(eq(schema.vodScreens.id, input));
+  }),
 });
 
 export const vodScreenTypeRouter = createTRPCRouter({
@@ -55,7 +55,11 @@ export const vodScreenTypeRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.vodScreenTypes).values(input);
     }),
-  delete: createDeleteQuery<typeof vodScreenTypes>(vodScreenTypes),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.vodScreenTypes)
+      .where(eq(schema.vodScreenTypes.id, input));
+  }),
 });
 
 export const vodScreenMediaListRouter = createTRPCRouter({
@@ -77,5 +81,9 @@ export const vodScreenMediaListRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.vodScreenMediaLists).values(input);
     }),
-  delete: createDeleteQuery<typeof vodScreenMediaLists>(vodScreenMediaLists),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.vodScreenMediaLists)
+      .where(eq(schema.vodScreenMediaLists.id, input));
+  }),
 });

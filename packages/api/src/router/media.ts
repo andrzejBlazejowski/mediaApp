@@ -3,24 +3,16 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  mediaCategories,
   mediaCategoriesInsertSchema,
-  mediaImages,
   mediaImagesInsertSchema,
-  mediaImageTypes,
   mediaImageTypesInsertSchema,
-  medias,
   mediasInsertSchema,
-  mediaViewImpressions,
   mediaViewImpressionsInsertSchema,
-  videoContents,
   videoContentsInsertSchema,
-  videoContentTypes,
   videoContentTypesInsertSchema,
 } from "@media/db/schema/media";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const mediaRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -41,7 +33,9 @@ export const mediaRouter = createTRPCRouter({
       return ctx.db.insert(schema.medias).values(input);
     }),
 
-  delete: createDeleteQuery<typeof medias>(medias),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.medias).where(eq(schema.medias.id, input));
+  }),
 });
 
 export const videoContentRouter = createTRPCRouter({
@@ -65,7 +59,11 @@ export const videoContentRouter = createTRPCRouter({
       return ctx.db.insert(schema.videoContents).values(input);
     }),
 
-  delete: createDeleteQuery<typeof videoContents>(videoContents),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.videoContents)
+      .where(eq(schema.videoContents.id, input));
+  }),
 });
 
 export const videoContentTypeRouter = createTRPCRouter({
@@ -89,7 +87,11 @@ export const videoContentTypeRouter = createTRPCRouter({
       return ctx.db.insert(schema.videoContentTypes).values(input);
     }),
 
-  delete: createDeleteQuery<typeof videoContentTypes>(videoContentTypes),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.videoContentTypes)
+      .where(eq(schema.videoContentTypes.id, input));
+  }),
 });
 
 export const mediaCategoyRouter = createTRPCRouter({
@@ -113,7 +115,11 @@ export const mediaCategoyRouter = createTRPCRouter({
       return ctx.db.insert(schema.mediaCategories).values(input);
     }),
 
-  delete: createDeleteQuery<typeof mediaCategories>(mediaCategories),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaCategories)
+      .where(eq(schema.mediaCategories.id, input));
+  }),
 });
 
 export const mediaImageRouter = createTRPCRouter({
@@ -137,7 +143,11 @@ export const mediaImageRouter = createTRPCRouter({
       return ctx.db.insert(schema.mediaImages).values(input);
     }),
 
-  delete: createDeleteQuery<typeof mediaImages>(mediaImages),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaImages)
+      .where(eq(schema.mediaImages.id, input));
+  }),
 });
 
 export const mediaImageTypeRouter = createTRPCRouter({
@@ -161,7 +171,11 @@ export const mediaImageTypeRouter = createTRPCRouter({
       return ctx.db.insert(schema.mediaImageTypes).values(input);
     }),
 
-  delete: createDeleteQuery<typeof mediaImageTypes>(mediaImageTypes),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaImageTypes)
+      .where(eq(schema.mediaImageTypes.id, input));
+  }),
 });
 
 export const mediaViewImpressionRouter = createTRPCRouter({
@@ -185,5 +199,9 @@ export const mediaViewImpressionRouter = createTRPCRouter({
       return ctx.db.insert(schema.mediaViewImpressions).values(input);
     }),
 
-  delete: createDeleteQuery<typeof mediaViewImpressions>(mediaViewImpressions),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaViewImpressions)
+      .where(eq(schema.mediaViewImpressions.id, input));
+  }),
 });
