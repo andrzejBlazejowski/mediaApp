@@ -26,6 +26,13 @@ export const purchaseRouter = createTRPCRouter({
   //     });
   //   }),
   byId: createByIDQuery<typeof purchases>(purchases),
+
+  // create: protectedProcedure
+  //   .input(purchasesInsertSchema)
+  //   .mutation(({ ctx, input }) => {
+  //     return ctx.db.insert(schema.purchases).values(input);
+  //   }),
+
   create: createCreateQuery<typeof purchases>(
     purchases,
     z.object({
@@ -47,6 +54,13 @@ export const purchaseItemRouter = createTRPCRouter({
   //     });
   //   }),
   byId: createByIDQuery<typeof purchaseItems>(purchaseItems),
+
+  // create: protectedProcedure
+  //   .input(purchaseItemsInsertSchema)
+  //   .mutation(({ ctx, input }) => {
+  //     return ctx.db.insert(schema.purchaseItems).values(input);
+  //   }),
+
   create: createCreateQuery<typeof purchaseItems>(
     purchaseItems,
     z.object({
@@ -68,6 +82,13 @@ export const purchaseTypeRouter = createTRPCRouter({
   //     });
   //   }),
   byId: createByIDQuery<typeof purchaseTypes>(purchaseTypes),
+
+  // create: protectedProcedure
+  //   .input(purchaseTypesInsertSchema)
+  //   .mutation(({ ctx, input }) => {
+  //     return ctx.db.insert(schema.purchaseTypes).values(input);
+  //   }),
+
   create: createCreateQuery<typeof purchaseTypes>(
     purchaseTypes,
     z.object({

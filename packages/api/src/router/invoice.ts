@@ -4,12 +4,15 @@ import { z } from "zod";
 import { schema } from "@media/db";
 import {
   invoices,
+  invoicesInsertSchema,
   invoiceTemplates,
+  invoiceTemplatesInsertSchema,
   invoiceTypes,
+  invoiceTypesInsertSchema,
 } from "@media/db/schema/invoice";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import { createCreateQuery, createDeleteQuery } from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const invoiceRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -25,12 +28,12 @@ export const invoiceRouter = createTRPCRouter({
         where: eq(schema.invoices.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof invoices>(
-    invoices,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(invoicesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.invoices).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof invoices>(invoices),
 });
 
@@ -48,12 +51,12 @@ export const invoiceTypeRouter = createTRPCRouter({
         where: eq(schema.invoiceTypes.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof invoiceTypes>(
-    invoiceTypes,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(invoiceTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.invoiceTypes).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof invoiceTypes>(invoiceTypes),
 });
 
@@ -71,11 +74,11 @@ export const invoiceTemplateRouter = createTRPCRouter({
         where: eq(schema.invoiceTemplates.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof invoiceTemplates>(
-    invoiceTemplates,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(invoiceTemplatesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.invoiceTemplates).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof invoiceTemplates>(invoiceTemplates),
 });

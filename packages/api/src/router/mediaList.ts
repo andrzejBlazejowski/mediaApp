@@ -4,16 +4,15 @@ import { z } from "zod";
 import { schema } from "@media/db";
 import {
   mediaListMedias,
+  mediaListMediasInsertSchema,
   mediaLists,
+  mediaListsInsertSchema,
   mediaListTypes,
+  mediaListTypesInsertSchema,
 } from "@media/db/schema/mediaList";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const mediaListRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -28,12 +27,12 @@ export const mediaListRouter = createTRPCRouter({
         where: eq(schema.mediaLists.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof mediaLists>(
-    mediaLists,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(mediaListsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.mediaLists).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof mediaLists>(mediaLists),
 });
 
@@ -50,12 +49,12 @@ export const mediaListTypeRouter = createTRPCRouter({
         where: eq(schema.mediaListTypes.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof mediaListTypes>(
-    mediaListTypes,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(mediaListTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.mediaListTypes).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof mediaListTypes>(mediaListTypes),
 });
 
@@ -72,11 +71,11 @@ export const mediaListMediaRouter = createTRPCRouter({
         where: eq(schema.mediaListMedias.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof mediaListMedias>(
-    mediaListMedias,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(mediaListMediasInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.mediaListMedias).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof mediaListMedias>(mediaListMedias),
 });

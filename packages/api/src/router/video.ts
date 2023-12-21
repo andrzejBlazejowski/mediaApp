@@ -2,10 +2,10 @@ import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
-import { videos } from "@media/db/schema/video";
+import { videos, videosInsertSchema } from "@media/db/schema/video";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import { createCreateQuery, createDeleteQuery } from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const videoRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -18,11 +18,10 @@ export const videoRouter = createTRPCRouter({
         where: eq(schema.videos.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof videos>(
-    videos,
-    z.object({
-      title: z.string().min(1),
+  create: protectedProcedure
+    .input(videosInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.videos).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof videos>(videos),
 });

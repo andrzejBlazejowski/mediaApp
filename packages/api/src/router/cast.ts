@@ -4,14 +4,19 @@ import { z } from "zod";
 import { schema } from "@media/db";
 import {
   castMemberImages,
+  castMemberImagesInsertSchema,
   castMembers,
+  castMembersInsertSchema,
   castRoles,
+  castRolesInsertSchema,
   mediaCastMembers,
+  mediaCastMembersInsertSchema,
   people,
+  peopleInsertSchema,
 } from "@media/db/schema/cast";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import { createCreateQuery, createDeleteQuery } from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const castMemberRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -27,12 +32,12 @@ export const castMemberRouter = createTRPCRouter({
         where: eq(schema.castMembers.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof castMembers>(
-    castMembers,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(castMembersInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.castMembers).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof castMembers>(castMembers),
 });
 
@@ -50,12 +55,12 @@ export const castMemberImageRouter = createTRPCRouter({
         where: eq(schema.castMemberImages.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof castMemberImages>(
-    castMemberImages,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(castMemberImagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.castMemberImages).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof castMemberImages>(castMemberImages),
 });
 
@@ -73,12 +78,12 @@ export const castRoleRouter = createTRPCRouter({
         where: eq(schema.castRoles.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof castRoles>(
-    castRoles,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(castRolesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.castRoles).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof castRoles>(castRoles),
 });
 
@@ -96,12 +101,12 @@ export const mediaCastMemberRouter = createTRPCRouter({
         where: eq(schema.mediaCastMembers.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof mediaCastMembers>(
-    mediaCastMembers,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(mediaCastMembersInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.mediaCastMembers).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof mediaCastMembers>(mediaCastMembers),
 });
 
@@ -117,11 +122,11 @@ export const peopleRouter = createTRPCRouter({
         where: eq(schema.people.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof people>(
-    people,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(peopleInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.people).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof people>(people),
 });

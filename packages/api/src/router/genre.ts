@@ -2,10 +2,10 @@ import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
-import { genres } from "@media/db/schema/genre";
+import { genres, genresInsertSchema } from "@media/db/schema/genre";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import { createCreateQuery, createDeleteQuery } from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const genreRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -19,11 +19,10 @@ export const genreRouter = createTRPCRouter({
         where: eq(schema.genres.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof genres>(
-    genres,
-    z.object({
-      title: z.string().min(1),
+  create: protectedProcedure
+    .input(genresInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.genres).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof genres>(genres),
 });

@@ -4,16 +4,15 @@ import { z } from "zod";
 import { schema } from "@media/db";
 import {
   backOfficeDictionaries,
+  backOfficeDictionariesInsertSchema,
   clientAppDictionaries,
+  clientAppDictionariesInsertSchema,
   countries,
+  countriesInsertSchema,
 } from "@media/db/schema/dictionary";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const clientAppDictionaryRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -29,12 +28,13 @@ export const clientAppDictionaryRouter = createTRPCRouter({
         where: eq(schema.clientAppDictionaries.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof clientAppDictionaries>(
-    clientAppDictionaries,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(clientAppDictionariesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.clientAppDictionaries).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof clientAppDictionaries>(
     clientAppDictionaries,
   ),
@@ -54,12 +54,13 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
         where: eq(schema.backOfficeDictionaries.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof backOfficeDictionaries>(
-    backOfficeDictionaries,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(backOfficeDictionariesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.backOfficeDictionaries).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof backOfficeDictionaries>(
     backOfficeDictionaries,
   ),
@@ -79,11 +80,12 @@ export const countryRouter = createTRPCRouter({
         where: eq(schema.countries.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof countries>(
-    countries,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(countriesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.countries).values(input);
     }),
-  ),
+
   delete: createDeleteQuery<typeof countries>(countries),
 });

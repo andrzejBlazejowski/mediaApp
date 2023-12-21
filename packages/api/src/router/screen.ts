@@ -2,14 +2,15 @@ import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
-import { screens, screenTypes } from "@media/db/schema/screen";
-
-import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+  screens,
+  screensInsertSchema,
+  screenTypes,
+  screenTypesInsertSchema,
+} from "@media/db/schema/screen";
+
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const screenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -23,12 +24,12 @@ export const screenRouter = createTRPCRouter({
         where: eq(schema.screens.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof screens>(
-    screens,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(screensInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.screens).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof screens>(screens),
 });
 
@@ -46,11 +47,11 @@ export const screenTypeRouter = createTRPCRouter({
         where: eq(schema.screenTypes.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof screenTypes>(
-    screenTypes,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(screenTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.screenTypes).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof screenTypes>(screenTypes),
 });

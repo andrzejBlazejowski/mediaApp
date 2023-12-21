@@ -4,13 +4,17 @@ import { z } from "zod";
 import { schema } from "@media/db";
 import {
   menuLinkImages,
+  menuLinkImagesInsertSchema,
   menuLinks,
+  menuLinksInsertSchema,
   menus,
+  menusInsertSchema,
   menuTypes,
+  menuTypesInsertSchema,
 } from "@media/db/schema/menu";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import { createCreateQuery, createDeleteQuery } from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createDeleteQuery } from "./commonRouter";
 
 export const menuRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
@@ -24,12 +28,12 @@ export const menuRouter = createTRPCRouter({
         where: eq(schema.menus.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof menus>(
-    menus,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(menusInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.menus).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof menus>(menus),
 });
 
@@ -47,12 +51,12 @@ export const menuLinkRouter = createTRPCRouter({
         where: eq(schema.menuLinks.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof menuLinks>(
-    menuLinks,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(menuLinksInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.menuLinks).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof menuLinks>(menuLinks),
 });
 
@@ -70,12 +74,12 @@ export const menuTypeRouter = createTRPCRouter({
         where: eq(schema.menuTypes.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof menuTypes>(
-    menuTypes,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(menuTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.menuTypes).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof menuTypes>(menuTypes),
 });
 
@@ -93,11 +97,11 @@ export const menuLinkImageRouter = createTRPCRouter({
         where: eq(schema.menuLinkImages.id, input.id),
       });
     }),
-  create: createCreateQuery<typeof menuLinkImages>(
-    menuLinkImages,
-    z.object({
-      title: z.string().min(1),
+
+  create: protectedProcedure
+    .input(menuLinkImagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.menuLinkImages).values(input);
     }),
-  ),
   delete: createDeleteQuery<typeof menuLinkImages>(menuLinkImages),
 });
