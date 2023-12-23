@@ -7,47 +7,47 @@ import type { TableViewProps } from "../_components/TableView";
 import { TableView } from "../_components/TableView";
 
 export default function Page() {
-  const videoContents = api.videoContent.all.useQuery();
+  const casts = api.castMember.all.useQuery();
 
   const mediaIndexProps = useMemo(() => {
     const data =
-      !videoContents.data || videoContents.data.length === 0
+      !casts.data || casts.data.length === 0
         ? []
-        : videoContents.data.map((videoContent) => {
+        : casts.data.map((cast) => {
             return {
-              mediaId: { value: videoContent.mediaId.toString() },
-              videoId: { value: videoContent.videoId.toString() },
-              type: { value: videoContent.videoContentTypeId.toString() },
+              firstName: { value: cast.person?.firstName },
+              lastName: { value: cast.person?.lastName },
+              role: { value: cast.castRole?.name },
             };
           });
     return {
       title: "video content list",
       data: data,
       headersConfig: {
-        mediaId: {
+        firstName: {
           orderNumber: 0,
-          name: "mediaId",
-          label: "mediaId",
+          name: "firstName",
+          label: "firstName",
           classNames: "w-[100px]",
           sortable: true,
         },
-        videoId: {
+        lastName: {
           orderNumber: 1,
-          name: "videoId",
-          label: "videoId",
+          name: "lastName",
+          label: "lastName",
           classNames: "w-[100px]",
           sortable: true,
         },
-        type: {
+        role: {
           orderNumber: 2,
-          name: "type",
-          label: "type",
+          name: "role",
+          label: "role",
           classNames: "w-[100px]",
           sortable: true,
         },
       },
     } as TableViewProps;
-  }, [videoContents]);
+  }, [casts]);
 
   return <TableView {...mediaIndexProps}></TableView>;
 }

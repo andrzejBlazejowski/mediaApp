@@ -16,6 +16,11 @@ export const castMemberRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.castMembers.findMany({
       orderBy: desc(schema.castMembers.id),
+      with: {
+        castMemberImage: true,
+        castRole: true,
+        person: true,
+      },
     });
   }),
 
@@ -24,6 +29,11 @@ export const castMemberRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.castMembers.findFirst({
         where: eq(schema.castMembers.id, input.id),
+        with: {
+          castMemberImage: true,
+          castRole: true,
+          person: true,
+        },
       });
     }),
 
