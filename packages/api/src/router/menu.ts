@@ -13,7 +13,12 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const menuRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.menus.findMany({ orderBy: desc(schema.menus.id) });
+    return ctx.db.query.menus.findMany({
+      orderBy: desc(schema.menus.id),
+      with: {
+        menuLinks: true,
+      },
+    });
   }),
 
   byId: publicProcedure
@@ -21,6 +26,9 @@ export const menuRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.menus.findFirst({
         where: eq(schema.menus.id, input.id),
+        with: {
+          menuLinks: true,
+        },
       });
     }),
 
@@ -39,6 +47,11 @@ export const menuLinkRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.menuLinks.findMany({
       orderBy: desc(schema.menuLinks.id),
+      with: {
+        menuLinkImage: true,
+        menu: true,
+        destinationScreen: true,
+      },
     });
   }),
 
@@ -47,6 +60,11 @@ export const menuLinkRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.menuLinks.findFirst({
         where: eq(schema.menuLinks.id, input.id),
+        with: {
+          menuLinkImage: true,
+          menu: true,
+          destinationScreen: true,
+        },
       });
     }),
 
@@ -95,6 +113,10 @@ export const menuLinkImageRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.menuLinkImages.findMany({
       orderBy: desc(schema.menuLinkImages.id),
+      with: {
+        menuLink: true,
+        image: true,
+      },
     });
   }),
 
@@ -103,6 +125,10 @@ export const menuLinkImageRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.menuLinkImages.findFirst({
         where: eq(schema.menuLinkImages.id, input.id),
+        with: {
+          menuLink: true,
+          image: true,
+        },
       });
     }),
 
