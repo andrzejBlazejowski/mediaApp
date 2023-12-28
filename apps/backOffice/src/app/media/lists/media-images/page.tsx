@@ -21,7 +21,7 @@ export default function Page() {
             };
           });
     return {
-      title: "video content types list",
+      title: "medias list media images",
       data: data,
       headersConfig: {
         name: {

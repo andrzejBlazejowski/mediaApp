@@ -20,7 +20,7 @@ export default function Page() {
             };
           });
     return {
-      title: "video content types list",
+      title: "media view impresions",
       data: data,
       headersConfig: {
         progress: {
