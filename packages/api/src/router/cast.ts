@@ -155,7 +155,7 @@ export const peopleRouter = createTRPCRouter({
     return ctx.db.query.people.findMany({
       orderBy: desc(schema.people.id),
       with: {
-        castMembers: true,
+        castMember: true,
       },
     });
   }),
@@ -166,7 +166,7 @@ export const peopleRouter = createTRPCRouter({
       return ctx.db.query.people.findFirst({
         where: eq(schema.people.id, input.id),
         with: {
-          castMembers: true,
+          castMember: true,
         },
       });
     }),
