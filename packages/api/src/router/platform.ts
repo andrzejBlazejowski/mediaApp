@@ -13,6 +13,9 @@ export const platformRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.platforms.findMany({
       orderBy: desc(schema.platforms.id),
+      with: {
+        menuPlatforms: true,
+      },
     });
   }),
   byId: publicProcedure
@@ -20,6 +23,9 @@ export const platformRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.platforms.findFirst({
         where: eq(schema.platforms.id, input.id),
+        with: {
+          menuPlatforms: true,
+        },
       });
     }),
   create: protectedProcedure
@@ -39,6 +45,10 @@ export const menuPlatformRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.menuPlatforms.findMany({
       orderBy: desc(schema.menuPlatforms.id),
+      with: {
+        platform: true,
+        menu: true,
+      },
     });
   }),
   byId: publicProcedure
@@ -46,6 +56,10 @@ export const menuPlatformRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.menuPlatforms.findFirst({
         where: eq(schema.menuPlatforms.id, input.id),
+        with: {
+          platform: true,
+          menu: true,
+        },
       });
     }),
 

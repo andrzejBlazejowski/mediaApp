@@ -14,6 +14,10 @@ export const vodScreenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.vodScreens.findMany({
       orderBy: desc(schema.vodScreens.id),
+      with: {
+        screens: true,
+        vodScreenType: true,
+      },
     });
   }),
   byId: publicProcedure
@@ -21,6 +25,10 @@ export const vodScreenRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.vodScreens.findFirst({
         where: eq(schema.vodScreens.id, input.id),
+        with: {
+          screens: true,
+          vodScreenType: true,
+        },
       });
     }),
 
@@ -66,6 +74,10 @@ export const vodScreenMediaListRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.vodScreenMediaLists.findMany({
       orderBy: desc(schema.vodScreenMediaLists.id),
+      with: {
+        vodScreen: true,
+        mediaList: true,
+      },
     });
   }),
   byId: publicProcedure
@@ -73,6 +85,10 @@ export const vodScreenMediaListRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.vodScreenMediaLists.findFirst({
         where: eq(schema.vodScreenMediaLists.id, input.id),
+        with: {
+          vodScreen: true,
+          mediaList: true,
+        },
       });
     }),
 

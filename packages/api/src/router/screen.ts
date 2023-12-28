@@ -11,7 +11,15 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const screenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.screens.findMany({ orderBy: desc(schema.screens.id) });
+    return ctx.db.query.screens.findMany({
+      orderBy: desc(schema.screens.id),
+      with: {
+        screenType: true,
+        menuLinks: true,
+        articleScreen: true,
+        vodScreen: true,
+      },
+    });
   }),
 
   byId: publicProcedure
@@ -19,6 +27,12 @@ export const screenRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.screens.findFirst({
         where: eq(schema.screens.id, input.id),
+        with: {
+          screenType: true,
+          menuLinks: true,
+          articleScreen: true,
+          vodScreen: true,
+        },
       });
     }),
 
