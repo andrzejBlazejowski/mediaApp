@@ -5,7 +5,6 @@ import { schema } from "@media/db";
 import { genres, genresInsertSchema } from "@media/db/schema/genre";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const genreRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {

@@ -2,10 +2,9 @@ import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
-import { videos, videosInsertSchema } from "@media/db/schema/video";
+import { videosInsertSchema } from "@media/db/schema/video";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const videoRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {

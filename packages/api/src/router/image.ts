@@ -5,7 +5,6 @@ import { schema } from "@media/db";
 import { images, imagesInsertSchema } from "@media/db/schema/image";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createDeleteQuery } from "./commonRouter";
 
 export const imageRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
