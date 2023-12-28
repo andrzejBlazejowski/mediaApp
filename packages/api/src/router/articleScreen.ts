@@ -13,6 +13,10 @@ export const articleScreenRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.articleScreens.findMany({
       orderBy: desc(schema.articleScreens.id),
+      with: {
+        articleScreenImages: true,
+        screens: true,
+      },
     });
   }),
   byId: publicProcedure
@@ -20,6 +24,10 @@ export const articleScreenRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.articleScreens.findFirst({
         where: eq(schema.articleScreens.id, input.id),
+        with: {
+          articleScreenImages: true,
+          screens: true,
+        },
       });
     }),
 
@@ -40,6 +48,9 @@ export const articleScreenImageRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.articleScreenImages.findMany({
       orderBy: desc(schema.articleScreenImages.id),
+      with: {
+        articleScreen: true,
+      },
     });
   }),
   byId: publicProcedure
@@ -47,6 +58,9 @@ export const articleScreenImageRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.articleScreenImages.findFirst({
         where: eq(schema.articleScreenImages.id, input.id),
+        with: {
+          articleScreen: true,
+        },
       });
     }),
 
