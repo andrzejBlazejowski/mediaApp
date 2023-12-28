@@ -14,6 +14,10 @@ export const mediaListRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.mediaLists.findMany({
       orderBy: desc(schema.mediaLists.id),
+      with: {
+        mediaListType: true,
+        mediaListMedias: true,
+      },
     });
   }),
   byId: publicProcedure
@@ -21,6 +25,10 @@ export const mediaListRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaLists.findFirst({
         where: eq(schema.mediaLists.id, input.id),
+        with: {
+          mediaListType: true,
+          mediaListMedias: true,
+        },
       });
     }),
 
@@ -66,6 +74,10 @@ export const mediaListMediaRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.mediaListMedias.findMany({
       orderBy: desc(schema.mediaListMedias.id),
+      with: {
+        mediaList: true,
+        media: true,
+      },
     });
   }),
   byId: publicProcedure
@@ -73,6 +85,10 @@ export const mediaListMediaRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaListMedias.findFirst({
         where: eq(schema.mediaListMedias.id, input.id),
+        with: {
+          mediaList: true,
+          media: true,
+        },
       });
     }),
 
