@@ -54,6 +54,10 @@ export const castMemberImageRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.castMemberImages.findMany({
       orderBy: desc(schema.castMemberImages.id),
+      with: {
+        image: true,
+        castMember: true,
+      },
     });
   }),
 
@@ -62,6 +66,10 @@ export const castMemberImageRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.castMemberImages.findFirst({
         where: eq(schema.castMemberImages.id, input.id),
+        with: {
+          image: true,
+          castMember: true,
+        },
       });
     }),
 
@@ -110,6 +118,10 @@ export const mediaCastMemberRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.mediaCastMembers.findMany({
       orderBy: desc(schema.mediaCastMembers.id),
+      with: {
+        castMember: true,
+        media: true,
+      },
     });
   }),
 
@@ -118,6 +130,10 @@ export const mediaCastMemberRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaCastMembers.findFirst({
         where: eq(schema.mediaCastMembers.id, input.id),
+        with: {
+          castMember: true,
+          media: true,
+        },
       });
     }),
 
@@ -136,7 +152,12 @@ export const mediaCastMemberRouter = createTRPCRouter({
 
 export const peopleRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.people.findMany({ orderBy: desc(schema.people.id) });
+    return ctx.db.query.people.findMany({
+      orderBy: desc(schema.people.id),
+      with: {
+        castMembers: true,
+      },
+    });
   }),
 
   byId: publicProcedure
@@ -144,6 +165,9 @@ export const peopleRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.people.findFirst({
         where: eq(schema.people.id, input.id),
+        with: {
+          castMembers: true,
+        },
       });
     }),
 
