@@ -4,6 +4,7 @@ import { createInsertSchema } from "drizzle-zod";
 
 import { users } from "./auth";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { medias } from "./media";
 
 export const invoices = mysqlTable(
   "invoices",
@@ -24,6 +25,7 @@ export const invoicesRelations = relations(invoices, ({ one }) => ({
     fields: [invoices.invoiceTypeId],
     references: [invoiceTypes.id],
   }),
+  media: one(medias, { fields: [invoices.mediaId], references: [medias.id] }),
   user: one(users, { fields: [invoices.userId], references: [users.id] }),
 }));
 

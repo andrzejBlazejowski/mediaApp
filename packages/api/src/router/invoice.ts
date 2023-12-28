@@ -14,6 +14,11 @@ export const invoiceRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.invoices.findMany({
       orderBy: desc(schema.invoices.id),
+      with: {
+        invoiceType: true,
+        media: true,
+        user: true,
+      },
     });
   }),
 
@@ -22,6 +27,11 @@ export const invoiceRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.invoices.findFirst({
         where: eq(schema.invoices.id, input.id),
+        with: {
+          invoiceType: true,
+          media: true,
+          user: true,
+        },
       });
     }),
 
