@@ -16,7 +16,16 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediaRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.medias.findMany({ orderBy: desc(schema.medias.id) });
+    return ctx.db.query.medias.findMany({
+      orderBy: desc(schema.medias.id),
+      with: {
+        mediaCategory: true,
+        mediaImages: true,
+        mediaCastMembers: true,
+        mediaViewImpressions: true,
+        videoContents: true,
+      },
+    });
   }),
 
   byId: publicProcedure
@@ -24,6 +33,13 @@ export const mediaRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.medias.findFirst({
         where: eq(schema.medias.id, input.id),
+        with: {
+          mediaCategory: true,
+          mediaImages: true,
+          mediaCastMembers: true,
+          mediaViewImpressions: true,
+          videoContents: true,
+        },
       });
     }),
 
@@ -42,6 +58,9 @@ export const videoContentRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.videoContents.findMany({
       orderBy: desc(schema.videoContents.id),
+      with: {
+        videoContentType: true,
+      },
     });
   }),
 
@@ -50,6 +69,9 @@ export const videoContentRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.videoContents.findFirst({
         where: eq(schema.videoContents.id, input.id),
+        with: {
+          videoContentType: true,
+        },
       });
     }),
 
@@ -126,6 +148,11 @@ export const mediaImageRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.mediaImages.findMany({
       orderBy: desc(schema.mediaImages.id),
+      with: {
+        mediaImageType: true,
+        media: true,
+        image: true,
+      },
     });
   }),
 
@@ -134,6 +161,11 @@ export const mediaImageRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaImages.findFirst({
         where: eq(schema.mediaImages.id, input.id),
+        with: {
+          mediaImageType: true,
+          media: true,
+          image: true,
+        },
       });
     }),
 
@@ -182,6 +214,9 @@ export const mediaViewImpressionRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.mediaViewImpressions.findMany({
       orderBy: desc(schema.mediaViewImpressions.id),
+      with: {
+        media: true,
+      },
     });
   }),
 
@@ -190,6 +225,9 @@ export const mediaViewImpressionRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaViewImpressions.findFirst({
         where: eq(schema.mediaViewImpressions.id, input.id),
+        with: {
+          media: true,
+        },
       });
     }),
 
