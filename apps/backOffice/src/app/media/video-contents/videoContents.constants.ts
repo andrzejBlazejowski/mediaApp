@@ -3,15 +3,15 @@ import { InputTypes } from "../../_components/FormView/FormView.types";
 
 export const uiSchema = {
   videoId: {
-    clases: "w-1/3 ",
+    classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
   videoContentTypeId: {
-    clases: "w-1/3 ",
+    classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
   mediaId: {
-    clases: "w-1/3 ",
+    classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
-} as unknown as IuiSchema;
+} as IuiSchema;

@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
@@ -76,17 +76,9 @@ export default function FormView({
           if (hiddenFeilds.includes(key)) {
             return null;
           }
-
-          const ui = uiSchema[key];
-          const classes =
-            typeof ui !== "undefined" && typeof ui.classes === "string"
-              ? ui.classes
-              : "";
-
           return (
             <FormField
               control={form.control}
-              // className={classes}
               name={key}
               key={key}
               render={({ field }) => {
@@ -105,7 +97,9 @@ export default function FormView({
             />
           );
         })}
-        <Button type="submit">Submit</Button>
+        <div className="flex justify-center">
+          <Button type="submit">Submit</Button>
+        </div>
       </form>
     </Form>
   );
