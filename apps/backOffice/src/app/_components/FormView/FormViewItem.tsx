@@ -2,11 +2,17 @@ import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { IFeield } from "./FormView.types";
 
-export const FormViewItem = (field: IFeield, classes: string) => (
+type formItemProps = {
+  field: IFeield;
+  classes: string;
+  setValue: (value: string) => void;
+};
+
+export const FormViewItem = ({ field, classes, setValue }: formItemProps) => (
   <FormItem className={classes}>
     <FormLabel>{field.name}</FormLabel>
     <FormControl>
-      <Input {...field} />
+      <Input {...field} onChange={(e) => setValue(e.target.value)} />
     </FormControl>
     <FormMessage />
   </FormItem>

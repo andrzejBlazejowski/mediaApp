@@ -1,11 +1,13 @@
 import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
+import { AnyZodObject } from "zod";
 
 export interface FormViewProps {
   type: "add" | "edit";
   title?: string;
   form: UseFormReturn<any>;
-  onSubmit: (values: any) => void;
+  onSubmit: (values: any) => any;
   uiSchema: IuiSchema;
+  zSchema: AnyZodObject;
 }
 
 export type IuiSchema = Record<string, { classes: string; type: InputTypes }>;
