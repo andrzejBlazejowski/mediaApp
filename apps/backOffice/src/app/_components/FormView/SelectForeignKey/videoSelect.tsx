@@ -1,31 +1,29 @@
-import React from "react";
+"use-client";
+
+import React, { useMemo } from "react";
 
 import { api } from "~/utils/api";
-import { SelectForeignKey } from "./";
+import { SelectUi } from ".";
 
 interface Props {
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }
 
-export default function videoSelect({ defaultValue, onValueChange }: Props) {
+export default function VideoSelect(props: Props) {
   const videos = api.video.all.useQuery();
-  const options =
-    !videos.data || videos.data.length === 0
-      ? []
-      : videos.data.map((video) => {
-          return {
-            value: video.id.toString(),
-            name: video.url,
-          };
-        });
-
-  return (
-    <SelectForeignKey
-      defaultValue={defaultValue}
-      onValueChange={onValueChange}
-      placeholder="select video"
-      options={options}
-    />
+  const options = useMemo(
+    () =>
+      !videos.data || videos.data.length === 0
+        ? []
+        : videos.data.map((video) => {
+            return {
+              value: video.id.toString(),
+              name: video.name ?? video.url,
+            };
+          }),
+    [videos],
   );
+
+  return <SelectUi {...props} placeholder="select video" options={options} />;
 }

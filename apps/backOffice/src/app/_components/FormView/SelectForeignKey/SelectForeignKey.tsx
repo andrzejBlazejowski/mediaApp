@@ -1,41 +1,30 @@
 import React from "react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
+import VideoSelect from "./VideoSelect";
 
-interface SelectProps {
-  placeholder?: string;
+interface Props {
+  foreignKey: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
-  options: {
-    name: string;
-    value: string;
-  }[];
 }
 
-export function SelectForeignKey({
-  placeholder,
-  options,
+export default function SelectForeignKey({
+  foreignKey,
   defaultValue,
   onValueChange,
-}: SelectProps) {
-  return (
-    <Select defaultValue={defaultValue} onValueChange={onValueChange}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
+}: Props) {
+  const props = {
+    defaultValue,
+    onValueChange,
+  };
+  switch (foreignKey) {
+    case "videoId":
+      return <VideoSelect {...props} />;
+    case "videoContentTypeId":
+      return <VideoSelect {...props} />;
+    case "mediaId":
+      return <VideoSelect {...props} />;
+    default:
+      return <VideoSelect {...props} />;
+  }
 }
