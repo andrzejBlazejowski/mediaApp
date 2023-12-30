@@ -4,6 +4,7 @@ import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import type { IFeield } from "./FormView.types";
 import { InputTypes } from "./FormView.types";
+import SelectForeignKey from "./SelectForeignKey/SelectForeignKey";
 
 interface formItemProps {
   field: IFeield;
@@ -20,13 +21,21 @@ export const FormViewItem = ({
 }: formItemProps) => (
   <FormItem className={classes}>
     <FormLabel>{field.name}</FormLabel>
-    <FormControl>
-      <Input
-        {...field}
-        type={getHtmlInputType(type)}
-        {...register(field.name, { valueAsNumber: true })}
+    {type === InputTypes.foreignKey ? (
+      <SelectForeignKey
+        foreignKey={field.name}
+        defaultValue={field.value}
+        onValueChange={field.onChange}
       />
-    </FormControl>
+    ) : (
+      <FormControl>
+        <Input
+          {...field}
+          type={getHtmlInputType(type)}
+          {...register(field.name, { valueAsNumber: true })}
+        />
+      </FormControl>
+    )}
     <FormMessage />
   </FormItem>
 );
