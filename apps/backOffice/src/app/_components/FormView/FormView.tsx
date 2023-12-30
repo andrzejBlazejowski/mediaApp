@@ -34,7 +34,7 @@ export default function FormView({
     goBack();
   }, [goBack]);
 
-  const unValidSubmit = useCallback(
+  const onValidSubmit = useCallback(
     async (data: any) => {
       if (type === "add") {
         data.createdAt = new Date();
@@ -71,7 +71,7 @@ export default function FormView({
           {type}
         </h2>
       </div>
-      <form onSubmit={form.handleSubmit(unValidSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onValidSubmit)} className="space-y-8">
         {zShape.map(([key]) => {
           if (hiddenFeilds.includes(key)) {
             return null;
