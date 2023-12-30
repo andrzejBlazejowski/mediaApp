@@ -18,6 +18,7 @@ export default function Page() {
               firstName: { value: cast.person?.firstName },
               lastName: { value: cast.person?.lastName },
               role: { value: cast.castRole?.name },
+              id: { value: cast.id.toString() },
             };
           });
     return {

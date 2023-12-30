@@ -8,6 +8,8 @@ import { TableView } from "../../_components/TableView";
 
 export default function Page() {
   const videoContents = api.videoContent.all.useQuery();
+  const deleteRow = api.videoContent.delete.useMutation();
+  const utils = api.useUtils();
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -18,6 +20,7 @@ export default function Page() {
               mediaId: { value: videoContent.mediaId.toString() },
               videoId: { value: videoContent.videoId.toString() },
               type: { value: videoContent.videoContentTypeId.toString() },
+              id: { value: videoContent.id.toString() },
             };
           });
     return {
@@ -46,8 +49,13 @@ export default function Page() {
           sortable: true,
         },
       },
+      onDeleteRow: async (id) => {
+        console.log(id, "on delete row");
+        await deleteRow.mutateAsync(id);
+        await utils.videoContent.all.invalidate();
+      },
     } as TableViewProps;
-  }, [videoContents]);
+  }, [videoContents, deleteRow, utils]);
 
   return <TableView {...mediaIndexProps}></TableView>;
 }
