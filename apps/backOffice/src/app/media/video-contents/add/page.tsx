@@ -8,7 +8,7 @@ import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
 import { api } from "~/utils/api";
-import { uiSchema } from "../media.constants";
+import { uiSchema } from "../videoContents.constants";
 
 export default function Page() {
   const utils = api.useUtils();
@@ -27,15 +27,9 @@ export default function Page() {
     values: z.infer<typeof media.videoContentsInsertSchema>,
   ) => {
     console.log(values);
-    try {
-      const result = await mutateAsync(values);
-      await utils.videoContent.all.invalidate();
-      debugger;
-      return result;
-    } catch (error) {
-      debugger;
-      return error;
-    }
+    const result = await mutateAsync(values);
+    await utils.videoContent.all.invalidate();
+    return result;
   };
 
   return (
@@ -45,7 +39,7 @@ export default function Page() {
       form={form}
       onSubmit={onSubmit}
       uiSchema={uiSchema}
-      zSchema={media.videoContentTypesInsertSchema}
+      zSchema={media.videoContentsInsertSchema}
     />
   );
 }

@@ -1,19 +1,47 @@
+import { UseFormRegister } from "react-hook-form";
+
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { IFeield } from "./FormView.types";
+import type { IFeield } from "./FormView.types";
+import { InputTypes } from "./FormView.types";
 
-type formItemProps = {
+interface formItemProps {
   field: IFeield;
   classes: string;
-  setValue: (value: string) => void;
-};
+  type?: InputTypes;
+  register: UseFormRegister<any>;
+}
 
-export const FormViewItem = ({ field, classes, setValue }: formItemProps) => (
+export const FormViewItem = ({
+  field,
+  classes,
+  type,
+  register,
+}: formItemProps) => (
   <FormItem className={classes}>
     <FormLabel>{field.name}</FormLabel>
     <FormControl>
-      <Input {...field} onChange={(e) => setValue(e.target.value)} />
+      <Input
+        {...field}
+        type={getHtmlInputType(type)}
+        {...register(field.name, { valueAsNumber: true })}
+      />
     </FormControl>
     <FormMessage />
   </FormItem>
 );
+
+function getHtmlInputType(type: InputTypes = InputTypes.text) {
+  switch (type) {
+    case InputTypes.foreignKey:
+      return "number";
+    case InputTypes.date:
+      return "date";
+    case InputTypes.colorPicker:
+      return "color";
+    case InputTypes.checkbox:
+      return "checkbox";
+    default:
+      return "text";
+  }
+}

@@ -19,17 +19,8 @@ export default function FormView({
   const pathname = usePathname();
   const Router = useRouter();
   const zShape = Object.entries(zSchema.shape);
-  const [values, setValues] = useState(
-    zShape.reduce(
-      (acc, [key]) => {
-        acc[key] = "";
-        return acc;
-      },
-      {} as Record<string, any>,
-    ),
-  );
 
-  const onBack = useCallback(() => {
+  const goBack = useCallback(() => {
     if (type === "add") {
       const desiredPath = pathname.replace("/add", "");
       Router.push(desiredPath);
@@ -39,30 +30,32 @@ export default function FormView({
     }
   }, [pathname, Router]);
 
-  const submit: MouseEventHandler<HTMLButtonElement> = useCallback(
-    async (e) => {
-      e.preventDefault();
+  const onBack = useCallback(() => {
+    goBack();
+  }, [goBack]);
+
+  const unValidSubmit = useCallback(
+    async (data: any) => {
       if (type === "add") {
-        values.createdAt = new Date().getTime();
-        values.createdBy = 1;
+        data.createdAt = new Date();
+        data.createdBy = "1";
       }
-      values.updatedAt = new Date().getTime();
-      values.updatedBy = 1;
-      values.isDeleted = false;
+      data.updatedAt = new Date();
+      data.updatedBy = "1";
+      data.isDeleted = false;
 
       if (onSubmit) {
-        const result = await onSubmit(values);
-        debugger;
-        if (result.name === "TRPCClientError"){
-
-        }else if(result.name === "TRPCClientError"){
+        try {
+          const result = await onSubmit(data);
+          goBack();
+        } catch (error) {
           alert("Error submitting data.");
         }
       } else {
-        onBack();
+        goBack();
       }
     },
-    [onBack, values],
+    [onSubmit, type, goBack],
   );
 
   return (
@@ -78,16 +71,24 @@ export default function FormView({
           {type}
         </h2>
       </div>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(unValidSubmit)} className="space-y-8">
         {zShape.map(([key]) => {
           if (hiddenFeilds.includes(key)) {
             return null;
           }
 
+          const ui = uiSchema[key];
+          const classes =
+            typeof ui !== "undefined" && typeof ui.classes === "string"
+              ? ui.classes
+              : "";
+
           return (
             <FormField
               control={form.control}
+              // className={classes}
               name={key}
+              key={key}
               render={({ field }) => {
                 const ui = uiSchema[field.name];
                 const classes =
@@ -97,19 +98,14 @@ export default function FormView({
                 return FormViewItem({
                   field: field as unknown as IFeield,
                   classes: classes,
-                  setValue: (nextValue) => {
-                    setValues((prev) => {
-                      return { ...prev, [key]: nextValue };
-                    });
-                  },
+                  type: uiSchema[field.name]?.type,
+                  register: form.register,
                 });
               }}
             />
           );
         })}
-        <Button type="submit" onClick={submit}>
-          Submit
-        </Button>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
