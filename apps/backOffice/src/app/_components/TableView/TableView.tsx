@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 
 import { Row, TableViewProps } from ".";
 import { Button } from "../ui/button";
@@ -34,7 +34,7 @@ export function TableView({
           </TableHead>
         ));
     } else if (data[0]) {
-      const headers = Object.entries(data[0]).map(([key, value]) => (
+      return Object.entries(data[0]).map(([key]) => (
         <TableHead key={key} className="w-[100px]">
           {key}
         </TableHead>
@@ -51,10 +51,9 @@ export function TableView({
     (row: Row) => {
       const id = row?.id?.value;
       if (id) {
-        console.log(id, "delete");
         onDeleteRow && onDeleteRow(parseInt(id));
       } else {
-        console.log("delete - id is not defined");
+        console.error("delete - id is not defined");
       }
     },
     [pathname, Router],
@@ -72,6 +71,10 @@ export function TableView({
     [pathname, Router],
   );
 
+  const onAddRow = useCallback(() => {
+    Router.push(`${pathname}/add`);
+  }, [pathname, Router]);
+
   const getOrderedTableCells = (row: Row) => {
     const res = Object.entries(row)
       .sort(([aKey], [bKey]) => {
@@ -86,6 +89,9 @@ export function TableView({
     <>
       <h2 className="mt-6 scroll-m-20 border-b pb-2 text-center text-3xl font-semibold tracking-tight first:mt-0">
         {title}
+        <Button className=" ml-6" onClick={onAddRow}>
+          <Plus />
+        </Button>
       </h2>
       <Table>
         <TableHeader>
@@ -101,7 +107,7 @@ export function TableView({
             <TableRow key={index}>
               {getOrderedTableCells(row).map((field) => (
                 <TableCell
-                  key={index + (field.name || field.value)}
+                  key={index + (crypto?.randomUUID() || "") + field.value}
                   className="font-medium"
                 >
                   {field.value}
@@ -109,6 +115,8 @@ export function TableView({
               ))}
               <TableCell key="actions" className="font-medium">
                 <Button
+                  size="icon"
+                  className=" mr-2"
                   onClick={() => {
                     editRow(row);
                   }}
@@ -117,6 +125,7 @@ export function TableView({
                   <Pencil />
                 </Button>
                 <Button
+                  size="icon"
                   onClick={() => {
                     deleteRow(row);
                   }}

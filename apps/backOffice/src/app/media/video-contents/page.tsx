@@ -50,7 +50,6 @@ export default function Page() {
         },
       },
       onDeleteRow: async (id) => {
-        console.log(id, "on delete row");
         await deleteRow.mutateAsync(id);
         await utils.videoContent.all.invalidate();
       },
