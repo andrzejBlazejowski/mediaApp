@@ -60,6 +60,8 @@ export const videoContentRouter = createTRPCRouter({
       orderBy: desc(schema.videoContents.id),
       with: {
         videoContentType: true,
+        media: true,
+        video: true,
       },
     });
   }),
@@ -71,6 +73,8 @@ export const videoContentRouter = createTRPCRouter({
         where: eq(schema.videoContents.id, input.id),
         with: {
           videoContentType: true,
+          media: true,
+          video: true,
         },
       });
     }),

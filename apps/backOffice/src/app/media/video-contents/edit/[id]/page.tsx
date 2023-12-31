@@ -1,7 +1,7 @@
 "use client";
 
-import FormView from "~/app/_components/FormView/FormView";
-import { useEditForm } from "~/app/_lib/useEditForm";
+import {FormView} from "~/app/_components/";
+import { useEditForm } from "~/app/_lib/";
 import { formConfig } from "../../constants";
 
 export default function Page() {

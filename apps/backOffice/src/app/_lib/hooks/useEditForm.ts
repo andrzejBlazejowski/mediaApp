@@ -1,3 +1,5 @@
+import { useEffect, useMemo } from "react";
+import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -12,19 +14,26 @@ interface Props<InsertSchemaType> {
   uiSchema: IuiSchema;
 }
 
-export function useAddForm<InsertSchemaType extends ZodType<any, any, any>>({
+export function useEditForm<InsertSchemaType extends ZodType<any, any, any>>({
   insertSchema,
   title,
   uiSchema,
 }: Props<InsertSchemaType>) {
+  const type = "edit";
+  const routeParams = useParams<{ id: string }>();
+  const id = useMemo(() => parseInt(routeParams.id), [routeParams.id]);
+  const rawData = api.videoContent.byId.useQuery({ id });
   const utils = api.useUtils();
-  const type = "add";
 
   const form = useForm<z.infer<InsertSchemaType>>({
     resolver: zodResolver(insertSchema),
   });
 
-  const { mutateAsync, error } = api.videoContent.create.useMutation({
+  useEffect(() => {
+    if (rawData.data) form.reset(rawData.data);
+  }, [rawData.data]);
+
+  const { mutateAsync, error } = api.videoContent.update.useMutation({
     async onSuccess() {
       await utils.videoContent.all.invalidate();
     },
