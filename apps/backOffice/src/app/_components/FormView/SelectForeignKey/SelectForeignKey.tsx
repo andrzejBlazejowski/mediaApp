@@ -1,12 +1,13 @@
 import React from "react";
 
+import MediaSelect from "./MediaSelect";
+import { SelectProps } from "./select.types";
+import VideoContentTypeSelect from "./VideoContentType";
 import VideoSelect from "./VideoSelect";
 
-interface Props {
+type Props = SelectProps & {
   foreignKey: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-}
+};
 
 export default function SelectForeignKey({
   foreignKey,
@@ -21,9 +22,9 @@ export default function SelectForeignKey({
     case "videoId":
       return <VideoSelect {...props} />;
     case "videoContentTypeId":
-      return <VideoSelect {...props} />;
+      return <VideoContentTypeSelect {...props} />;
     case "mediaId":
-      return <VideoSelect {...props} />;
+      return <MediaSelect {...props} />;
     default:
       return <VideoSelect {...props} />;
   }

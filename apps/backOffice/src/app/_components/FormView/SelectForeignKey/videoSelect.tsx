@@ -4,13 +4,9 @@ import React, { useMemo } from "react";
 
 import { api } from "~/utils/api";
 import { SelectUi } from ".";
+import { SelectProps } from "./select.types";
 
-interface Props {
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-}
-
-export default function VideoSelect(props: Props) {
+export default function VideoSelect(props: SelectProps) {
   const videos = api.video.all.useQuery();
   const options = useMemo(
     () =>
