@@ -1,3 +1,5 @@
+import { media } from "@media/db";
+
 import type { IuiSchema } from "../../_components/FormView/FormView.types";
 import { InputTypes } from "../../_components/FormView/FormView.types";
 
@@ -15,3 +17,9 @@ export const uiSchema = {
     type: InputTypes.foreignKey,
   },
 } as IuiSchema;
+
+export const formConfig = {
+  uiSchema,
+  title: "Video content",
+  insertSchema: media.videoContentsInsertSchema,
+};
