@@ -27,6 +27,7 @@ export function SelectUi({
   return (
     <Select
       defaultValue={defaultValue + ""}
+      value={defaultValue + ""}
       onValueChange={(value: string) =>
         onValueChange && onValueChange(parseInt(value))
       }
@@ -35,11 +36,13 @@ export function SelectUi({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.name}
-          </SelectItem>
-        ))}
+        {options.map((option) => {
+          return (
+            <SelectItem key={option.value} value={option.value}>
+              {option.name}
+            </SelectItem>
+          );
+        })}
       </SelectContent>
     </Select>
   );

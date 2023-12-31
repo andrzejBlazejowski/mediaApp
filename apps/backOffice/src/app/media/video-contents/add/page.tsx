@@ -15,11 +15,6 @@ export default function Page() {
 
   const form = useForm<z.infer<typeof media.videoContentsInsertSchema>>({
     resolver: zodResolver(media.videoContentsInsertSchema),
-    defaultValues: {
-      videoId: 1,
-      videoContentTypeId: 2,
-      mediaId: 2,
-    },
   });
 
   const { mutateAsync, error } = api.videoContent.create.useMutation({
