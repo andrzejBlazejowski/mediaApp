@@ -18,6 +18,7 @@ export default function SelectForeignKey({
     defaultValue,
     onValueChange,
   };
+
   switch (foreignKey) {
     case "videoId":
       return <VideoSelect {...props} />;

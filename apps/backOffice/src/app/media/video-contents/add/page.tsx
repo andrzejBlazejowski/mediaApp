@@ -15,6 +15,11 @@ export default function Page() {
 
   const form = useForm<z.infer<typeof media.videoContentsInsertSchema>>({
     resolver: zodResolver(media.videoContentsInsertSchema),
+    defaultValues: {
+      videoId: 1,
+      videoContentTypeId: 2,
+      mediaId: 2,
+    },
   });
 
   const { mutateAsync, error } = api.videoContent.create.useMutation({
@@ -26,7 +31,6 @@ export default function Page() {
   const onSubmit = async (
     values: z.infer<typeof media.videoContentsInsertSchema>,
   ) => {
-    console.log(values);
     const result = await mutateAsync(values);
     await utils.videoContent.all.invalidate();
     return result;

@@ -7,7 +7,7 @@ import * as z from "zod";
 import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
-import { uiSchema } from "../../media.constants";
+import { uiSchema } from "../../videoContents.constants";
 
 export default function Page() {
   const form = useForm<z.infer<typeof media.videoContentsInsertSchema>>({

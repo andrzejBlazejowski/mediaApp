@@ -26,7 +26,7 @@ export function SelectUi({
 }: SelectProps) {
   return (
     <Select
-      defaultValue={defaultValue}
+      defaultValue={defaultValue + ""}
       onValueChange={(value: string) =>
         onValueChange && onValueChange(parseInt(value))
       }
