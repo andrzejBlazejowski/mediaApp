@@ -1,51 +1,103 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
-  invoices,
-  invoiceTemplates,
-  invoiceTypes,
+  invoicesInsertSchema,
+  invoiceTemplatesInsertSchema,
+  invoiceTypesInsertSchema,
 } from "@media/db/schema/invoice";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const invoiceRouter = createTRPCRouter({
-  all: createAllQuery<typeof invoices>(invoices),
-  byId: createByIDQuery<typeof invoices>(invoices),
-  create: createCreateQuery<typeof invoices>(
-    invoices,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.invoices.findMany({
+      orderBy: desc(schema.invoices.id),
+      with: {
+        invoiceType: true,
+        media: true,
+        user: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.invoices.findFirst({
+        where: eq(schema.invoices.id, input.id),
+        with: {
+          invoiceType: true,
+          media: true,
+          user: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof invoices>(invoices),
+
+  create: protectedProcedure
+    .input(invoicesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.invoices).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.invoices).where(eq(schema.invoices.id, input));
+  }),
 });
 
 export const invoiceTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof invoiceTypes>(invoiceTypes),
-  byId: createByIDQuery<typeof invoiceTypes>(invoiceTypes),
-  create: createCreateQuery<typeof invoiceTypes>(
-    invoiceTypes,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.invoiceTypes.findMany({
+      orderBy: desc(schema.invoiceTypes.id),
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.invoiceTypes.findFirst({
+        where: eq(schema.invoiceTypes.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof invoiceTypes>(invoiceTypes),
+
+  create: protectedProcedure
+    .input(invoiceTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.invoiceTypes).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.invoiceTypes)
+      .where(eq(schema.invoiceTypes.id, input));
+  }),
 });
 
 export const invoiceTemplateRouter = createTRPCRouter({
-  all: createAllQuery<typeof invoiceTemplates>(invoiceTemplates),
-  byId: createByIDQuery<typeof invoiceTemplates>(invoiceTemplates),
-  create: createCreateQuery<typeof invoiceTemplates>(
-    invoiceTemplates,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.invoiceTemplates.findMany({
+      orderBy: desc(schema.invoiceTemplates.id),
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.invoiceTemplates.findFirst({
+        where: eq(schema.invoiceTemplates.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof invoiceTemplates>(invoiceTemplates),
+
+  create: protectedProcedure
+    .input(invoiceTemplatesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.invoiceTemplates).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.invoiceTemplates)
+      .where(eq(schema.invoiceTemplates.id, input));
+  }),
 });

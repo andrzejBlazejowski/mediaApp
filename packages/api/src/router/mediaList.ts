@@ -1,68 +1,105 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
 import {
-  mediaListMedias,
-  mediaLists,
-  mediaListTypes,
+  mediaListMediasInsertSchema,
+  mediaListsInsertSchema,
+  mediaListTypesInsertSchema,
 } from "@media/db/schema/mediaList";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediaListRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    // return ctx.db.select().from(schema.post).orderBy(desc(schema.post.id));
     return ctx.db.query.mediaLists.findMany({
       orderBy: desc(schema.mediaLists.id),
+      with: {
+        mediaListType: true,
+        mediaListMedias: true,
+      },
     });
   }),
-  byId: createByIDQuery<typeof mediaLists>(mediaLists),
-  create: createCreateQuery<typeof mediaLists>(
-    mediaLists,
-    z.object({
-      title: z.string().min(1),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.mediaLists.findFirst({
+        where: eq(schema.mediaLists.id, input.id),
+        with: {
+          mediaListType: true,
+          mediaListMedias: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof mediaLists>(mediaLists),
+
+  create: protectedProcedure
+    .input(mediaListsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.mediaLists).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaLists)
+      .where(eq(schema.mediaLists.id, input));
+  }),
 });
 
 export const mediaListTypeRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    // return ctx.db.select().from(schema.post).orderBy(desc(schema.post.id));
     return ctx.db.query.mediaListTypes.findMany({
       orderBy: desc(schema.mediaListTypes.id),
     });
   }),
-  byId: createByIDQuery<typeof mediaListTypes>(mediaListTypes),
-  create: createCreateQuery<typeof mediaListTypes>(
-    mediaListTypes,
-    z.object({
-      title: z.string().min(1),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.mediaListTypes.findFirst({
+        where: eq(schema.mediaListTypes.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof mediaListTypes>(mediaListTypes),
+
+  create: protectedProcedure
+    .input(mediaListTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.mediaListTypes).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaListTypes)
+      .where(eq(schema.mediaListTypes.id, input));
+  }),
 });
 
 export const mediaListMediaRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    // return ctx.db.select().from(schema.post).orderBy(desc(schema.post.id));
     return ctx.db.query.mediaListMedias.findMany({
       orderBy: desc(schema.mediaListMedias.id),
+      with: {
+        mediaList: true,
+        media: true,
+      },
     });
   }),
-  byId: createByIDQuery<typeof mediaListMedias>(mediaListMedias),
-  create: createCreateQuery<typeof mediaListMedias>(
-    mediaListMedias,
-    z.object({
-      title: z.string().min(1),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.mediaListMedias.findFirst({
+        where: eq(schema.mediaListMedias.id, input.id),
+        with: {
+          mediaList: true,
+          media: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof mediaListMedias>(mediaListMedias),
+
+  create: protectedProcedure
+    .input(mediaListMediasInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.mediaListMedias).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.mediaListMedias)
+      .where(eq(schema.mediaListMedias.id, input));
+  }),
 });

@@ -1,23 +1,37 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { videos } from "@media/db/schema/video";
+import { schema } from "@media/db";
+import { videosInsertSchema } from "@media/db/schema/video";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const videoRouter = createTRPCRouter({
-  all: createAllQuery<typeof videos>(videos),
-  byId: createByIDQuery<typeof videos>(videos),
-  create: createCreateQuery<typeof videos>(
-    videos,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.videos.findMany({
+      orderBy: desc(schema.videos.id),
+      with: {
+        videoContents: true,
+      },
+    });
+  }),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.videos.findFirst({
+        where: eq(schema.videos.id, input.id),
+        with: {
+          videoContents: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof videos>(videos),
+  create: protectedProcedure
+    .input(videosInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.videos).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.videos).where(eq(schema.videos.id, input));
+  }),
 });

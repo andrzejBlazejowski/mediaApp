@@ -1,35 +1,74 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { screens, screenTypes } from "@media/db/schema/screen";
-
-import { createTRPCRouter } from "../trpc";
+import { schema } from "@media/db";
 import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+  screensInsertSchema,
+  screenTypesInsertSchema,
+} from "@media/db/schema/screen";
+
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const screenRouter = createTRPCRouter({
-  all: createAllQuery<typeof screens>(screens),
-  byId: createByIDQuery<typeof screens>(screens),
-  create: createCreateQuery<typeof screens>(
-    screens,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.screens.findMany({
+      orderBy: desc(schema.screens.id),
+      with: {
+        screenType: true,
+        menuLinks: true,
+        articleScreen: true,
+        vodScreen: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.screens.findFirst({
+        where: eq(schema.screens.id, input.id),
+        with: {
+          screenType: true,
+          menuLinks: true,
+          articleScreen: true,
+          vodScreen: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof screens>(screens),
+
+  create: protectedProcedure
+    .input(screensInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.screens).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.screens).where(eq(schema.screens.id, input));
+  }),
 });
 
 export const screenTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof screenTypes>(screenTypes),
-  byId: createByIDQuery<typeof screenTypes>(screenTypes),
-  create: createCreateQuery<typeof screenTypes>(
-    screenTypes,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.screenTypes.findMany({
+      orderBy: desc(schema.screenTypes.id),
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.screenTypes.findFirst({
+        where: eq(schema.screenTypes.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof screenTypes>(screenTypes),
+
+  create: protectedProcedure
+    .input(screenTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.screenTypes).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.screenTypes)
+      .where(eq(schema.screenTypes.id, input));
+  }),
 });

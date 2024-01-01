@@ -1,55 +1,95 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
-  backOfficeDictionaries,
-  clientAppDictionaries,
-  countries,
+  backOfficeDictionariesInsertSchema,
+  clientAppDictionariesInsertSchema,
+  countriesInsertSchema,
 } from "@media/db/schema/dictionary";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const clientAppDictionaryRouter = createTRPCRouter({
-  all: createAllQuery<typeof clientAppDictionaries>(clientAppDictionaries),
-  byId: createByIDQuery<typeof clientAppDictionaries>(clientAppDictionaries),
-  create: createCreateQuery<typeof clientAppDictionaries>(
-    clientAppDictionaries,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.clientAppDictionaries.findMany({
+      orderBy: desc(schema.clientAppDictionaries.id),
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.clientAppDictionaries.findFirst({
+        where: eq(schema.clientAppDictionaries.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof clientAppDictionaries>(
-    clientAppDictionaries,
-  ),
+
+  create: protectedProcedure
+    .input(clientAppDictionariesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.clientAppDictionaries).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.clientAppDictionaries)
+      .where(eq(schema.clientAppDictionaries.id, input));
+  }),
 });
 
 export const backOfficeDictionaryRouter = createTRPCRouter({
-  all: createAllQuery<typeof backOfficeDictionaries>(backOfficeDictionaries),
-  byId: createByIDQuery<typeof backOfficeDictionaries>(backOfficeDictionaries),
-  create: createCreateQuery<typeof backOfficeDictionaries>(
-    backOfficeDictionaries,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.backOfficeDictionaries.findMany({
+      orderBy: desc(schema.backOfficeDictionaries.id),
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.backOfficeDictionaries.findFirst({
+        where: eq(schema.backOfficeDictionaries.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof backOfficeDictionaries>(
-    backOfficeDictionaries,
-  ),
+
+  create: protectedProcedure
+    .input(backOfficeDictionariesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.backOfficeDictionaries).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.backOfficeDictionaries)
+      .where(eq(schema.backOfficeDictionaries.id, input));
+  }),
 });
 
 export const countryRouter = createTRPCRouter({
-  all: createAllQuery<typeof countries>(countries),
-  byId: createByIDQuery<typeof countries>(countries),
-  create: createCreateQuery<typeof countries>(
-    countries,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.countries.findMany({
+      orderBy: desc(schema.countries.id),
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.countries.findFirst({
+        where: eq(schema.countries.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof countries>(countries),
+
+  create: protectedProcedure
+    .input(countriesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.countries).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.countries)
+      .where(eq(schema.countries.id, input));
+  }),
 });

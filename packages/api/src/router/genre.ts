@@ -1,23 +1,29 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { genres } from "@media/db/schema/genre";
+import { schema } from "@media/db";
+import { genres, genresInsertSchema } from "@media/db/schema/genre";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const genreRouter = createTRPCRouter({
-  all: createAllQuery<typeof genres>(genres),
-  byId: createByIDQuery<typeof genres>(genres),
-  create: createCreateQuery<typeof genres>(
-    genres,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.genres.findMany({ orderBy: desc(schema.genres.id) });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.genres.findFirst({
+        where: eq(schema.genres.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof genres>(genres),
+  create: protectedProcedure
+    .input(genresInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.genres).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.genres).where(eq(schema.genres.id, input));
+  }),
 });

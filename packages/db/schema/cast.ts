@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { mySqlTable } from "./_table";
 import { baseColumns, dictionaryColumns } from "./commonColumns";
@@ -41,6 +42,8 @@ export const castMembersRelations = relations(castMembers, ({ one, many }) => ({
   mediaCastMembers: many(mediaCastMembers),
 }));
 
+export const castMembersInsertSchema = createInsertSchema(castMembers);
+
 export const castMemberImages = mysqlTable(
   "castMemberImages",
   {
@@ -69,6 +72,9 @@ export const castMemberImagesRelations = relations(
   }),
 );
 
+export const castMemberImagesInsertSchema =
+  createInsertSchema(castMemberImages);
+
 export const castRoles = mysqlTable(
   "castRoles",
   {
@@ -83,6 +89,8 @@ export const castRoles = mysqlTable(
 export const castRolesRelations = relations(castRoles, ({ many }) => ({
   castMembers: many(castMembers),
 }));
+
+export const castRolesInsertSchema = createInsertSchema(castRoles);
 
 export const mediaCastMembers = mysqlTable(
   "mediaCastMembers",
@@ -111,6 +119,9 @@ export const mediaCastMembersRelations = relations(
   }),
 );
 
+export const mediaCastMembersInsertSchema =
+  createInsertSchema(mediaCastMembers);
+
 export const people = mySqlTable(
   "people",
   {
@@ -134,3 +145,5 @@ export const peopleRelations = relations(people, ({ one }) => ({
     references: [castMembers.peopleId],
   }),
 }));
+
+export const peopleInsertSchema = createInsertSchema(people);

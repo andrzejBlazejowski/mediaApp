@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { medias } from "./media";
@@ -16,6 +17,8 @@ export const mediaLists = mysqlTable(
     idIdx: index("id_idx").on(mediaList.id),
   }),
 );
+
+export const mediaListsInsertSchema = createInsertSchema(mediaLists);
 
 export const mediaListsRelations = relations(mediaLists, ({ many, one }) => ({
   mediaListMedias: many(mediaListMedias),
@@ -52,6 +55,8 @@ export const mediaListMediasRelations = relations(
   }),
 );
 
+export const mediaListMediasInsertSchema = createInsertSchema(mediaListMedias);
+
 export const mediaListTypes = mysqlTable(
   "mediaListTypes",
   {
@@ -69,3 +74,5 @@ export const mediaListTypesRelations = relations(
     mediaLists: many(mediaLists),
   }),
 );
+
+export const mediaListTypesInsertSchema = createInsertSchema(mediaListTypes);

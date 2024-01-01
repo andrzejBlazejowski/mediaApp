@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
 import { images } from "./image";
@@ -32,6 +33,8 @@ export const menusRelations = relations(menus, ({ many, one }) => ({
   menuLinks: many(menuLinks),
 }));
 
+export const menusInsertSchema = createInsertSchema(menus);
+
 export const menuLinks = mysqlTable(
   "menuLinks",
   {
@@ -59,6 +62,8 @@ export const menuLinksRelations = relations(menuLinks, ({ one }) => ({
   }),
 }));
 
+export const menuLinksInsertSchema = createInsertSchema(menuLinks);
+
 export const menuTypes = mysqlTable(
   "menuTypes",
   {
@@ -73,6 +78,8 @@ export const menuTypes = mysqlTable(
 export const menuTypesRelations = relations(menuTypes, ({ many }) => ({
   menus: many(menus),
 }));
+
+export const menuTypesInsertSchema = createInsertSchema(menuTypes);
 
 export const menuLinkImages = mysqlTable(
   "menuLinkImages",
@@ -98,3 +105,5 @@ export const menuLinkImagesRelations = relations(menuLinkImages, ({ one }) => ({
     references: [images.id],
   }),
 }));
+
+export const menuLinkImagesInsertSchema = createInsertSchema(menuLinkImages);

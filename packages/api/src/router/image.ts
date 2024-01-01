@@ -1,23 +1,30 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { images } from "@media/db/schema/image";
+import { schema } from "@media/db";
+import { images, imagesInsertSchema } from "@media/db/schema/image";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const imageRouter = createTRPCRouter({
-  all: createAllQuery<typeof images>(images),
-  byId: createByIDQuery<typeof images>(images),
-  create: createCreateQuery<typeof images>(
-    images,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.images.findMany({ orderBy: desc(schema.images.id) });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.images.findFirst({
+        where: eq(schema.images.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof images>(images),
+
+  create: protectedProcedure
+    .input(imagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.images).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.images).where(eq(schema.images.id, input));
+  }),
 });

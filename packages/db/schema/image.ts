@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, varchar } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { mySqlTable } from "./_table";
 import { brandingImages } from "./branding";
@@ -28,3 +29,5 @@ export const imagesRelations = relations(images, ({ many }) => ({
   mediaImages: many(mediaImages),
   menuLinkImages: many(menuLinkImages),
 }));
+
+export const imagesInsertSchema = createInsertSchema(images);

@@ -1,77 +1,189 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
-  brandingColors,
-  brandingColorTypes,
-  brandingImages,
-  brandingImageTypes,
-  brandings,
+  brandingColorsInsertSchema,
+  brandingColorTypesInsertSchema,
+  brandingImagesInsertSchema,
+  brandingImageTypesInsertSchema,
+  brandingsInsertSchema,
 } from "@media/db/schema/branding";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const brandingRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandings>(brandings),
-  byId: createByIDQuery<typeof brandings>(brandings),
-  create: createCreateQuery<typeof brandings>(
-    brandings,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandings.findMany({
+      orderBy: desc(schema.brandings.id),
+      with: {
+        brandingColors: true,
+        brandingImages: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.brandings.findFirst({
+        where: eq(schema.brandings.id, input.id),
+        with: {
+          brandingColors: true,
+          brandingImages: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof brandings>(brandings),
+
+  create: protectedProcedure
+    .input(brandingsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandings).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandings)
+      .where(eq(schema.brandings.id, input));
+  }),
 });
 
 export const brandingColorRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandingColors>(brandingColors),
-  byId: createByIDQuery<typeof brandingColors>(brandingColors),
-  create: createCreateQuery<typeof brandingColors>(
-    brandingColors,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandingColors.findMany({
+      orderBy: desc(schema.brandingColors.id),
+      with: {
+        branding: true,
+        brandingColorType: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.brandingColors.findFirst({
+        where: eq(schema.brandingColors.id, input.id),
+        with: {
+          branding: true,
+          brandingColorType: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof brandingColors>(brandingColors),
+
+  create: protectedProcedure
+    .input(brandingColorsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandingColors).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandingColors)
+      .where(eq(schema.brandingColors.id, input));
+  }),
 });
 
 export const brandingColorTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandingColorTypes>(brandingColorTypes),
-  byId: createByIDQuery<typeof brandingColorTypes>(brandingColorTypes),
-  create: createCreateQuery<typeof brandingColorTypes>(
-    brandingColorTypes,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandingColorTypes.findMany({
+      orderBy: desc(schema.brandingColorTypes.id),
+      with: {
+        brandingColors: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.brandingColorTypes.findFirst({
+        where: eq(schema.brandingColorTypes.id, input.id),
+        with: {
+          brandingColors: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof brandingColorTypes>(brandingColorTypes),
+
+  create: protectedProcedure
+    .input(brandingColorTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandingColorTypes).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandingColorTypes)
+      .where(eq(schema.brandingColorTypes.id, input));
+  }),
 });
 
 export const brandingImageRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandingImages>(brandingImages),
-  byId: createByIDQuery<typeof brandingImages>(brandingImages),
-  create: createCreateQuery<typeof brandingImages>(
-    brandingImages,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandingImages.findMany({
+      orderBy: desc(schema.brandingImages.id),
+      with: {
+        brandingImageType: true,
+        branding: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.brandingImages.findFirst({
+        where: eq(schema.brandingImages.id, input.id),
+        with: {
+          brandingImageType: true,
+          branding: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof brandingImages>(brandingImages),
+
+  create: protectedProcedure
+    .input(brandingImagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandingImages).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandingImages)
+      .where(eq(schema.brandingImages.id, input));
+  }),
 });
 
 export const brandingImageTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof brandingImageTypes>(brandingImageTypes),
-  byId: createByIDQuery<typeof brandingImageTypes>(brandingImageTypes),
-  create: createCreateQuery<typeof brandingImageTypes>(
-    brandingImageTypes,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.brandingImageTypes.findMany({
+      orderBy: desc(schema.brandingImageTypes.id),
+      with: {
+        brandingImages: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.brandingImageTypes.findFirst({
+        where: eq(schema.brandingImageTypes.id, input.id),
+        with: {
+          brandingImages: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof brandingImageTypes>(brandingImageTypes),
+
+  create: protectedProcedure
+    .input(brandingImageTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.brandingImageTypes).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.brandingImageTypes)
+      .where(eq(schema.brandingImageTypes.id, input));
+  }),
 });

@@ -1,51 +1,105 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
-  vodScreenMediaLists,
-  vodScreens,
-  vodScreenTypes,
+  vodScreenMediaListsInsertSchema,
+  vodScreensInsertSchema,
+  vodScreenTypesInsertSchema,
 } from "@media/db/schema/vodScreen";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const vodScreenRouter = createTRPCRouter({
-  all: createAllQuery<typeof vodScreens>(vodScreens),
-  byId: createByIDQuery<typeof vodScreens>(vodScreens),
-  create: createCreateQuery<typeof vodScreens>(
-    vodScreens,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.vodScreens.findMany({
+      orderBy: desc(schema.vodScreens.id),
+      with: {
+        screens: true,
+        vodScreenType: true,
+      },
+    });
+  }),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.vodScreens.findFirst({
+        where: eq(schema.vodScreens.id, input.id),
+        with: {
+          screens: true,
+          vodScreenType: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof vodScreens>(vodScreens),
+
+  create: protectedProcedure
+    .input(vodScreensInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.vodScreens).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.vodScreens)
+      .where(eq(schema.vodScreens.id, input));
+  }),
 });
 
 export const vodScreenTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof vodScreenTypes>(vodScreenTypes),
-  byId: createByIDQuery<typeof vodScreenTypes>(vodScreenTypes),
-  create: createCreateQuery<typeof vodScreenTypes>(
-    vodScreenTypes,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.vodScreenTypes.findMany({
+      orderBy: desc(schema.vodScreenTypes.id),
+    });
+  }),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.vodScreenTypes.findFirst({
+        where: eq(schema.vodScreenTypes.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof vodScreenTypes>(vodScreenTypes),
+
+  create: protectedProcedure
+    .input(vodScreenTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.vodScreenTypes).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.vodScreenTypes)
+      .where(eq(schema.vodScreenTypes.id, input));
+  }),
 });
 
 export const vodScreenMediaListRouter = createTRPCRouter({
-  all: createAllQuery<typeof vodScreenMediaLists>(vodScreenMediaLists),
-  byId: createByIDQuery<typeof vodScreenMediaLists>(vodScreenMediaLists),
-  create: createCreateQuery<typeof vodScreenMediaLists>(
-    vodScreenMediaLists,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.vodScreenMediaLists.findMany({
+      orderBy: desc(schema.vodScreenMediaLists.id),
+      with: {
+        vodScreen: true,
+        mediaList: true,
+      },
+    });
+  }),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.vodScreenMediaLists.findFirst({
+        where: eq(schema.vodScreenMediaLists.id, input.id),
+        with: {
+          vodScreen: true,
+          mediaList: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof vodScreenMediaLists>(vodScreenMediaLists),
+
+  create: protectedProcedure
+    .input(vodScreenMediaListsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.vodScreenMediaLists).values(input);
+    }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.vodScreenMediaLists)
+      .where(eq(schema.vodScreenMediaLists.id, input));
+  }),
 });

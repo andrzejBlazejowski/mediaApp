@@ -1,64 +1,146 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
-  menuLinkImages,
-  menuLinks,
-  menus,
-  menuTypes,
+  menuLinkImagesInsertSchema,
+  menuLinksInsertSchema,
+  menusInsertSchema,
+  menuTypesInsertSchema,
 } from "@media/db/schema/menu";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const menuRouter = createTRPCRouter({
-  all: createAllQuery<typeof menus>(menus),
-  byId: createByIDQuery<typeof menus>(menus),
-  create: createCreateQuery<typeof menus>(
-    menus,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menus.findMany({
+      orderBy: desc(schema.menus.id),
+      with: {
+        menuLinks: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menus.findFirst({
+        where: eq(schema.menus.id, input.id),
+        with: {
+          menuLinks: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof menus>(menus),
+
+  create: protectedProcedure
+    .input(menusInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.menus).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.menus).where(eq(schema.menus.id, input));
+  }),
 });
 
 export const menuLinkRouter = createTRPCRouter({
-  all: createAllQuery<typeof menuLinks>(menuLinks),
-  byId: createByIDQuery<typeof menuLinks>(menuLinks),
-  create: createCreateQuery<typeof menuLinks>(
-    menuLinks,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menuLinks.findMany({
+      orderBy: desc(schema.menuLinks.id),
+      with: {
+        menuLinkImage: true,
+        menu: true,
+        destinationScreen: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menuLinks.findFirst({
+        where: eq(schema.menuLinks.id, input.id),
+        with: {
+          menuLinkImage: true,
+          menu: true,
+          destinationScreen: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof menuLinks>(menuLinks),
+
+  create: protectedProcedure
+    .input(menuLinksInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.menuLinks).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.menuLinks)
+      .where(eq(schema.menuLinks.id, input));
+  }),
 });
 
 export const menuTypeRouter = createTRPCRouter({
-  all: createAllQuery<typeof menuTypes>(menuTypes),
-  byId: createByIDQuery<typeof menuTypes>(menuTypes),
-  create: createCreateQuery<typeof menuTypes>(
-    menuTypes,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menuTypes.findMany({
+      orderBy: desc(schema.menuTypes.id),
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menuTypes.findFirst({
+        where: eq(schema.menuTypes.id, input.id),
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof menuTypes>(menuTypes),
+
+  create: protectedProcedure
+    .input(menuTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.menuTypes).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.menuTypes)
+      .where(eq(schema.menuTypes.id, input));
+  }),
 });
 
 export const menuLinkImageRouter = createTRPCRouter({
-  all: createAllQuery<typeof menuLinkImages>(menuLinkImages),
-  byId: createByIDQuery<typeof menuLinkImages>(menuLinkImages),
-  create: createCreateQuery<typeof menuLinkImages>(
-    menuLinkImages,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.menuLinkImages.findMany({
+      orderBy: desc(schema.menuLinkImages.id),
+      with: {
+        menuLink: true,
+        image: true,
+      },
+    });
+  }),
+
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.menuLinkImages.findFirst({
+        where: eq(schema.menuLinkImages.id, input.id),
+        with: {
+          menuLink: true,
+          image: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof menuLinkImages>(menuLinkImages),
+
+  create: protectedProcedure
+    .input(menuLinkImagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.menuLinkImages).values(input);
+    }),
+
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.menuLinkImages)
+      .where(eq(schema.menuLinkImages.id, input));
+  }),
 });
