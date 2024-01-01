@@ -8,7 +8,7 @@ import { hiddenFeilds } from "./FormView.constants";
 import { FormViewProps, IFeield } from "./FormView.types";
 import { FormViewItem } from "./FormViewItem";
 
-export function FormView({
+export default function FormView({
   type,
   onSubmit,
   uiSchema,

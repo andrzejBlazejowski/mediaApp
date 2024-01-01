@@ -27,5 +27,5 @@ export interface TableViewProps {
   title: string;
   data: Rows;
   headersConfig?: HeadersConfig;
-  onDeleteRow?: (id: number) => Promise<void>;
+  onDeleteRow?: (id: number) => void;
 }

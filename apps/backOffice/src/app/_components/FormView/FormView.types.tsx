@@ -2,7 +2,7 @@ import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import { AnyZodObject } from "zod";
 
 export interface FormViewProps {
-  type: string;
+  type: "add" | "edit";
   title?: string;
   form: UseFormReturn<any>;
   onSubmit: (values: any) => any;

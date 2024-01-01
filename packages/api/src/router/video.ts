@@ -30,14 +30,6 @@ export const videoRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.videos).values(input);
     }),
-  update: protectedProcedure
-    .input(videosInsertSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db
-        .update(schema.videos)
-        .set(input)
-        .where(eq(schema.videos.id, input.id ?? 0));
-    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.videos).where(eq(schema.videos.id, input));

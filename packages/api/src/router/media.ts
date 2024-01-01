@@ -60,8 +60,6 @@ export const videoContentRouter = createTRPCRouter({
       orderBy: desc(schema.videoContents.id),
       with: {
         videoContentType: true,
-        media: true,
-        video: true,
       },
     });
   }),
@@ -73,8 +71,6 @@ export const videoContentRouter = createTRPCRouter({
         where: eq(schema.videoContents.id, input.id),
         with: {
           videoContentType: true,
-          media: true,
-          video: true,
         },
       });
     }),
@@ -83,14 +79,6 @@ export const videoContentRouter = createTRPCRouter({
     .input(videoContentsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.videoContents).values(input);
-    }),
-  update: protectedProcedure
-    .input(videoContentsInsertSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db
-        .update(schema.videoContents)
-        .set(input)
-        .where(eq(schema.videoContents.id, input.id ?? 0));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
