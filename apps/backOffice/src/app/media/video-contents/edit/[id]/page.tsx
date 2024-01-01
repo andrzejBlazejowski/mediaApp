@@ -10,7 +10,7 @@ import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
 import { api } from "~/utils/api";
-import { uiSchema } from "../../videoContents.constants";
+import { uiSchema } from "../../constants";
 
 export default function Page() {
   const routeParams = useParams<{ id: string }>();

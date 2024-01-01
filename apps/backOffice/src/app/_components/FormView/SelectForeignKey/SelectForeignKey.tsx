@@ -3,7 +3,7 @@ import React from "react";
 import MediaSelect from "./MediaSelect";
 import { SelectProps } from "./select.types";
 import VideoContentTypeSelect from "./VideoContentType";
-import VideoSelect from "./VideoSelect";
+import VideoSelect from "./VideosSelect";
 
 type Props = SelectProps & {
   foreignKey: string;
