@@ -14,22 +14,29 @@ export default function Page() {
   const deleteRow = api.videoContent.delete.useMutation();
   const invalidate = utils.videoContent.all.invalidate;
   const headersConfig = {
-    mediaId: {
+    id: {
       orderNumber: 0,
-      name: "mediaId",
-      label: "mediaId",
+      name: "id",
+      label: "id",
+      classNames: "w-[20px]",
+      sortable: true,
+    },
+    media: {
+      orderNumber: 1,
+      name: "media",
+      label: "media",
       classNames: "w-[100px]",
       sortable: true,
     },
-    videoId: {
-      orderNumber: 1,
-      name: "videoId",
-      label: "videoId",
+    video: {
+      orderNumber: 2,
+      name: "video",
+      label: "video",
       classNames: "w-[100px]",
       sortable: true,
     },
     type: {
-      orderNumber: 2,
+      orderNumber: 3,
       name: "type",
       label: "type",
       classNames: "w-[100px]",
@@ -43,9 +50,9 @@ export default function Page() {
         ? []
         : rawData.data.map((row) => {
             return {
-              mediaId: { value: row.mediaId.toString() },
-              videoId: { value: row.videoId.toString() },
-              type: { value: row.videoContentTypeId.toString() },
+              media: { value: row.media.name },
+              video: { value: row.video.name },
+              type: { value: row.videoContentType.name },
               id: { value: row.id.toString() },
             };
           });
