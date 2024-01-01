@@ -8,7 +8,7 @@ import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
 import { api } from "~/utils/api";
-import { uiSchema } from "../constants";
+import { title, uiSchema } from "../constants";
 
 export default function Page() {
   const utils = api.useUtils();
@@ -38,7 +38,7 @@ export default function Page() {
   return (
     <FormView
       type="add"
-      title="Video Content"
+      title={title}
       form={form}
       onSubmit={onSubmit}
       uiSchema={uiSchema}

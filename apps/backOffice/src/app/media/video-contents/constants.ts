@@ -15,3 +15,5 @@ export const uiSchema = {
     type: InputTypes.foreignKey,
   },
 } as IuiSchema;
+
+export const title = "Video Content";

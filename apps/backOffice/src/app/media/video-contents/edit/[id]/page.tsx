@@ -10,44 +10,49 @@ import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
 import { api } from "~/utils/api";
-import { uiSchema } from "../../constants";
+import { title, uiSchema } from "../../constants";
 
 export default function Page() {
-  const routeParams = useParams<{ id: string }>();
-  const id = useMemo(() => parseInt(routeParams.id), [routeParams.id]);
-  const videoContent = api.videoContent.byId.useQuery({ id });
   const utils = api.useUtils();
 
-  const form = useForm<z.infer<typeof media.videoContentsInsertSchema>>({
-    resolver: zodResolver(media.videoContentsInsertSchema),
+  const schema = media.videoContentsInsertSchema;
+  const route = api.videoContent;
+  const util = utils.videoContent;
+
+  const invalidate = util.all.invalidate;
+  type insetType = typeof schema;
+  const routeParams = useParams<{ id: string }>();
+  const id = useMemo(() => parseInt(routeParams.id), [routeParams.id]);
+  const rawData = route.byId.useQuery({ id });
+
+  const form = useForm<z.infer<insetType>>({
+    resolver: zodResolver(schema),
   });
 
   useEffect(() => {
-    if (videoContent.data) form.reset(videoContent.data);
-  }, [videoContent.data]);
+    if (rawData.data) form.reset(rawData.data);
+  }, [rawData.data]);
 
-  const { mutateAsync, error } = api.videoContent.create.useMutation({
+  const { mutateAsync, error } = route.update.useMutation({
     async onSuccess() {
-      await utils.videoContent.all.invalidate();
+      await invalidate();
     },
   });
 
-  const onSubmit = async (
-    values: z.infer<typeof media.videoContentsInsertSchema>,
-  ) => {
+  const onSubmit = async (values: z.infer<insetType>) => {
     const result = await mutateAsync(values);
-    await utils.videoContent.all.invalidate();
+    await invalidate();
     return result;
   };
 
   return (
     <FormView
       type="edit"
-      title="Video Content"
+      title={title}
       form={form}
       onSubmit={onSubmit}
       uiSchema={uiSchema}
-      zSchema={media.videoContentsInsertSchema}
+      zSchema={schema}
     />
   );
 }
