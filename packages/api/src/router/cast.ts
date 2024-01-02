@@ -42,6 +42,14 @@ export const castMemberRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.castMembers).values(input);
     }),
+  update: protectedProcedure
+    .input(castMembersInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.videoContents)
+        .set(input)
+        .where(eq(schema.videoContents.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
