@@ -1,7 +1,7 @@
 import React from "react";
 
 import CastRoleSelect from "./CastRoleSelect";
-import CountrySelect from "./countrySelect";
+import CountrySelect from "./CountrySelect";
 import MediaSelect from "./MediaSelect";
 import PeopleSelect from "./PeopleSelect";
 import { SelectProps } from "./select.types";
