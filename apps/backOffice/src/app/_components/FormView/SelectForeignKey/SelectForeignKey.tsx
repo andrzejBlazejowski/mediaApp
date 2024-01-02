@@ -1,6 +1,9 @@
 import React from "react";
 
+import CastRoleSelect from "./CastRoleSelect";
+import CountrySelect from "./countrySelect";
 import MediaSelect from "./MediaSelect";
+import PeopleSelect from "./PeopleSelect";
 import { SelectProps } from "./select.types";
 import VideoContentTypeSelect from "./VideoContentType";
 import VideoSelect from "./VideosSelect";
@@ -20,12 +23,19 @@ export default function SelectForeignKey({
   };
 
   switch (foreignKey) {
-    case "videoId":
-      return <VideoSelect {...props} />;
     case "videoContentTypeId":
       return <VideoContentTypeSelect {...props} />;
     case "mediaId":
       return <MediaSelect {...props} />;
+    case "mediaId":
+      return <MediaSelect {...props} />;
+    case "peopleId":
+      return <PeopleSelect {...props} />;
+    case "countryId":
+      return <CountrySelect {...props} />;
+    case "castRoleId":
+      return <CastRoleSelect {...props} />;
+    case "videoId":
     default:
       return <VideoSelect {...props} />;
   }
