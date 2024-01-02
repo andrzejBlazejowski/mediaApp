@@ -32,7 +32,9 @@ export const FormViewItem = ({
         <Input
           {...field}
           type={getHtmlInputType(type)}
-          {...register(field.name, { valueAsNumber: true })}
+          {...(getHtmlInputType(type) === "number"
+            ? register(field.name, { valueAsNumber: true })
+            : {})}
         />
       </FormControl>
     )}
@@ -50,6 +52,7 @@ function getHtmlInputType(type: InputTypes = InputTypes.text) {
       return "color";
     case InputTypes.checkbox:
       return "checkbox";
+    case InputTypes.text:
     default:
       return "text";
   }
