@@ -2,11 +2,11 @@ import type { IuiSchema } from "~/app/_components/FormView/FormView.types";
 import { InputTypes } from "~/app/_components/FormView/FormView.types";
 
 export const uiSchema = {
-  media: {
+  mediaId: {
     classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
-  list: {
+  mediaListId: {
     classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
