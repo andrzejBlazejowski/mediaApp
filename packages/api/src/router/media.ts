@@ -264,6 +264,14 @@ export const mediaViewImpressionRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaViewImpressions).values(input);
     }),
+  update: protectedProcedure
+    .input(mediaViewImpressionsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.mediaViewImpressions)
+        .set(input)
+        .where(eq(schema.mediaViewImpressions.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db

@@ -52,6 +52,8 @@ function getHtmlInputType(type: InputTypes = InputTypes.text) {
       return "color";
     case InputTypes.checkbox:
       return "checkbox";
+    case InputTypes.number:
+      return "number";
     case InputTypes.text:
     default:
       return "text";

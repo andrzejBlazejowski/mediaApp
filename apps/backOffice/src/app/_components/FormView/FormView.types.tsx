@@ -22,4 +22,5 @@ export enum InputTypes {
   image = "image",
   colorPicker = "colorPicker",
   checkbox = "checkbox",
+  number = "number",
 }
