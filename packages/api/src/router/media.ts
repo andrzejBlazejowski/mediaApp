@@ -213,6 +213,15 @@ export const mediaImageTypeRouter = createTRPCRouter({
       return ctx.db.insert(schema.mediaImageTypes).values(input);
     }),
 
+  update: protectedProcedure
+    .input(mediaImageTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.mediaImageTypes)
+        .set(input)
+        .where(eq(schema.mediaImageTypes.id, input.id ?? 0));
+    }),
+
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.mediaImageTypes)
