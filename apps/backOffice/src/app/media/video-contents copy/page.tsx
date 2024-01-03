@@ -2,50 +2,43 @@
 
 import React, { useMemo } from "react";
 
-import type { TableViewProps } from "~/app/_components/TableView";
-import { TableView } from "~/app/_components/TableView";
 import { api } from "~/utils/api";
+import type { TableViewProps } from "../../_components/TableView";
+import { TableView } from "../../_components/TableView";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
 
-  const rawData = api.media.all.useQuery();
-  const deleteRow = api.media.delete.useMutation();
-  const invalidate = utils.media.all.invalidate;
+  const rawData = api.videoContent.all.useQuery();
+  const deleteRow = api.videoContent.delete.useMutation();
+  const invalidate = utils.videoContent.all.invalidate;
   const headersConfig = {
     id: {
       orderNumber: 0,
       name: "id",
       label: "id",
+      classNames: "w-[20px]",
+      sortable: true,
+    },
+    media: {
+      orderNumber: 1,
+      name: "media",
+      label: "media",
       classNames: "w-[100px]",
       sortable: true,
     },
-    name: {
-      orderNumber: 1,
-      name: "name",
-      label: "Name",
+    video: {
+      orderNumber: 2,
+      name: "video",
+      label: "video",
       classNames: "w-[100px]",
       sortable: true,
     },
     type: {
-      orderNumber: 2,
-      name: "type",
-      label: "Type",
-      classNames: "w-[50px]",
-      sortable: true,
-    },
-    isFree: {
       orderNumber: 3,
-      name: "isFree",
-      label: "IsFree",
-      classNames: "w-[50px]",
-      sortable: true,
-    },
-    category: {
-      orderNumber: 4,
-      name: "Category",
-      label: "Category",
+      name: "type",
+      label: "type",
       classNames: "w-[100px]",
       sortable: true,
     },
@@ -57,11 +50,10 @@ export default function Page() {
         ? []
         : rawData.data.map((row) => {
             return {
+              media: { value: row.media.name },
+              video: { value: row.video.name },
+              type: { value: row.videoContentType.name },
               id: { value: row.id.toString() },
-              name: { value: row.name ?? "" },
-              type: { value: row.type ?? "" },
-              isFree: { value: row.isFree.toString() ?? "" },
-              category: { value: row.mediaCategory.name ?? "" },
             };
           });
     return {

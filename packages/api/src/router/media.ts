@@ -48,6 +48,14 @@ export const mediaRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.medias).values(input);
     }),
+    update: protectedProcedure
+      .input(mediasInsertSchema)
+      .mutation(({ ctx, input }) => {
+        return ctx.db
+          .update(schema.medias)
+          .set(input)
+          .where(eq(schema.medias.id, input.id ?? 0));
+      }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.medias).where(eq(schema.medias.id, input));

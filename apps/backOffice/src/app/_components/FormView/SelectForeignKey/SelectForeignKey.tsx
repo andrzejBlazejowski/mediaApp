@@ -3,6 +3,7 @@ import React from "react";
 import CastRoleSelect from "./CastRoleSelect";
 import CountrySelect from "./CountrySelect";
 import ImageSelect from "./ImageSelect";
+import MediaCategorySelect from "./MediaCategorySelect";
 import MediaImageTypeSelect from "./MediaImageTypeSelect";
 import MediaListSelect from "./MediaListSelect";
 import MediaSelect from "./MediaSelect";
@@ -42,6 +43,8 @@ export default function SelectForeignKey({
       return <ImageSelect {...props} />;
     case "mediaImageTypeId":
       return <MediaImageTypeSelect {...props} />;
+    case "mediaCategoryId":
+      return <MediaCategorySelect {...props} />;
     case "mediaListId":
       return <MediaListSelect {...props} />;
     case "videoId":

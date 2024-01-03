@@ -13,9 +13,9 @@ import { title, uiSchema } from "../constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const schema = media.mediasInsertSchema;
-  const route = api.media;
-  const util = utils.media;
+  const schema = media.videoContentsInsertSchema;
+  const route = api.videoContent;
+  const util = utils.videoContent;
 
   const invalidate = util.all.invalidate;
   type insetType = typeof schema;

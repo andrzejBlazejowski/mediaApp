@@ -2,28 +2,30 @@ import type { IuiSchema } from "../_components/FormView/FormView.types";
 import { InputTypes } from "../_components/FormView/FormView.types";
 
 export const uiSchema = {
-  name: {
-    clases: "w-1/4 ",
-    type: InputTypes.text,
-  },
   shortDescription: {
-    clases: "w-1/2 ",
+    classes: "w-1/2 inline-block m-2",
     type: InputTypes.textArea,
   },
   description: {
-    clases: "w-1/2 ",
+    classes: "w-1/2 inline-block m-2",
     type: InputTypes.textArea,
   },
+  name: {
+    classes: "w-1/4 inline-block m-2",
+    type: InputTypes.text,
+  },
   type: {
-    clases: "w-1/4 ",
-    type: InputTypes.foreignKey,
+    classes: "w-1/4 inline-block m-2",
+    type: InputTypes.text,
   },
   isFree: {
-    clases: "w-1/4 ",
+    classes: "w-1/4 inline-block m-2",
     type: InputTypes.checkbox,
   },
-  mediaCategoyId: {
-    clases: "w-1/4 ",
+  mediaCategoryId: {
+    classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
 } as unknown as IuiSchema;
+
+export const title = "media";
