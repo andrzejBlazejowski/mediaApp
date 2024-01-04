@@ -10,6 +10,7 @@ import MediaListSelect from "./MediaListSelect";
 import MediaSelect from "./MediaSelect";
 import PeopleSelect from "./PeopleSelect";
 import { SelectProps } from "./select.types";
+import SexKeySelect from "./SexKeySelect";
 import VideoContentTypeSelect from "./VideoContentType";
 import VideoSelect from "./VideosSelect";
 
@@ -50,6 +51,8 @@ export default function SelectForeignKey({
       return <CastMemberSelect {...props} />;
     case "mediaListId":
       return <MediaListSelect {...props} />;
+    case "sex":
+      return <SexKeySelect {...props} />;
     case "videoId":
     default:
       return <VideoSelect {...props} />;

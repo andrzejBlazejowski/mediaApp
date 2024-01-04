@@ -22,10 +22,10 @@ export const uiSchema = {
     classes: "w-1/4 inline-block m-2",
     type: InputTypes.date,
   },
-  sexKey: {
+  sex: {
     classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
 } as IuiSchema;
 
-export const title = "media cast members";
+export const title = "people";

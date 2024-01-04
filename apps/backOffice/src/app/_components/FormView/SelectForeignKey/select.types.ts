@@ -1,4 +1,4 @@
 export interface SelectProps {
   defaultValue?: string;
-  onValueChange?: (value: number) => void;
+  onValueChange?: (value: number | string) => void;
 }
