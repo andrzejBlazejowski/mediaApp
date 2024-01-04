@@ -10,9 +10,9 @@ import { title } from "./constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const rawData = api.castMember.all.useQuery();
-  const deleteRow = api.castMember.delete.useMutation();
-  const invalidate = utils.castMember.all.invalidate;
+  const rawData = api.castMemberImage.all.useQuery();
+  const deleteRow = api.castMemberImage.delete.useMutation();
+  const invalidate = utils.castMemberImage.all.invalidate;
   const headersConfig = {
     id: {
       orderNumber: 0,
@@ -21,24 +21,24 @@ export default function Page() {
       classNames: "w-[100px]",
       sortable: true,
     },
-    firstName: {
+    name: {
       orderNumber: 1,
-      name: "firstName",
-      label: "firstName",
+      name: "name",
+      label: "name",
       classNames: "w-[100px]",
       sortable: true,
     },
-    lastName: {
+    media: {
+      orderNumber: 1,
+      name: "media",
+      label: "media",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    image: {
       orderNumber: 2,
-      name: "lastName",
-      label: "lastName",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    role: {
-      orderNumber: 3,
-      name: "role",
-      label: "role",
+      name: "image",
+      label: "image",
       classNames: "w-[100px]",
       sortable: true,
     },
@@ -50,10 +50,10 @@ export default function Page() {
         ? []
         : rawData.data.map((row) => {
             return {
-              firstName: { value: row.person?.firstName },
-              lastName: { value: row.person?.lastName },
-              role: { value: row.castRole?.name },
               id: { value: row.id.toString() },
+              name: { value: row.name },
+              cast: { value: `${row.castMember?.id}  ` },
+              image: { value: row?.image?.name ?? "" },
             };
           });
     return {
