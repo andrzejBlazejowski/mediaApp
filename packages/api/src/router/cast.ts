@@ -166,6 +166,14 @@ export const mediaCastMemberRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaCastMembers).values(input);
     }),
+  update: protectedProcedure
+    .input(mediaCastMembersInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.mediaCastMembers)
+        .set(input)
+        .where(eq(schema.mediaCastMembers.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
@@ -199,6 +207,14 @@ export const peopleRouter = createTRPCRouter({
     .input(peopleInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.people).values(input);
+    }),
+  update: protectedProcedure
+    .input(peopleInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.people)
+        .set(input)
+        .where(eq(schema.people.id, input.id ?? 0));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
