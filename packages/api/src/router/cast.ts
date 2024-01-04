@@ -122,6 +122,14 @@ export const castRoleRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.castRoles).values(input);
     }),
+  update: protectedProcedure
+    .input(castRolesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.castRoles)
+        .set(input)
+        .where(eq(schema.castRoles.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
