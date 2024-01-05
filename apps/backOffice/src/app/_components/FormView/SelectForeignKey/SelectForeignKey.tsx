@@ -1,5 +1,9 @@
 import React from "react";
 
+import BrandingColorTypeSelect from "./BrandingColorTypeSelect";
+import BrandingImageSelect from "./BrandingImageSelect";
+import BrandingImageTypeSelect from "./BrandingImageTypeSelect";
+import BrandingSelect from "./BrandingSelect";
 import CastMemberSelect from "./CastMemberSelect ";
 import CastRoleSelect from "./CastRoleSelect";
 import CountrySelect from "./CountrySelect";
@@ -53,6 +57,14 @@ export default function SelectForeignKey({
       return <MediaListSelect {...props} />;
     case "sex":
       return <SexKeySelect {...props} />;
+    case "brandingImageTypeId":
+      return <BrandingImageTypeSelect {...props} />;
+    case "brandingImageId":
+      return <BrandingImageSelect {...props} />;
+    case "brandingColorTypeId":
+      return <BrandingColorTypeSelect {...props} />;
+    case "brandingId":
+      return <BrandingSelect {...props} />;
     case "videoId":
     default:
       return <VideoSelect {...props} />;

@@ -40,6 +40,14 @@ export const brandingRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.brandings).values(input);
     }),
+  update: protectedProcedure
+    .input(brandingsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.brandings)
+        .set(input)
+        .where(eq(schema.brandings.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
@@ -76,6 +84,14 @@ export const brandingColorRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.brandingColors).values(input);
     }),
+  update: protectedProcedure
+    .input(brandingColorsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.brandingColors)
+        .set(input)
+        .where(eq(schema.brandingColors.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
@@ -110,6 +126,14 @@ export const brandingColorTypeRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.brandingColorTypes).values(input);
     }),
+  update: protectedProcedure
+    .input(brandingColorTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.brandingColorTypes)
+        .set(input)
+        .where(eq(schema.brandingColorTypes.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
@@ -125,6 +149,7 @@ export const brandingImageRouter = createTRPCRouter({
       with: {
         brandingImageType: true,
         branding: true,
+        image: true,
       },
     });
   }),
@@ -137,6 +162,7 @@ export const brandingImageRouter = createTRPCRouter({
         with: {
           brandingImageType: true,
           branding: true,
+          image: true,
         },
       });
     }),
@@ -145,6 +171,14 @@ export const brandingImageRouter = createTRPCRouter({
     .input(brandingImagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.brandingImages).values(input);
+    }),
+  update: protectedProcedure
+    .input(brandingImagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.brandingImages)
+        .set(input)
+        .where(eq(schema.brandingImages.id, input.id ?? 0));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
@@ -179,6 +213,14 @@ export const brandingImageTypeRouter = createTRPCRouter({
     .input(brandingImageTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.brandingImageTypes).values(input);
+    }),
+  update: protectedProcedure
+    .input(brandingImageTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.brandingImageTypes)
+        .set(input)
+        .where(eq(schema.brandingImageTypes.id, input.id ?? 0));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {

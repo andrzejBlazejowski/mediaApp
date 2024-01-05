@@ -12,7 +12,7 @@ interface SelectProps {
   placeholder?: string;
   defaultValue?: string;
   onValueChange?: (value: number | string) => void;
-  type: "string" | "number";
+  type?: "string" | "number";
   options: {
     name: string;
     value: string;
