@@ -1,5 +1,7 @@
 import React from "react";
 
+import ArticleScreenImageSelect from "./ArticleScreenImageSelect";
+import ArticleScreenSelect from "./ArticleScreenSelect";
 import BrandingColorTypeSelect from "./BrandingColorTypeSelect";
 import BrandingImageSelect from "./BrandingImageSelect";
 import BrandingImageTypeSelect from "./BrandingImageTypeSelect";
@@ -17,6 +19,8 @@ import { SelectProps } from "./select.types";
 import SexKeySelect from "./SexKeySelect";
 import VideoContentTypeSelect from "./VideoContentType";
 import VideoSelect from "./VideosSelect";
+import VodScreenSelect from "./VodScreenSelect";
+import VodScreenTypeSelect from "./VodScreenTypeSelect";
 
 type Props = SelectProps & {
   foreignKey: string;
@@ -65,12 +69,16 @@ export default function SelectForeignKey({
       return <BrandingColorTypeSelect {...props} />;
     case "brandingId":
       return <BrandingSelect {...props} />;
-    case "videoId":
-    case "articleScreenImageId":
-    case "vodScreenTypeId":
     case "vodScreenId":
-    case "mediaListId":
+      return <VodScreenSelect {...props} />;
+    case "vodScreenTypeId":
+      return <VodScreenTypeSelect {...props} />;
+    case "articleScreenId":
+      return <ArticleScreenSelect {...props} />;
+    case "articleScreenImageId":
+      return <ArticleScreenImageSelect {...props} />;
 
+    case "videoId":
     default:
       return <VideoSelect {...props} />;
   }
