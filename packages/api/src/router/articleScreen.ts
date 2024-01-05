@@ -36,6 +36,14 @@ export const articleScreenRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.articleScreens).values(input);
     }),
+  update: protectedProcedure
+    .input(articleScreensInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.articleScreens)
+        .set(input)
+        .where(eq(schema.articleScreens.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
@@ -50,6 +58,7 @@ export const articleScreenImageRouter = createTRPCRouter({
       orderBy: desc(schema.articleScreenImages.id),
       with: {
         articleScreen: true,
+        image: true,
       },
     });
   }),
@@ -60,6 +69,7 @@ export const articleScreenImageRouter = createTRPCRouter({
         where: eq(schema.articleScreenImages.id, input.id),
         with: {
           articleScreen: true,
+          image: true,
         },
       });
     }),
@@ -68,6 +78,14 @@ export const articleScreenImageRouter = createTRPCRouter({
     .input(articleScreenImagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.articleScreenImages).values(input);
+    }),
+  update: protectedProcedure
+    .input(articleScreenImagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.articleScreenImages)
+        .set(input)
+        .where(eq(schema.articleScreenImages.id, input.id ?? 0));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {

@@ -41,6 +41,15 @@ export const screenRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.screens).values(input);
     }),
+  update: protectedProcedure
+    .input(screensInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.screens)
+        .set(input)
+        .where(eq(schema.screens.id, input.id ?? 0));
+    }),
+
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.screens).where(eq(schema.screens.id, input));
   }),
@@ -65,6 +74,14 @@ export const screenTypeRouter = createTRPCRouter({
     .input(screenTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.screenTypes).values(input);
+    }),
+  update: protectedProcedure
+    .input(screenTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.screenTypes)
+        .set(input)
+        .where(eq(schema.screenTypes.id, input.id ?? 0));
     }),
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db

@@ -66,6 +66,11 @@ export default function SelectForeignKey({
     case "brandingId":
       return <BrandingSelect {...props} />;
     case "videoId":
+    case "articleScreenImageId":
+    case "vodScreenTypeId":
+    case "vodScreenId":
+    case "mediaListId":
+
     default:
       return <VideoSelect {...props} />;
   }
