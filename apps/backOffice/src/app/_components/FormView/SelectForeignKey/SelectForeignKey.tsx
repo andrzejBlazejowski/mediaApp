@@ -92,6 +92,8 @@ export default function SelectForeignKey({
       return <MenuPlatformTypeSelect {...props} />;
     case "menuLinkImageId":
       return <MenuLinkImageTypeSelect {...props} />;
+    case "purchaseTypeId":
+    case "userId":
 
     case "videoId":
     default:

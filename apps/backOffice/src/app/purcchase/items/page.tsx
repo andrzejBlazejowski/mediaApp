@@ -10,9 +10,9 @@ import { title } from "./constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const rawData = api.menuType.all.useQuery();
-  const deleteRow = api.menuType.delete.useMutation();
-  const invalidate = utils.menuType.all.invalidate;
+  const rawData = api.purchaseItem.all.useQuery();
+  const deleteRow = api.purchaseItem.delete.useMutation();
+  const invalidate = utils.purchaseItem.all.invalidate;
   const headersConfig = {
     id: {
       orderNumber: 0,
@@ -21,17 +21,17 @@ export default function Page() {
       classNames: "w-[100px]",
       sortable: true,
     },
-    name: {
+    purchase: {
       orderNumber: 1,
-      name: "name",
-      label: "name",
+      name: "purchase",
+      label: "purchase",
       classNames: "w-[100px]",
       sortable: true,
     },
-    description: {
+    media: {
       orderNumber: 2,
-      name: "description",
-      label: "description",
+      name: "media",
+      label: "media",
       classNames: "w-[100px]",
       sortable: true,
     },
@@ -44,8 +44,10 @@ export default function Page() {
         : rawData.data.map((row) => {
             return {
               id: { value: row.id.toString() },
-              name: { value: row.name },
-              description: { value: row.description },
+              purchase: { value: row.purchaseId.toString() },
+              media: {
+                value: row?.media?.name ?? row.mediaId.toString() ?? "",
+              },
             };
           });
     return {

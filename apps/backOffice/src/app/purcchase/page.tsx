@@ -21,17 +21,17 @@ export default function Page() {
       classNames: "w-[100px]",
       sortable: true,
     },
-    name: {
+    type: {
       orderNumber: 1,
-      name: "name",
-      label: "name",
+      name: "type",
+      label: "type",
       classNames: "w-[100px]",
       sortable: true,
     },
-    description: {
+    user: {
       orderNumber: 2,
-      name: "description",
-      label: "description",
+      name: "user",
+      label: "user",
       classNames: "w-[100px]",
       sortable: true,
     },
@@ -44,8 +44,15 @@ export default function Page() {
         : rawData.data.map((row) => {
             return {
               id: { value: row.id.toString() },
-              name: { value: row.name },
-              description: { value: row.description },
+              type: {
+                value:
+                  row?.purchaseType?.name ??
+                  row.purchaseTypeId.toString() ??
+                  "",
+              },
+              user: {
+                value: row?.user?.email ?? row.userId.toString() ?? "",
+              },
             };
           });
     return {
