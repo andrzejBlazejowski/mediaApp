@@ -33,6 +33,14 @@ export const platformRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.platforms).values(input);
     }),
+  update: protectedProcedure
+    .input(platformsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.platforms)
+        .set(input)
+        .where(eq(schema.platforms.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
@@ -67,6 +75,14 @@ export const menuPlatformRouter = createTRPCRouter({
     .input(menuPlatformsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menuPlatforms).values(input);
+    }),
+  update: protectedProcedure
+    .input(menuPlatformsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.menuPlatforms)
+        .set(input)
+        .where(eq(schema.menuPlatforms.id, input.id ?? 0));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {

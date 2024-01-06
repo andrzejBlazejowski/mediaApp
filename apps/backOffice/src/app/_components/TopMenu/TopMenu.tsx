@@ -176,12 +176,12 @@ const menuComponents = {
   dictionary: [
     {
       title: "client app",
-      href: "/dictionary/clientApp",
+      href: "/dictionary/client-app",
       description: "loream ipsum",
     },
     {
       title: "back office",
-      href: "/dictionary/clientApp",
+      href: "/dictionary/back-app",
       description: "loream ipsum",
     },
     {
@@ -197,6 +197,11 @@ const menuComponents = {
     {
       title: "platforms",
       href: "/platforms",
+      description: "loream ipsum",
+    },
+    {
+      title: "platform menus",
+      href: "/platforms/menu",
       description: "loream ipsum",
     },
   ],
