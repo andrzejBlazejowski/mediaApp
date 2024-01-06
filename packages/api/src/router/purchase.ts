@@ -1,117 +1,132 @@
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { schema } from "@media/db";
 import {
-  purchaseItems,
-  purchases,
-  purchaseTypes,
-} from "@media/db/schema/Purchase";
+  purchaseItemsInsertSchema,
+  purchasesInsertSchema,
+  purchaseTypesInsertSchema,
+} from "@media/db/schema/purchase";
 
-import { createTRPCRouter } from "../trpc";
-import {
-  createAllQuery,
-  createByIDQuery,
-  createCreateQuery,
-  createDeleteQuery,
-} from "./commonRouter";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const purchaseRouter = createTRPCRouter({
-  // TODO: fix it - change to specific query not generic
-  all: createAllQuery<typeof purchases>(purchases),
-
-  // byId: publicProcedure
-  //   .input(z.object({ id: z.number() }))
-  //   .query(({ ctx, input }) => {
-  //     return ctx.db.query.purchases.findFirst({
-  //       where: eq(schema.purchases.id, input.id),
-  //     });
-  //   }),
-  byId: createByIDQuery<typeof purchases>(purchases),
-
-  // create: protectedProcedure
-  //   .input(purchasesInsertSchema)
-  //   .mutation(({ ctx, input }) => {
-  //     return ctx.db.insert(schema.purchases).values(input);
-  //   }),
-
-  create: createCreateQuery<typeof purchases>(
-    purchases,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.purchases.findMany({
+      orderBy: desc(schema.purchases.id),
+      with: {
+        purchaseType: true,
+        user: true,
+      },
+    });
+  }),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.purchases.findFirst({
+        where: eq(schema.purchases.id, input.id),
+        with: {
+          purchaseType: true,
+          user: true,
+          purchaseItems: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof purchases>(purchases),
+  create: protectedProcedure
+    .input(purchasesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.purchases).values(input);
+    }),
+  update: protectedProcedure
+    .input(purchasesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.purchases)
+        .set(input)
+        .where(eq(schema.purchases.id, input.id ?? 0));
+    }),
 
-  // delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
-  //   return ctx.db
-  //     .delete(schema.purchases)
-  //     .where(eq(schema.purchases.id, input));
-  // }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.purchases)
+      .where(eq(schema.purchases.id, input));
+  }),
 });
 
 export const purchaseItemRouter = createTRPCRouter({
-  // TODO: fix it - change to specific query not generic
-  all: createAllQuery<typeof purchaseItems>(purchaseItems),
-
-  // byId: publicProcedure
-  //   .input(z.object({ id: z.number() }))
-  //   .query(({ ctx, input }) => {
-  //     return ctx.db.query.purchaseItems.findFirst({
-  //       where: eq(schema.purchaseItems.id, input.id),
-  //     });
-  //   }),
-  byId: createByIDQuery<typeof purchaseItems>(purchaseItems),
-
-  // create: protectedProcedure
-  //   .input(purchaseItemsInsertSchema)
-  //   .mutation(({ ctx, input }) => {
-  //     return ctx.db.insert(schema.purchaseItems).values(input);
-  //   }),
-
-  create: createCreateQuery<typeof purchaseItems>(
-    purchaseItems,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.purchaseItems.findMany({
+      orderBy: desc(schema.purchaseItems.id),
+      with: {
+        purchase: true,
+        media: true,
+      },
+    });
+  }),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.purchaseItems.findFirst({
+        where: eq(schema.purchaseItems.id, input.id),
+        with: {
+          purchase: true,
+          media: true,
+        },
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof purchaseItems>(purchaseItems),
+  create: protectedProcedure
+    .input(purchaseItemsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.purchaseItems).values(input);
+    }),
+  update: protectedProcedure
+    .input(purchaseItemsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.purchaseItems)
+        .set(input)
+        .where(eq(schema.purchaseItems.id, input.id ?? 0));
+    }),
 
-  // delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
-  //   return ctx.db
-  //     .delete(schema.purchaseItems)
-  //     .where(eq(schema.purchaseItems.id, input));
-  // }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.purchaseItems)
+      .where(eq(schema.purchaseItems.id, input));
+  }),
 });
 
 export const purchaseTypeRouter = createTRPCRouter({
-  // TODO: fix it - change to specific query not generic
-  all: createAllQuery<typeof purchaseTypes>(purchaseTypes),
-
-  // byId: publicProcedure
-  //   .input(z.object({ id: z.number() }))
-  //   .query(({ ctx, input }) => {
-  //     return ctx.db.query.purchaseTypes.findFirst({
-  //       where: eq(schema.purchaseTypes.id, input.id),
-  //     });
-  //   }),
-  byId: createByIDQuery<typeof purchaseTypes>(purchaseTypes),
-
-  // create: protectedProcedure
-  //   .input(purchaseTypesInsertSchema)
-  //   .mutation(({ ctx, input }) => {
-  //     return ctx.db.insert(schema.purchaseTypes).values(input);
-  //   }),
-
-  create: createCreateQuery<typeof purchaseTypes>(
-    purchaseTypes,
-    z.object({
-      title: z.string().min(1),
+  all: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.purchaseTypes.findMany({
+      orderBy: desc(schema.purchaseTypes.id),
+      with: {},
+    });
+  }),
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.purchaseTypes.findFirst({
+        where: eq(schema.purchaseTypes.id, input.id),
+        with: {},
+      });
     }),
-  ),
-  delete: createDeleteQuery<typeof purchaseTypes>(purchaseTypes),
+  create: protectedProcedure
+    .input(purchaseTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.purchaseTypes).values(input);
+    }),
+  update: protectedProcedure
+    .input(purchaseTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.purchaseTypes)
+        .set(input)
+        .where(eq(schema.purchaseTypes.id, input.id ?? 0));
+    }),
 
-  // delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
-  //   return ctx.db
-  //     .delete(schema.purchaseTypes)
-  //     .where(eq(schema.purchaseTypes.id, input));
-  // }),
+  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.db
+      .delete(schema.purchaseTypes)
+      .where(eq(schema.purchaseTypes.id, input));
+  }),
 });

@@ -40,6 +40,14 @@ export const invoiceRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoices).values(input);
     }),
+  update: protectedProcedure
+    .input(invoicesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.invoices)
+        .set(input)
+        .where(eq(schema.invoices.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.invoices).where(eq(schema.invoices.id, input));
