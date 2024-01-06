@@ -10,9 +10,9 @@ import { title } from "./constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const rawData = api.platform.all.useQuery();
-  const deleteRow = api.platform.delete.useMutation();
-  const invalidate = utils.platform.all.invalidate;
+  const rawData = api.menuLink.all.useQuery();
+  const deleteRow = api.menuLink.delete.useMutation();
+  const invalidate = utils.menuLink.all.invalidate;
   const headersConfig = {
     id: {
       orderNumber: 0,
@@ -32,6 +32,13 @@ export default function Page() {
       orderNumber: 2,
       name: "description",
       label: "description",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    menu: {
+      orderNumber: 3,
+      name: "menu",
+      label: "menu",
       classNames: "w-[100px]",
       sortable: true,
     },

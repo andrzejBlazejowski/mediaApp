@@ -17,6 +17,8 @@ export const menuRouter = createTRPCRouter({
       orderBy: desc(schema.menus.id),
       with: {
         menuLinks: true,
+        menuPlatform: true,
+        menuType: true,
       },
     });
   }),

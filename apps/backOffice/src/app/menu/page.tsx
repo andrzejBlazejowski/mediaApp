@@ -21,17 +21,17 @@ export default function Page() {
       classNames: "w-[100px]",
       sortable: true,
     },
-    name: {
+    platform: {
       orderNumber: 1,
-      name: "name",
-      label: "name",
+      name: "platform",
+      label: "platform",
       classNames: "w-[100px]",
       sortable: true,
     },
-    description: {
+    type: {
       orderNumber: 2,
-      name: "description",
-      label: "description",
+      name: "type",
+      label: "type",
       classNames: "w-[100px]",
       sortable: true,
     },
@@ -44,8 +44,10 @@ export default function Page() {
         : rawData.data.map((row) => {
             return {
               id: { value: row.id.toString() },
-              name: { value: row.name },
-              description: { value: row.description },
+              platform: {
+                value: row.menuPlatformId.toString(),
+              },
+              type: { value: row?.menuType?.name ?? row.menuTypeId },
             };
           });
     return {

@@ -10,6 +10,14 @@ export const uiSchema = {
     classes: "w-1/2 inline-block m-2",
     type: InputTypes.textArea,
   },
+  menuId: {
+    classes: "w-1/2 inline-block m-2",
+    type: InputTypes.foreignKey,
+  },
+  menuLinkImageId: {
+    classes: "w-1/2 inline-block m-2",
+    type: InputTypes.foreignKey,
+  },
 } as IuiSchema;
 
-export const title = "platform";
+export const title = "menu links";

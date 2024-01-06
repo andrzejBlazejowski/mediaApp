@@ -14,7 +14,10 @@ import MediaCategorySelect from "./MediaCategorySelect";
 import MediaImageTypeSelect from "./MediaImageTypeSelect";
 import MediaListSelect from "./MediaListSelect";
 import MediaSelect from "./MediaSelect";
+import MenuLinkImageTypeSelect from "./MenuLinkImageTypeSelect ";
+import MenuPlatformTypeSelect from "./MenuPlatformTypeSelect";
 import MenuSelect from "./MenuSelect";
+import MenuTypeSelect from "./MenuTypeSelect";
 import PeopleSelect from "./PeopleSelect";
 import PlatformSelect from "./PlatformSelect";
 import { SelectProps } from "./select.types";
@@ -83,6 +86,13 @@ export default function SelectForeignKey({
       return <MenuSelect {...props} />;
     case "platformId":
       return <PlatformSelect {...props} />;
+    case "menuTypeId":
+      return <MenuTypeSelect {...props} />;
+    case "menuPlatformId":
+      return <MenuPlatformTypeSelect {...props} />;
+    case "menuLinkImageId":
+      return <MenuLinkImageTypeSelect {...props} />;
+
     case "videoId":
     default:
       return <VideoSelect {...props} />;

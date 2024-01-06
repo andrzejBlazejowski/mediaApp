@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { platform } from "@media/db";
+import { menu } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
 import { api } from "~/utils/api";
@@ -15,9 +15,9 @@ import { title, uiSchema } from "../../constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const schema = platform.platformsInsertSchema;
-  const route = api.platform;
-  const util = utils.platform;
+  const schema = menu.menuLinksInsertSchema;
+  const route = api.menuLink;
+  const util = utils.menuLink;
 
   const invalidate = util.all.invalidate;
   type insetType = typeof schema;
