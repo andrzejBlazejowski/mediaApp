@@ -12,10 +12,10 @@ export default function VideoSelect(props: SelectProps) {
     () =>
       !videos.data || videos.data.length === 0
         ? []
-        : videos.data.map((video) => {
+        : videos.data.map((row) => {
             return {
-              value: video.id.toString(),
-              name: video.name ?? video.url,
+              value: row.id.toString(),
+              name: row.name ?? row.url,
             };
           }),
     [videos],

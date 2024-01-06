@@ -10,6 +10,7 @@ import CastMemberSelect from "./CastMemberSelect ";
 import CastRoleSelect from "./CastRoleSelect";
 import CountrySelect from "./CountrySelect";
 import ImageSelect from "./ImageSelect";
+import InvoiceTypeSelect from "./InvoiceTypeSelect";
 import MediaCategorySelect from "./MediaCategorySelect";
 import MediaImageTypeSelect from "./MediaImageTypeSelect";
 import MediaListSelect from "./MediaListSelect";
@@ -20,8 +21,10 @@ import MenuSelect from "./MenuSelect";
 import MenuTypeSelect from "./MenuTypeSelect";
 import PeopleSelect from "./PeopleSelect";
 import PlatformSelect from "./PlatformSelect";
+import PurchaseTypeSelect from "./PurchaseTypeSelect";
 import { SelectProps } from "./select.types";
 import SexKeySelect from "./SexKeySelect";
+import UserSelect from "./UserSelect";
 import VideoContentTypeSelect from "./VideoContentType";
 import VideoSelect from "./VideosSelect";
 import VodScreenSelect from "./VodScreenSelect";
@@ -90,9 +93,12 @@ export default function SelectForeignKey({
       return <MenuPlatformTypeSelect {...props} />;
     case "menuLinkImageId":
       return <MenuLinkImageTypeSelect {...props} />;
-    case "purchaseTypeId":
     case "userId":
+      return <UserSelect {...props} />;
+    case "purchaseTypeId":
+      return <PurchaseTypeSelect {...props} />;
     case "invoiceTypeId":
+      return <InvoiceTypeSelect {...props} />;
 
     case "videoId":
     default:
