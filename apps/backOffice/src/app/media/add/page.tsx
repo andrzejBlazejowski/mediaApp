@@ -7,18 +7,42 @@ import * as z from "zod";
 import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
-import { uiSchema } from "../media.constants";
+import { api } from "~/utils/api";
+import { title, uiSchema } from "../constants";
 
 export default function Page() {
-  const form = useForm<z.infer<typeof media.mediasInsertSchema>>({
-    resolver: zodResolver(media.mediasInsertSchema),
+  const utils = api.useUtils();
+
+  const schema = media.mediasInsertSchema;
+  const route = api.media;
+  const util = utils.media;
+
+  const invalidate = util.all.invalidate;
+  type insetType = typeof schema;
+  const form = useForm<z.infer<insetType>>({
+    resolver: zodResolver(schema),
   });
 
-  function onSubmit(values: z.infer<typeof media.mediasInsertSchema>) {
-    console.log(values);
-  }
+  const { mutateAsync, error } = route.create.useMutation({
+    async onSuccess() {
+      await invalidate();
+    },
+  });
+
+  const onSubmit = async (values: z.infer<insetType>) => {
+    const result = await mutateAsync(values);
+    await invalidate();
+    return result;
+  };
 
   return (
-    <FormView type="add" form={form} onSubmit={onSubmit} uiSchema={uiSchema} />
+    <FormView
+      type="add"
+      title={title}
+      form={form}
+      onSubmit={onSubmit}
+      uiSchema={uiSchema}
+      zSchema={schema}
+    />
   );
 }

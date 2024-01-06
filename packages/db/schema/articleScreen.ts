@@ -3,6 +3,7 @@ import { index, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { createInsertSchema } from "drizzle-zod";
 
 import { baseColumns, dictionaryColumns } from "./commonColumns";
+import { images } from "./image";
 import { screens } from "./screen";
 
 export const articleScreens = mysqlTable(
@@ -51,6 +52,10 @@ export const articleScreenImagesRelations = relations(
     articleScreen: one(articleScreens, {
       fields: [articleScreenImages.articleScreenId],
       references: [articleScreens.id],
+    }),
+    image: one(images, {
+      fields: [articleScreenImages.imageId],
+      references: [images.id],
     }),
   }),
 );

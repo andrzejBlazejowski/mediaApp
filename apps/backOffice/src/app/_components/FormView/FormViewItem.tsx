@@ -2,6 +2,7 @@ import { UseFormRegister } from "react-hook-form";
 
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import type { IFeield } from "./FormView.types";
 import { InputTypes } from "./FormView.types";
 import SelectForeignKey from "./SelectForeignKey/SelectForeignKey";
@@ -29,11 +30,17 @@ export const FormViewItem = ({
       />
     ) : (
       <FormControl>
-        <Input
-          {...field}
-          type={getHtmlInputType(type)}
-          {...register(field.name, { valueAsNumber: true })}
-        />
+        {type === InputTypes.textArea ? (
+          <Textarea className="block w-full" {...field} />
+        ) : (
+          <Input
+            {...field}
+            type={getHtmlInputType(type)}
+            {...(getHtmlInputType(type) === "number"
+              ? register(field.name, { valueAsNumber: true })
+              : {})}
+          />
+        )}
       </FormControl>
     )}
     <FormMessage />
@@ -50,6 +57,9 @@ function getHtmlInputType(type: InputTypes = InputTypes.text) {
       return "color";
     case InputTypes.checkbox:
       return "checkbox";
+    case InputTypes.number:
+      return "number";
+    case InputTypes.text:
     default:
       return "text";
   }

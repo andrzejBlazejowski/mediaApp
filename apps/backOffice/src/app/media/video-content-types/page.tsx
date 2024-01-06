@@ -2,44 +2,62 @@
 
 import React, { useMemo } from "react";
 
+import type { TableViewProps } from "~/app/_components/TableView";
+import { TableView } from "~/app/_components/TableView";
 import { api } from "~/utils/api";
-import type { TableViewProps } from "../../_components/TableView";
-import { TableView } from "../../_components/TableView";
+import { title } from "./constants";
 
 export default function Page() {
-  const videoContentTypes = api.videoContentType.all.useQuery();
+  const utils = api.useUtils();
+
+  const rawData = api.videoContentType.all.useQuery();
+  const deleteRow = api.videoContentType.delete.useMutation();
+  const invalidate = utils.videoContentType.all.invalidate;
+  const headersConfig = {
+    id: {
+      orderNumber: 0,
+      name: "id",
+      label: "id",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    name: {
+      orderNumber: 0,
+      name: "name",
+      label: "name",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    description: {
+      orderNumber: 1,
+      name: "description",
+      label: "description",
+      classNames: "w-[200px]",
+      sortable: true,
+    },
+  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
-      !videoContentTypes.data || videoContentTypes.data.length === 0
+      !rawData.data || rawData.data.length === 0
         ? []
-        : videoContentTypes.data.map((videoContentType) => {
+        : rawData.data.map((row) => {
             return {
-              name: { value: videoContentType.name },
-              description: { value: videoContentType.description },
+              id: { value: row.id.toString() },
+              name: { value: row.name ?? "" },
+              description: { value: row.description ?? "" },
             };
           });
     return {
-      title: "video content types list",
+      title: title + " list",
       data: data,
-      headersConfig: {
-        name: {
-          orderNumber: 0,
-          name: "name",
-          label: "name",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
-        description: {
-          orderNumber: 1,
-          name: "description",
-          label: "description",
-          classNames: "w-[200px]",
-          sortable: true,
-        },
+      headersConfig,
+      onDeleteRow: async (id) => {
+        await deleteRow.mutateAsync(id);
+        await invalidate();
       },
     } as TableViewProps;
-  }, [videoContentTypes]);
+  }, [rawData]);
 
   return <TableView {...mediaIndexProps}></TableView>;
 }

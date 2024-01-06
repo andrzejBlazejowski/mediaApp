@@ -37,6 +37,14 @@ export const mediaListRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaLists).values(input);
     }),
+  update: protectedProcedure
+    .input(mediaListsInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.mediaLists)
+        .set(input)
+        .where(eq(schema.mediaLists.id, input.id ?? 0));
+    }),
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.mediaLists)
@@ -62,6 +70,14 @@ export const mediaListTypeRouter = createTRPCRouter({
     .input(mediaListTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaListTypes).values(input);
+    }),
+  update: protectedProcedure
+    .input(mediaListTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.mediaListTypes)
+        .set(input)
+        .where(eq(schema.mediaListTypes.id, input.id ?? 0));
     }),
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
@@ -96,6 +112,14 @@ export const mediaListMediaRouter = createTRPCRouter({
     .input(mediaListMediasInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaListMedias).values(input);
+    }),
+  update: protectedProcedure
+    .input(mediaListMediasInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.mediaListMedias)
+        .set(input)
+        .where(eq(schema.mediaListMedias.id, input.id ?? 0));
     }),
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db

@@ -2,52 +2,62 @@
 
 import React, { useMemo } from "react";
 
+import type { TableViewProps } from "~/app/_components/TableView";
+import { TableView } from "~/app/_components/TableView";
 import { api } from "~/utils/api";
-import type { TableViewProps } from "../../../_components/TableView";
-import { TableView } from "../../../_components/TableView";
+import { title } from "./constants";
 
 export default function Page() {
-  const mediaImages = api.mediaImage.all.useQuery();
+  const utils = api.useUtils();
+
+  const rawData = api.mediaListMedia.all.useQuery();
+  const deleteRow = api.mediaListMedia.delete.useMutation();
+  const invalidate = utils.mediaListMedia.all.invalidate;
+  const headersConfig = {
+    id: {
+      orderNumber: 0,
+      name: "id",
+      label: "id",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    media: {
+      orderNumber: 1,
+      name: "media",
+      label: "media",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    list: {
+      orderNumber: 2,
+      name: "list",
+      label: "list",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
-      !mediaImages.data || mediaImages.data.length === 0
+      !rawData.data || rawData.data.length === 0
         ? []
-        : mediaImages.data.map((mediaImage) => {
+        : rawData.data.map((row) => {
             return {
-              name: { value: mediaImage.name },
-              mediaId: { value: mediaImage.mediaId.toString() },
-              imageId: { value: mediaImage.imageId.toString() },
+              id: { value: row.id.toString() },
+              media: { value: row.media.name ?? row.mediaId },
+              list: { value: row.mediaList.name ?? row.mediaListId },
             };
           });
     return {
-      title: "media list medias",
+      title: title + " list",
       data: data,
-      headersConfig: {
-        name: {
-          orderNumber: 0,
-          name: "name",
-          label: "name",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
-        mediaId: {
-          orderNumber: 1,
-          name: "mediaId",
-          label: "mediaId",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
-        imageId: {
-          orderNumber: 2,
-          name: "imageId",
-          label: "imageId",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
+      headersConfig,
+      onDeleteRow: async (id) => {
+        await deleteRow.mutateAsync(id);
+        await invalidate();
       },
     } as TableViewProps;
-  }, [mediaImages]);
+  }, [rawData]);
 
   return <TableView {...mediaIndexProps}></TableView>;
 }

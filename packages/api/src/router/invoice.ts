@@ -40,6 +40,14 @@ export const invoiceRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoices).values(input);
     }),
+  update: protectedProcedure
+    .input(invoicesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.invoices)
+        .set(input)
+        .where(eq(schema.invoices.id, input.id ?? 0));
+    }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.invoices).where(eq(schema.invoices.id, input));
@@ -65,6 +73,14 @@ export const invoiceTypeRouter = createTRPCRouter({
     .input(invoiceTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoiceTypes).values(input);
+    }),
+  update: protectedProcedure
+    .input(invoiceTypesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.invoiceTypes)
+        .set(input)
+        .where(eq(schema.invoiceTypes.id, input.id ?? 0));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
@@ -93,6 +109,14 @@ export const invoiceTemplateRouter = createTRPCRouter({
     .input(invoiceTemplatesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoiceTemplates).values(input);
+    }),
+  update: protectedProcedure
+    .input(invoiceTemplatesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.invoiceTemplates)
+        .set(input)
+        .where(eq(schema.invoiceTemplates.id, input.id ?? 0));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {

@@ -3,13 +3,13 @@ import {
   articleScreenRouter,
 } from "./router/articleScreen";
 import { authRouter } from "./router/auth";
-// import {
-//   brandingColorRouter,
-//   brandingColorTypeRouter,
-//   brandingImageRouter,
-//   brandingImageTypeRouter,
-//   brandingRouter,
-// } from "./router/branding";
+import {
+  brandingColorRouter,
+  brandingColorTypeRouter,
+  brandingImageRouter,
+  brandingImageTypeRouter,
+  brandingRouter,
+} from "./router/branding";
 import {
   castMemberImageRouter,
   castMemberRouter,
@@ -82,11 +82,11 @@ export const appRouter = createTRPCRouter({
   castRole: castRoleRouter,
   mediaCastMember: mediaCastMemberRouter,
   people: peopleRouter,
-  // brandingColor: brandingColorRouter,
-  // brandingColorType: brandingColorTypeRouter,
-  // brandingImage: brandingImageRouter,
-  // brandingImageType: brandingImageTypeRouter,
-  // branding: brandingRouter,
+  brandingColor: brandingColorRouter,
+  brandingColorType: brandingColorTypeRouter,
+  brandingImage: brandingImageRouter,
+  brandingImageType: brandingImageTypeRouter,
+  branding: brandingRouter,
   backOfficeDictionary: backOfficeDictionaryRouter,
   clientAppDictionary: clientAppDictionaryRouter,
   country: countryRouter,

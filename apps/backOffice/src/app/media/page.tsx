@@ -2,65 +2,78 @@
 
 import React, { useMemo } from "react";
 
+import type { TableViewProps } from "~/app/_components/TableView";
+import { TableView } from "~/app/_components/TableView";
 import { api } from "~/utils/api";
-import type { TableViewProps } from "../_components/TableView";
-import { TableView } from "../_components/TableView";
+import { title } from "./constants";
 
 export default function Page() {
-  const medias = api.media.all.useQuery();
+  const utils = api.useUtils();
+
+  const rawData = api.media.all.useQuery();
+  const deleteRow = api.media.delete.useMutation();
+  const invalidate = utils.media.all.invalidate;
+  const headersConfig = {
+    id: {
+      orderNumber: 0,
+      name: "id",
+      label: "id",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    name: {
+      orderNumber: 1,
+      name: "name",
+      label: "Name",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    type: {
+      orderNumber: 2,
+      name: "type",
+      label: "Type",
+      classNames: "w-[50px]",
+      sortable: true,
+    },
+    isFree: {
+      orderNumber: 3,
+      name: "isFree",
+      label: "IsFree",
+      classNames: "w-[50px]",
+      sortable: true,
+    },
+    category: {
+      orderNumber: 4,
+      name: "Category",
+      label: "Category",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
-      !medias.data || medias.data.length === 0
+      !rawData.data || rawData.data.length === 0
         ? []
-        : medias.data.map((media) => {
+        : rawData.data.map((row) => {
             return {
-              name: { value: media.name },
-              type: { value: media.type },
-              isFree: {
-                value: media.isFree.toString(),
-              },
-              category: {
-                value: media.mediaCategoryId.toString(),
-              },
+              id: { value: row.id.toString() },
+              name: { value: row.name ?? "" },
+              type: { value: row.type ?? "" },
+              isFree: { value: row.isFree.toString() ?? "" },
+              category: { value: row.mediaCategory.name ?? "" },
             };
           });
-
     return {
-      title: "media list",
+      title: title + " list",
       data: data,
-      headersConfig: {
-        name: {
-          orderNumber: 0,
-          name: "name",
-          label: "Name",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
-        type: {
-          orderNumber: 0,
-          name: "type",
-          label: "Type",
-          classNames: "w-[50px]",
-          sortable: true,
-        },
-        isFree: {
-          orderNumber: 0,
-          name: "isFree",
-          label: "IsFree",
-          classNames: "w-[50px]",
-          sortable: true,
-        },
-        category: {
-          orderNumber: 0,
-          name: "Category",
-          label: "Category",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
+      headersConfig,
+      onDeleteRow: async (id) => {
+        await deleteRow.mutateAsync(id);
+        await invalidate();
       },
     } as TableViewProps;
-  }, []);
+  }, [rawData]);
 
   return <TableView {...mediaIndexProps}></TableView>;
 }

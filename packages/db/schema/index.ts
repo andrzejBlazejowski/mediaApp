@@ -10,6 +10,7 @@ export * as media from "./media";
 export * as mediaList from "./mediaList";
 export * as menu from "./menu";
 export * as platform from "./platform";
+export * as purchase from "./purchase";
 export * as post from "./post";
 export * as screen from "./screen";
 export * as video from "./video";

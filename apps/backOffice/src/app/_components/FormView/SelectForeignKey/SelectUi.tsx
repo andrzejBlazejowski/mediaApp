@@ -11,7 +11,8 @@ import {
 interface SelectProps {
   placeholder?: string;
   defaultValue?: string;
-  onValueChange?: (value: number) => void;
+  onValueChange?: (value: number | string) => void;
+  type?: "string" | "number";
   options: {
     name: string;
     value: string;
@@ -22,6 +23,7 @@ export function SelectUi({
   placeholder,
   options,
   defaultValue,
+  type = "number",
   onValueChange,
 }: SelectProps) {
   return (
@@ -29,7 +31,8 @@ export function SelectUi({
       defaultValue={defaultValue + ""}
       value={defaultValue + ""}
       onValueChange={(value: string) =>
-        onValueChange && onValueChange(parseInt(value))
+        onValueChange &&
+        onValueChange(type === "number" ? parseInt(value) : value)
       }
     >
       <SelectTrigger className="w-[180px]">
