@@ -10,6 +10,10 @@ export const uiSchema = {
     classes: "w-1/2 inline-block m-2",
     type: InputTypes.textArea,
   },
+  template: {
+    classes: "w-1/2 inline-block m-2",
+    type: InputTypes.textArea,
+  },
 } as IuiSchema;
 
-export const title = "menyu type";
+export const title = "invoice template";

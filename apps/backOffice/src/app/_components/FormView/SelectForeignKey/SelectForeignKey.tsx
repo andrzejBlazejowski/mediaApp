@@ -46,8 +46,6 @@ export default function SelectForeignKey({
       return <VideoContentTypeSelect {...props} />;
     case "mediaId":
       return <MediaSelect {...props} />;
-    case "mediaId":
-      return <MediaSelect {...props} />;
     case "peopleId":
       return <PeopleSelect {...props} />;
     case "countryId":
@@ -94,6 +92,7 @@ export default function SelectForeignKey({
       return <MenuLinkImageTypeSelect {...props} />;
     case "purchaseTypeId":
     case "userId":
+    case "invoiceTypeId":
 
     case "videoId":
     default:

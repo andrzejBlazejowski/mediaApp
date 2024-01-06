@@ -10,9 +10,9 @@ import { title } from "./constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const rawData = api.menuType.all.useQuery();
-  const deleteRow = api.menuType.delete.useMutation();
-  const invalidate = utils.menuType.all.invalidate;
+  const rawData = api.invoiceType.all.useQuery();
+  const deleteRow = api.invoiceType.delete.useMutation();
+  const invalidate = utils.invoiceType.all.invalidate;
   const headersConfig = {
     id: {
       orderNumber: 0,

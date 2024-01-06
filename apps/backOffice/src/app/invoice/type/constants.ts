@@ -12,4 +12,4 @@ export const uiSchema = {
   },
 } as IuiSchema;
 
-export const title = "menyu type";
+export const title = "invoice type";

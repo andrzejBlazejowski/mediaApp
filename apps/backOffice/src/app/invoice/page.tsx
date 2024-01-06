@@ -10,9 +10,9 @@ import { title } from "./constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const rawData = api.menuType.all.useQuery();
-  const deleteRow = api.menuType.delete.useMutation();
-  const invalidate = utils.menuType.all.invalidate;
+  const rawData = api.invoice.all.useQuery();
+  const deleteRow = api.invoice.delete.useMutation();
+  const invalidate = utils.invoice.all.invalidate;
   const headersConfig = {
     id: {
       orderNumber: 0,
@@ -21,17 +21,24 @@ export default function Page() {
       classNames: "w-[100px]",
       sortable: true,
     },
-    name: {
+    type: {
       orderNumber: 1,
-      name: "name",
-      label: "name",
+      name: "type",
+      label: "type",
       classNames: "w-[100px]",
       sortable: true,
     },
-    description: {
+    media: {
       orderNumber: 2,
-      name: "description",
-      label: "description",
+      name: "media",
+      label: "media",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    user: {
+      orderNumber: 3,
+      name: "user",
+      label: "user",
       classNames: "w-[100px]",
       sortable: true,
     },
@@ -44,8 +51,12 @@ export default function Page() {
         : rawData.data.map((row) => {
             return {
               id: { value: row.id.toString() },
-              name: { value: row.name },
-              description: { value: row.description },
+              type: {
+                value:
+                  row?.invoiceType?.name ?? row.invoiceTypeId.toString() ?? "",
+              },
+              media: { value: row?.media?.name ?? row.media.toString() ?? "" },
+              user: { value: row?.user?.email ?? row?.userId ?? "" },
             };
           });
     return {

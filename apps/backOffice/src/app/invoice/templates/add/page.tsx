@@ -13,9 +13,9 @@ import { title, uiSchema } from "../constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const schema = menu.menuTypesInsertSchema;
-  const route = api.menuType;
-  const util = utils.menuType;
+  const schema = invoice.invoiceTemplatesInsertSchema;
+  const route = api.invoiceTemplate;
+  const util = utils.invoiceTemplate;
 
   const invalidate = util.all.invalidate;
   type insetType = typeof schema;
