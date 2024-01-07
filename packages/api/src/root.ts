@@ -22,6 +22,7 @@ import {
   clientAppDictionaryRouter,
   countryRouter,
 } from "./router/dictionary";
+import { expoRouter } from "./router/expo";
 import { genreRouter } from "./router/genre";
 import { imageRouter } from "./router/image";
 import {
@@ -66,6 +67,7 @@ import {
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
+  expo: expoRouter,
   auth: authRouter,
   post: postRouter,
   media: mediaRouter,

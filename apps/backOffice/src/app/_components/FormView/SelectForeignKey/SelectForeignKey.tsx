@@ -85,12 +85,12 @@ export default function SelectForeignKey({
       return <ArticleScreenImageSelect {...props} />;
     case "menuId":
       return <MenuSelect {...props} />;
+    case "menuPlatformId":
+    // return <MenuPlatformTypeSelect {...props} />;
     case "platformId":
       return <PlatformSelect {...props} />;
     case "menuTypeId":
       return <MenuTypeSelect {...props} />;
-    case "menuPlatformId":
-      return <MenuPlatformTypeSelect {...props} />;
     case "menuLinkImageId":
       return <MenuLinkImageTypeSelect {...props} />;
     case "userId":
@@ -99,7 +99,6 @@ export default function SelectForeignKey({
       return <PurchaseTypeSelect {...props} />;
     case "invoiceTypeId":
       return <InvoiceTypeSelect {...props} />;
-
     case "videoId":
     default:
       return <VideoSelect {...props} />;
