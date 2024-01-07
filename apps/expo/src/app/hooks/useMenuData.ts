@@ -8,11 +8,6 @@ export function useMenuData() {
 
   const { data } = api.expo.getMenu.useQuery({ platform: platform });
 
-  useEffect(() => {
-    console.warn("data");
-    console.warn(data?.menuPlatforms[0]?.menu.id);
-  }, [data]);
-
   interface MenuItem {
     name: string;
     id: number;

@@ -1,41 +1,36 @@
 import {
   Dimensions,
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
 } from "react-native";
-import { Card, Text } from "react-native-paper";
-import { Stack, useGlobalSearchParams } from "expo-router";
+import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
-import { useArticleData } from "../../hooks";
+import Asset from "~/app/components/Asset/Asset";
+import { useGridData } from "../../hooks";
 
-export default function Post() {
+export default function GridPage() {
+  const router = useRouter();
   const { id } = useGlobalSearchParams();
-  const { assets, title } = useGridData(typeof id === "string" ? id : "1");
+  const { assets, title, assetsType } = useGridData(
+    typeof id === "string" ? id : "1",
+  );
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title: name }} />
+      <Stack.Screen options={{ title }} />
       <ScrollView>
-        {images && isMoreThanOneImage && (
+        {assets && (
           <View style={[styles.grid]}>
-            {images.map((uri) => (
-              <View key={uri} style={styles.item}>
-                <Card>
-                  {firstImageUrl && (
-                    <Card.Cover key="cover" source={{ uri: firstImageUrl }} />
-                  )}
-                  <Card.Title
-                    titleVariant="displaySmall"
-                    key="title"
-                    title={title}
-                  />
-                  <Card.Content key="cover">
-                    <Text variant="bodyMedium">{content}</Text>
-                  </Card.Content>
-                </Card>
+            {assets.map((asset) => (
+              <View key={asset.id} style={styles.item}>
+                <Asset
+                  title={asset.name}
+                  url={asset.url}
+                  type={assetsType}
+                  onPress={() => router.replace(`/vod/details/${id}`)}
+                />
               </View>
             ))}
           </View>
@@ -52,13 +47,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   item: {
-    height: Dimensions.get("window").width / 2,
     width: "50%",
-    padding: 4,
-  },
-  photo: {
-    height: "100%",
-    width: "100%",
     padding: 4,
   },
 });

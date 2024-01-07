@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { api } from "~/utils/api";
 import { GridAssetTypeEnum } from "../utils";
 
-export function useArticleData(id: number | string) {
+export function useGridData(id: number | string) {
   if (!id || typeof id !== "string") throw new Error("unreachable");
   // const { data } = api.expo.getArticle.useQuery({
   //   id: typeof id === "string" ? parseInt(id) : id,
@@ -31,7 +31,7 @@ export function useArticleData(id: number | string) {
       },
     ];
     const title = " grid";
-    const assetsType = GridAssetTypeEnum.FRAME;
+    const assetsType = GridAssetTypeEnum.COVER;
     return { assets, title, assetsType };
   }, []);
 }

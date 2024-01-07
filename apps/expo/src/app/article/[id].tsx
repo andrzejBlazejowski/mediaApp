@@ -11,7 +11,7 @@ import { Stack, useGlobalSearchParams } from "expo-router";
 
 import { useArticleData } from "../hooks";
 
-export default function Post() {
+export default function ArticlePage() {
   const { id } = useGlobalSearchParams();
   const { images, firstImageUrl, isMoreThanOneImage, name, title, content } =
     useArticleData(typeof id === "string" ? id : "1");

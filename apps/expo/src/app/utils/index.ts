@@ -1,9 +1,9 @@
 export enum GridAssetTypeEnum {
-  COBVER = "cover",
+  COVER = "cover",
   FRAME = "frame",
 }
 export enum ListAssetTypeEnum {
   HIGHLIGHT = "highlight",
-  COBVER = "cover",
+  COVER = "cover",
   FRAME = "frame",
 }
