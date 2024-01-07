@@ -1,10 +1,11 @@
-import { desc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
-import { articleScreensInsertSchema } from "@media/db/schema/articleScreen";
+import { menus } from "@media/db/schema/menu";
+import { menuPlatforms, platforms } from "@media/db/schema/platform";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const expoRouter = createTRPCRouter({
   //   all: publicProcedure.query(({ ctx }) => {
@@ -61,6 +62,51 @@ export const expoRouter = createTRPCRouter({
         },
       });
       return article;
+    }),
+  getMenu: publicProcedure
+    .input(z.object({ platform: z.string() }))
+    .query(({ ctx, input }) => {
+      // const article = ctx.db.query.menus.findFirst({
+      //   where: eq(
+      //     schema.menus.menuPlatform.name.toUpperCase(),
+      //     input.platform.toUpperCase(),
+      //   ),
+      //   with: {
+      //     menuPlatform: true,
+      //     menuLinks: {
+      //       with: {
+      //         menuLinkImages: {
+      //           with: {
+      //             image: true,
+      //           },
+      //         },
+      //       },
+      //     },
+      //     menuType,
+      //   },
+      // });
+      return ctx.db.query.platforms.findFirst({
+        where: eq(schema.platforms.name, input.platform.toUpperCase()),
+        with: {
+          menuPlatforms: {
+            with: {
+              menu: {
+                with: {
+                  menuLinks: {
+                    with: {
+                      menuLinkImage: {
+                        with: {
+                          image: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
     }),
 });
 z;

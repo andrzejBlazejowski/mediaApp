@@ -9,7 +9,7 @@ import {
 import { Card, Text } from "react-native-paper";
 import { Stack, useGlobalSearchParams } from "expo-router";
 
-import { useArticleData } from "../hooks";
+import { useArticleData } from "../../hooks";
 
 export default function Post() {
   const { id } = useGlobalSearchParams();

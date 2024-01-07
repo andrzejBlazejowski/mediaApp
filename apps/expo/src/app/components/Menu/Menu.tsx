@@ -1,33 +1,21 @@
-import React, { useMemo } from "react";
-import { Drawer } from "react-native-paper";
+import React from "react";
+import { Drawer, Text } from "react-native-paper";
 import { useRouter } from "expo-router";
 
-import { api } from "~/utils/api";
+import { useMenuData } from "~/app/hooks/useMenuData";
 
 export default function Menu() {
   const router = useRouter();
-  const menuLinks = api.menuLink.all.useQuery();
-  const menuItems = useMemo(
-    () =>
-      menuLinks?.data
-        ? menuLinks.data.map((menuLink) => {
-            return {
-              name: menuLink.name ?? menuLink.id.toString(),
-              id: menuLink.id,
-            };
-          })
-        : [],
-    [menuLinks],
-  );
+  const { menuItems, title } = useMenuData();
+
   return (
-    <Drawer.Section title="title">
+    <Drawer.Section title={title}>
       {menuItems?.map((menuLink) => (
         <Drawer.CollapsedItem
-          focusedIcon="inbox"
-          unfocusedIcon="inbox-outline"
+          focusedIcon={{ uri: menuLink.url }}
           key={menuLink.id}
           label={menuLink.name}
-          onPress={() => router.replace("/article/1")}
+          onPress={() => router.replace(`/${menuLink.type}/${menuLink.id}`)}
         />
       ))}
     </Drawer.Section>
