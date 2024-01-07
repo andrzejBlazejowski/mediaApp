@@ -14,7 +14,7 @@ export function useArticleData(id: number | string) {
     const images = data
       ? data.articleScreenImages.map((image) => image?.image?.url ?? "")
       : [];
-    console.log(images.length);
+
     const firstImageUrl = images.length > 0 ? images[0] : null;
     const isMoreThanOneImage = images.length >= 1;
     return { images, firstImageUrl, isMoreThanOneImage, name, title, content };

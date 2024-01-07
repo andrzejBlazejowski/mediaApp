@@ -13,36 +13,33 @@ import { useArticleData } from "../../hooks";
 
 export default function Post() {
   const { id } = useGlobalSearchParams();
-  const { images, firstImageUrl, isMoreThanOneImage, name, title, content } =
-    useArticleData(typeof id === "string" ? id : "1");
+  const { assets, title } = useGridData(typeof id === "string" ? id : "1");
 
   return (
     <SafeAreaView>
       <Stack.Screen options={{ title: name }} />
       <ScrollView>
-        <Card>
-          {firstImageUrl && (
-            <Card.Cover key="cover" source={{ uri: firstImageUrl }} />
-          )}
-          <Card.Title titleVariant="displaySmall" key="title" title={title} />
-          <Card.Content key="cover">
-            <Text variant="bodyMedium">{content}</Text>
-          </Card.Content>
-
-          {images && isMoreThanOneImage && (
-            <View style={[styles.grid]}>
-              {images.map((uri) => (
-                <View key={uri} style={styles.item}>
-                  <Image
-                    source={{ uri }}
-                    style={styles.photo}
-                    accessibilityIgnoresInvertColors
+        {images && isMoreThanOneImage && (
+          <View style={[styles.grid]}>
+            {images.map((uri) => (
+              <View key={uri} style={styles.item}>
+                <Card>
+                  {firstImageUrl && (
+                    <Card.Cover key="cover" source={{ uri: firstImageUrl }} />
+                  )}
+                  <Card.Title
+                    titleVariant="displaySmall"
+                    key="title"
+                    title={title}
                   />
-                </View>
-              ))}
-            </View>
-          )}
-        </Card>
+                  <Card.Content key="cover">
+                    <Text variant="bodyMedium">{content}</Text>
+                  </Card.Content>
+                </Card>
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
