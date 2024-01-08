@@ -1,48 +1,50 @@
 import {
   Dimensions,
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
 } from "react-native";
-import { Card, Text } from "react-native-paper";
-import { Stack, useGlobalSearchParams } from "expo-router";
+import { Text } from "react-native-paper";
+import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
-import { useArticleData } from "../../hooks";
+import Asset from "~/app/components/Asset/Asset";
+import { useListData } from "../../hooks";
 
-export default function Post() {
+export default function ListPage() {
+  const router = useRouter();
   const { id } = useGlobalSearchParams();
-  const { images, firstImageUrl, isMoreThanOneImage, name, title, content } =
-    useArticleData(typeof id === "string" ? id : "1");
+  const { lists, title } = useListData(typeof id === "string" ? id : "1");
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title: name }} />
+      <Stack.Screen options={{ title }} />
       <ScrollView>
-        <Card>
-          {firstImageUrl && (
-            <Card.Cover key="cover" source={{ uri: firstImageUrl }} />
-          )}
-          <Card.Title titleVariant="displaySmall" key="title" title={title} />
-          <Card.Content key="cover">
-            <Text variant="bodyMedium">{content}</Text>
-          </Card.Content>
-
-          {images && isMoreThanOneImage && (
-            <View style={[styles.grid]}>
-              {images.map((uri) => (
-                <View key={uri} style={styles.item}>
-                  <Image
-                    source={{ uri }}
-                    style={styles.photo}
-                    accessibilityIgnoresInvertColors
-                  />
-                </View>
-              ))}
-            </View>
-          )}
-        </Card>
+        {lists?.map(({ assets, type, title, listId }) => (
+          <>
+            <Text variant="">{title}</Text>
+            <ScrollView
+              horizontal={true}
+              key={listId + title + type}
+              style={[styles.grid]}
+            >
+              {assets.map(({ name, url, id }) => {
+                console.warn(title + name);
+                return (
+                  <View key={listId + title + name + id} style={styles.item}>
+                    <Asset
+                      title={name}
+                      url={url}
+                      isInList
+                      type={type}
+                      onPress={() => router.replace(`/vod/details/${id}`)}
+                    />
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
@@ -55,13 +57,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   item: {
-    height: Dimensions.get("window").width / 2,
-    width: "50%",
-    padding: 4,
-  },
-  photo: {
-    height: "100%",
-    width: "100%",
+    width: Dimensions.get("window").width / 2 - 55,
     padding: 4,
   },
 });

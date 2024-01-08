@@ -9,9 +9,9 @@ import {
 import { Card, Text } from "react-native-paper";
 import { Stack, useGlobalSearchParams } from "expo-router";
 
-import { useArticleData } from "../hooks";
+import { useArticleData } from "../../hooks";
 
-export default function ArticlePage() {
+export default function DetailsPage() {
   const { id } = useGlobalSearchParams();
   const { images, firstImageUrl, isMoreThanOneImage, name, title, content } =
     useArticleData(typeof id === "string" ? id : "1");
