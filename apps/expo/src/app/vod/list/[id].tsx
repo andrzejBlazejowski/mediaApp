@@ -1,25 +1,24 @@
 import {
   Dimensions,
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
 } from "react-native";
-import { Card, Text } from "react-native-paper";
-import { Stack, useGlobalSearchParams } from "expo-router";
+import { Text } from "react-native-paper";
+import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
 import Asset from "~/app/components/Asset/Asset";
 import { useListData } from "~/app/hooks/";
 
-export default function Post() {
+export default function ListPage() {
+  const router = useRouter();
   const { id } = useGlobalSearchParams();
-  const { images, firstImageUrl, isMoreThanOneImage, name, title, content } =
-    useArticleData(typeof id === "string" ? id : "1");
+  const { lists, title } = useListData(typeof id === "string" ? id : "1");
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title: name }} />
+      <Stack.Screen options={{ title }} />
       <ScrollView>
         {lists?.map(({ assets, type, title, listId }) => (
           <>
@@ -30,6 +29,7 @@ export default function Post() {
               style={[styles.grid]}
             >
               {assets.map(({ name, url, id }) => {
+                console.warn(title + name);
                 return (
                   <View key={listId + title + name + id} style={styles.item}>
                     <Asset
@@ -57,13 +57,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   item: {
-    height: Dimensions.get("window").width / 2,
-    width: "50%",
-    padding: 4,
-  },
-  photo: {
-    height: "100%",
-    width: "100%",
+    width: Dimensions.get("window").width / 2 - 55,
     padding: 4,
   },
 });

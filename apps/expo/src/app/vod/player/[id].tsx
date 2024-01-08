@@ -44,9 +44,8 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 4,
   },
-
   video: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    width: "100%",
+    height: "100%",
   },
 });
