@@ -9,7 +9,8 @@ import {
 import { Card, Text } from "react-native-paper";
 import { Stack, useGlobalSearchParams } from "expo-router";
 
-import { useArticleData } from "../../hooks";
+import Asset from "~/app/components/Asset/Asset";
+import { useListData } from "~/app/hooks/";
 
 export default function Post() {
   const { id } = useGlobalSearchParams();
@@ -20,29 +21,30 @@ export default function Post() {
     <SafeAreaView>
       <Stack.Screen options={{ title: name }} />
       <ScrollView>
-        <Card>
-          {firstImageUrl && (
-            <Card.Cover key="cover" source={{ uri: firstImageUrl }} />
-          )}
-          <Card.Title titleVariant="displaySmall" key="title" title={title} />
-          <Card.Content key="cover">
-            <Text variant="bodyMedium">{content}</Text>
-          </Card.Content>
-
-          {images && isMoreThanOneImage && (
-            <View style={[styles.grid]}>
-              {images.map((uri) => (
-                <View key={uri} style={styles.item}>
-                  <Image
-                    source={{ uri }}
-                    style={styles.photo}
-                    accessibilityIgnoresInvertColors
-                  />
-                </View>
-              ))}
-            </View>
-          )}
-        </Card>
+        {lists?.map(({ assets, type, title, listId }) => (
+          <>
+            <Text variant="">{title}</Text>
+            <ScrollView
+              horizontal={true}
+              key={listId + title + type}
+              style={[styles.grid]}
+            >
+              {assets.map(({ name, url, id }) => {
+                return (
+                  <View key={listId + title + name + id} style={styles.item}>
+                    <Asset
+                      title={name}
+                      url={url}
+                      isInList
+                      type={type}
+                      onPress={() => router.replace(`/vod/player/${id}`)}
+                    />
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

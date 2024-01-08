@@ -2,7 +2,7 @@ import React from "react";
 import { Drawer, Text } from "react-native-paper";
 import { useRouter } from "expo-router";
 
-import { useMenuData } from "~/app/hooks/useMenuData";
+import { useMenuData } from "~/app/hooks/";
 
 export default function Menu() {
   const router = useRouter();
