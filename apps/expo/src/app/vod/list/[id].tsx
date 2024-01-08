@@ -9,7 +9,7 @@ import { Text } from "react-native-paper";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
 import Asset from "~/app/components/Asset/Asset";
-import { useListData } from "../../hooks";
+import { useListData } from "~/app/hooks/";
 
 export default function ListPage() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function ListPage() {
                       url={url}
                       isInList
                       type={type}
-                      onPress={() => router.replace(`/vod/details/${id}`)}
+                      onPress={() => router.replace(`/vod/player/${id}`)}
                     />
                   </View>
                 );

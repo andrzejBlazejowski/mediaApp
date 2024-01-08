@@ -1,49 +1,36 @@
-import {
-  Dimensions,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
-import { Card, Text } from "react-native-paper";
+import { useEffect, useRef } from "react";
+import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
+import { ResizeMode, Video } from "expo-av";
 import { Stack, useGlobalSearchParams } from "expo-router";
 
-import { useArticleData } from "../../hooks";
+import { usePlayerData } from "~/app/hooks/";
 
 export default function PlayerPage() {
+  const videoRef = useRef(null);
   const { id } = useGlobalSearchParams();
-  const { images, firstImageUrl, isMoreThanOneImage, name, title, content } =
-    useArticleData(typeof id === "string" ? id : "1");
+  const { title, url } = usePlayerData(typeof id === "string" ? id : "1");
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.presentFullscreenPlayer();
+      videoRef.current.playAsync();
+    }
+  }, [videoRef]);
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title: name }} />
-      <ScrollView>
-        <Card>
-          {firstImageUrl && (
-            <Card.Cover key="cover" source={{ uri: firstImageUrl }} />
-          )}
-          <Card.Title titleVariant="displaySmall" key="title" title={title} />
-          <Card.Content key="cover">
-            <Text variant="bodyMedium">{content}</Text>
-          </Card.Content>
-
-          {images && isMoreThanOneImage && (
-            <View style={[styles.grid]}>
-              {images.map((uri) => (
-                <View key={uri} style={styles.item}>
-                  <Image
-                    source={{ uri }}
-                    style={styles.photo}
-                    accessibilityIgnoresInvertColors
-                  />
-                </View>
-              ))}
-            </View>
-          )}
-        </Card>
-      </ScrollView>
+      <Stack.Screen options={{ title }} />
+      <View>
+        <Video
+          ref={videoRef}
+          style={styles.video}
+          source={{
+            uri: url,
+          }}
+          resizeMode={ResizeMode.CONTAIN}
+          isLooping
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -63,5 +50,9 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     padding: 4,
+  },
+  video: {
+    width: "100%",
+    height: "100%",
   },
 });
