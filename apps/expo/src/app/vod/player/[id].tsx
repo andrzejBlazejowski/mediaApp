@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
 import { ResizeMode, Video } from "expo-av";
 import { Stack, useGlobalSearchParams } from "expo-router";
@@ -5,21 +6,27 @@ import { Stack, useGlobalSearchParams } from "expo-router";
 import { usePlayerData } from "~/app/hooks/";
 
 export default function PlayerPage() {
+  const videoRef = useRef(null);
   const { id } = useGlobalSearchParams();
-  const { title, url, content } = usePlayerData(
-    typeof id === "string" ? id : "1",
-  );
+  const { title, url } = usePlayerData(typeof id === "string" ? id : "1");
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.presentFullscreenPlayer();
+      videoRef.current.playAsync();
+    }
+  }, [videoRef]);
 
   return (
     <SafeAreaView>
       <Stack.Screen options={{ title }} />
       <View>
         <Video
+          ref={videoRef}
           style={styles.video}
           source={{
-            uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+            uri: url,
           }}
-          useNativeControls
           resizeMode={ResizeMode.CONTAIN}
           isLooping
         />
