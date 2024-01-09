@@ -1,47 +1,85 @@
 import {
   Dimensions,
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
 } from "react-native";
-import { Card, Text } from "react-native-paper";
-import { Stack, useGlobalSearchParams } from "expo-router";
+import { Button, Card, Text } from "react-native-paper";
+import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
 import { useDetailsData } from "../../hooks";
 
 export default function DetailsPage() {
   const { id } = useGlobalSearchParams();
-  const { imgUrl, videoId, trailerId, mediaId, title, content, castMembers } =
-    useDetailsData(typeof id === "string" ? id : "1");
+  const router = useRouter();
+  const {
+    imgUrl,
+    videoId,
+    trailerId,
+    mediaId,
+    title,
+    content,
+    castMembers,
+    isFree,
+    isBought,
+  } = useDetailsData(typeof id === "string" ? id : "1");
+
+  const buy = () => {
+    // router.replace(`/vod/buy/${mediaId}`);
+  };
+  const watchMain = () => {
+    // router.replace(`/vod/player/${videoId}`);
+  };
+  const watchTrailer = () => {
+    // router.replace(`/vod/player/${trailerId}`);
+  };
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title: name }} />
+      <Stack.Screen options={{ title: title }} />
       <ScrollView>
         <Card>
-          {firstImageUrl && (
-            <Card.Cover key="cover" source={{ uri: firstImageUrl }} />
-          )}
+          {imgUrl && <Card.Cover key="cover" source={{ uri: imgUrl }} />}
           <Card.Title titleVariant="displaySmall" key="title" title={title} />
+          <Card.Actions>
+            {!isFree && !isBought && <Button onPress={buy()}>Buy</Button>}
+            <Button onPress={watchTrailer()}>Watch Trailer</Button>
+            {(isFree || isBought) && (
+              <Button onPress={watchMain()}>Watch Main</Button>
+            )}
+          </Card.Actions>
           <Card.Content key="cover">
             <Text variant="bodyMedium">{content}</Text>
+            {castMembers && (
+              <View style={[styles.grid]}>
+                {castMembers.map((castMember) => (
+                  <Card key={castMember.id} style={styles.castCard}>
+                    {castMember.image && (
+                      <Card.Cover
+                        key="cover"
+                        source={{ uri: castMember.image }}
+                      />
+                    )}
+                    <Card.Title
+                      titleVariant="titleSmall"
+                      key="title"
+                      title={castMember.name}
+                    />
+                    <Card.Content>
+                      <Text variant="bodySmall">{castMember.role}</Text>
+                      <Text variant="bodySmall">{castMember.geneder}</Text>
+                      <Text variant="bodySmall">{castMember.birthDate}</Text>
+                      {castMember.deathDate && (
+                        <Text variant="bodySmall">{castMember.deathDate}</Text>
+                      )}
+                      <Text variant="bodySmall">{castMember.country}</Text>
+                    </Card.Content>
+                  </Card>
+                ))}
+              </View>
+            )}
           </Card.Content>
-
-          {images && isMoreThanOneImage && (
-            <View style={[styles.grid]}>
-              {images.map((uri) => (
-                <View key={uri} style={styles.item}>
-                  <Image
-                    source={{ uri }}
-                    style={styles.photo}
-                    accessibilityIgnoresInvertColors
-                  />
-                </View>
-              ))}
-            </View>
-          )}
         </Card>
       </ScrollView>
     </SafeAreaView>
@@ -63,5 +101,10 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     padding: 4,
+  },
+  castCard: {
+    width: "46%",
+    padding: 4,
+    margin: "1%",
   },
 });

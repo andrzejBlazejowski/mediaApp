@@ -1,5 +1,5 @@
 import React from "react";
-import { Drawer, Text } from "react-native-paper";
+import { Drawer } from "react-native-paper";
 import { useRouter } from "expo-router";
 
 import { useMenuData } from "~/app/hooks/";
@@ -15,7 +15,7 @@ export default function Menu() {
           focusedIcon={{ uri: menuLink.url }}
           key={menuLink.id}
           label={menuLink.name}
-          onPress={() => router.replace(`/${"vod/details"}/${menuLink.id}`)}
+          onPress={() => router.replace(`/vod/details/${menuLink.id}`)}
         />
       ))}
     </Drawer.Section>
