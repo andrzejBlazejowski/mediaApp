@@ -9,12 +9,12 @@ import {
 import { Card, Text } from "react-native-paper";
 import { Stack, useGlobalSearchParams } from "expo-router";
 
-import { useArticleData } from "../../hooks";
+import { useDetailsData } from "../../hooks";
 
 export default function DetailsPage() {
   const { id } = useGlobalSearchParams();
-  const { images, firstImageUrl, isMoreThanOneImage, name, title, content } =
-    useArticleData(typeof id === "string" ? id : "1");
+  const { imgUrl, videoId, trailerId, mediaId, title, content, castMembers } =
+    useDetailsData(typeof id === "string" ? id : "1");
 
   return (
     <SafeAreaView>
