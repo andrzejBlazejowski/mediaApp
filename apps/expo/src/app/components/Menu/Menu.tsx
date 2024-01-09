@@ -15,7 +15,7 @@ export default function Menu() {
           focusedIcon={{ uri: menuLink.url }}
           key={menuLink.id}
           label={menuLink.name}
-          onPress={() => router.replace(`/${"vod/player"}/${menuLink.id}`)}
+          onPress={() => router.replace(`/${"vod/details"}/${menuLink.id}`)}
         />
       ))}
     </Drawer.Section>
