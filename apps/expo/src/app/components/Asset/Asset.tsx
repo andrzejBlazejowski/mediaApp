@@ -13,7 +13,7 @@ interface props {
   isInList?: boolean;
 }
 
-export default function Asset({ url, title, onPress, type, isInList }: props) {
+export function Asset({ url, title, onPress, type, isInList }: props) {
   return (
     <Card onPress={onPress}>
       {url && (

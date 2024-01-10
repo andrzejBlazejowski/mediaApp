@@ -4,26 +4,28 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { TRPCProvider } from "~/utils/api";
-import Menu from "./components/Menu/Menu";
+import { Menu, ThemeProvider } from "./components/";
 
 // This is the main layout of the app
 // It wraps your pages with the providers they need
 const RootLayout = () => {
   return (
     <TRPCProvider>
-      {/*
+      <ThemeProvider>
+        {/*
         The Stack component displays the current page.
         It also allows you to configure your screens 
       */}
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <Stack />
+        <View style={styles.container}>
+          <View style={styles.content}>
+            <Stack />
+          </View>
+          <View style={styles.menu}>
+            <Menu />
+          </View>
         </View>
-        <View style={styles.menu}>
-          <Menu />
-        </View>
-      </View>
-      <StatusBar />
+        <StatusBar />
+      </ThemeProvider>
     </TRPCProvider>
   );
 };

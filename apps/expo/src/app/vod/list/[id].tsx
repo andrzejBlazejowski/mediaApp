@@ -8,7 +8,7 @@ import {
 import { Text } from "react-native-paper";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
-import Asset from "~/app/components/Asset/Asset";
+import { Asset } from "~/app/components/";
 import { useListData } from "~/app/hooks/";
 
 export default function ListPage() {

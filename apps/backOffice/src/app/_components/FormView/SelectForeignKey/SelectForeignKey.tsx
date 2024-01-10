@@ -22,6 +22,7 @@ import MenuTypeSelect from "./MenuTypeSelect";
 import PeopleSelect from "./PeopleSelect";
 import PlatformSelect from "./PlatformSelect";
 import PurchaseTypeSelect from "./PurchaseTypeSelect";
+import ScreenTypeSelect from "./ScreenTypeSelect";
 import { SelectProps } from "./select.types";
 import SexKeySelect from "./SexKeySelect";
 import UserSelect from "./UserSelect";
@@ -79,6 +80,8 @@ export default function SelectForeignKey({
       return <VodScreenSelect {...props} />;
     case "vodScreenTypeId":
       return <VodScreenTypeSelect {...props} />;
+    case "screenTypeId":
+      return <ScreenTypeSelect {...props} />;
     case "articleScreenId":
       return <ArticleScreenSelect {...props} />;
     case "articleScreenImageId":
