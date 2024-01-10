@@ -32,6 +32,44 @@ export const expoRouter = createTRPCRouter({
         },
       });
     }),
+  getMediaDetails: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.medias.findFirst({
+        where: eq(schema.medias.id, input.id),
+        with: {
+          videoContents: {
+            with: {
+              video: true,
+              videoContentType: true,
+            },
+          },
+          mediaViewImpressions: true,
+          mediaImages: {
+            with: {
+              image: true,
+              mediaImageType: true,
+            },
+          },
+          mediaCastMembers: {
+            with: {
+              castMember: {
+                with: {
+                  castMemberImage: {
+                    with: {
+                      image: true,
+                    },
+                  },
+                  person: true,
+                  castRole: true,
+                  country: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    }),
   getMenu: publicProcedure
     .input(z.object({ platform: z.string() }))
     .query(({ ctx, input }) => {
@@ -59,4 +97,3 @@ export const expoRouter = createTRPCRouter({
       });
     }),
 });
-z;
