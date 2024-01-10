@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
-import Asset from "~/app/components/Asset/Asset";
+import { Asset } from "~/app/components/";
 import { useGridData } from "../../hooks";
 
 export default function GridPage() {

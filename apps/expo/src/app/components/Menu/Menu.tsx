@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 
 import { useMenuData } from "~/app/hooks/";
 
-export default function Menu() {
+export function Menu() {
   const router = useRouter();
   const { menuItems, title } = useMenuData();
 
