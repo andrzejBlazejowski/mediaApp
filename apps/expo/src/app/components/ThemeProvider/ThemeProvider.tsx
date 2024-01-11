@@ -9,11 +9,6 @@ import { useBrandingData } from "~/app/hooks";
 
 export function ThemeProvider({ children }: { children?: ReactNode }) {
   const { images, colors } = useBrandingData("client #1 summer theme");
-
-  console.warn(DefaultTheme.colors.primary);
-  console.warn(colors.primary);
-  console.warn(colors);
-
   const theme = {
     ...DefaultTheme,
     colors: {

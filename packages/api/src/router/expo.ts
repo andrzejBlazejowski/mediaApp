@@ -70,6 +70,15 @@ export const expoRouter = createTRPCRouter({
         },
       });
     }),
+
+  getPurchasesForMedia: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.purchases.findFirst({
+        where: eq(schema.purchases.mediaId, input.id),
+      });
+    }),
+
   getMenu: publicProcedure
     .input(z.object({ platform: z.string() }))
     .query(({ ctx, input }) => {
@@ -104,20 +113,40 @@ export const expoRouter = createTRPCRouter({
         mediaId: input.mediaId,
         progress: input.progress,
         isDeleted: false,
-        createdAt: new Date().toString(),
-        createdBy: 1,
-        updatedAt: new Date().toString(),
-        updatedBy: 1,
+        createdAt: new Date(),
+        createdBy: "1",
+        updatedAt: new Date(),
+        updatedBy: "1",
       });
     }),
 
-  buyMedia: protectedProcedure
+  buyMedia: publicProcedure
     .input(z.object({ mediaId: z.number() }))
-    .mutation(({ ctx, input }) => {
-      return ctx.db.insert(schema.).values({
-        mediaId: input.mediaId,
-        date: new Date(),
+    .mutation(async ({ ctx, input }) => {
+      const currentDate = new Date();
+      const purchaseType = await ctx.db.query.purchaseTypes.findFirst({
+        where: eq(schema.purchaseTypes.name, "UNLIMITED"),
       });
-      // return ctx.db.insert(schema.clientAppDictionaries).values(input);
+
+      const purchase = await ctx.db.insert(schema.purchases).values({
+        purchaseTypeId: purchaseType?.id ?? 1,
+        userId: 1,
+        mediaId: input.mediaId,
+        isDeleted: false,
+        createdAt: currentDate,
+        createdBy: "1",
+        updatedAt: currentDate,
+        updatedBy: "1",
+      });
+
+      return ctx.db.insert(schema.purchaseItems).values({
+        mediaId: input.mediaId,
+        purchaseId: parseInt(purchase.insertId),
+        isDeleted: false,
+        createdAt: currentDate,
+        createdBy: "1",
+        updatedAt: currentDate,
+        updatedBy: "1",
+      });
     }),
 });

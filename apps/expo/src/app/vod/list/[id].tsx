@@ -29,7 +29,6 @@ export default function ListPage() {
               style={[styles.grid]}
             >
               {assets.map(({ name, url, id }) => {
-                console.warn(title + name);
                 return (
                   <View key={listId + title + name + id} style={styles.item}>
                     <Asset

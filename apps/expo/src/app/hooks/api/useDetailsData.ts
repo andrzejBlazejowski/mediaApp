@@ -7,6 +7,9 @@ export function useDetailsData(id: number | string) {
   const { data } = api.expo.getMediaDetails.useQuery({
     id: typeof id === "string" ? parseInt(id) : id,
   });
+  const purchasesData = api.expo.getPurchasesForMedia.useQuery({
+    id: typeof id === "string" ? parseInt(id) : id,
+  });
 
   return useMemo(() => {
     const title = data?.name;
@@ -37,7 +40,8 @@ export function useDetailsData(id: number | string) {
       };
     });
     const isFree = data?.isFree;
-    const isBought = false;
+    const isBought =
+      purchasesData?.data?.mediaId === parseInt(id) ? true : false;
 
     return {
       imgUrl,
@@ -50,5 +54,5 @@ export function useDetailsData(id: number | string) {
       isFree,
       isBought,
     };
-  }, [data]);
+  }, [data, purchasesData]);
 }

@@ -2,14 +2,24 @@ import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
+import { api } from "~/utils/api";
+
 export default function DetailsPage() {
   const router = useRouter();
+  const utils = api.useUtils();
+  const invalidate = utils.expo.getMediaDetails.invalidate;
+  const { mutateAsync, error } = api.expo.buyMedia.useMutation({
+    async onSuccess() {
+      await invalidate();
+      onCancel();
+    },
+  });
   const { rest } = useGlobalSearchParams();
   const [id, name, price] =
     rest?.length && rest.length >= 1 ? rest : ["1", "", ""];
 
-  const onBuy = () => {
-    router.replace(`/vod/details/${id}`);
+  const onBuy = async () => {
+    await mutateAsync({ mediaId: parseInt(id ?? "1") });
   };
   const onCancel = () => {
     router.replace(`/vod/details/${id}`);
