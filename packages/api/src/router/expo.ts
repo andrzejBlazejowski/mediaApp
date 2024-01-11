@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { schema } from "@media/db";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const expoRouter = createTRPCRouter({
   getArticle: publicProcedure
@@ -95,5 +95,29 @@ export const expoRouter = createTRPCRouter({
           },
         },
       });
+    }),
+
+  saveMediaImpression: protectedProcedure
+    .input(z.object({ mediaId: z.number(), progress: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.mediaViewImpressions).values({
+        mediaId: input.mediaId,
+        progress: input.progress,
+        isDeleted: false,
+        createdAt: new Date().toString(),
+        createdBy: 1,
+        updatedAt: new Date().toString(),
+        updatedBy: 1,
+      });
+    }),
+
+  buyMedia: protectedProcedure
+    .input(z.object({ mediaId: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.insert(schema.).values({
+        mediaId: input.mediaId,
+        date: new Date(),
+      });
+      // return ctx.db.insert(schema.clientAppDictionaries).values(input);
     }),
 });

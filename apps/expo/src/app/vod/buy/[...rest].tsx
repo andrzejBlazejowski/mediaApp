@@ -1,4 +1,4 @@
-import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
@@ -9,10 +9,10 @@ export default function DetailsPage() {
     rest?.length && rest.length >= 1 ? rest : ["1", "", ""];
 
   const onBuy = () => {
-    router.replace(`/vod/buy/${mediaId}/${title}`);
+    router.replace(`/vod/details/${id}`);
   };
   const onCancel = () => {
-    router.replace(`/vod/buy/${mediaId}/${title}`);
+    router.replace(`/vod/details/${id}`);
   };
   return (
     <SafeAreaView>
