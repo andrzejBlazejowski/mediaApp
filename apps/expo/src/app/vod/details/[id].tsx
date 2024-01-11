@@ -26,13 +26,13 @@ export default function DetailsPage() {
   } = useDetailsData(typeof id === "string" ? id : "1");
 
   const buy = () => {
-    // router.replace(`/vod/buy/${mediaId}`);
+    router.replace(`/vod/buy/${mediaId}/${title}`);
   };
   const watchMain = () => {
-    // router.replace(`/vod/player/${videoId}`);
+    router.replace(`/vod/player/${videoId}`);
   };
   const watchTrailer = () => {
-    // router.replace(`/vod/player/${trailerId}`);
+    router.replace(`/vod/player/${trailerId}`);
   };
 
   return (
@@ -43,10 +43,10 @@ export default function DetailsPage() {
           {imgUrl && <Card.Cover key="cover" source={{ uri: imgUrl }} />}
           <Card.Title titleVariant="displaySmall" key="title" title={title} />
           <Card.Actions>
-            {!isFree && !isBought && <Button onPress={buy()}>Buy</Button>}
-            <Button onPress={watchTrailer()}>Watch Trailer</Button>
-            {(isFree || isBought) && (
-              <Button onPress={watchMain()}>Watch Main</Button>
+            {!isFree && !isBought && <Button onPress={buy}>Buy</Button>}
+            {trailerId && <Button onPress={watchTrailer}>Watch Trailer</Button>}
+            {(isFree || isBought) && videoId && (
+              <Button onPress={watchMain}>Watch Main</Button>
             )}
           </Card.Actions>
           <Card.Content key="cover">
@@ -68,7 +68,7 @@ export default function DetailsPage() {
                     />
                     <Card.Content>
                       <Text variant="bodySmall">{castMember.role}</Text>
-                      <Text variant="bodySmall">{castMember.geneder}</Text>
+                      <Text variant="bodySmall">{castMember.gender}</Text>
                       <Text variant="bodySmall">{castMember.birthDate}</Text>
                       {castMember.deathDate && (
                         <Text variant="bodySmall">{castMember.deathDate}</Text>

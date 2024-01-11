@@ -12,14 +12,12 @@ export function useDetailsData(id: number | string) {
     const title = data?.name;
     const content = data?.shortDescription;
     const imgUrl = data?.mediaImages[0]?.image?.url ?? "";
-    const videoId =
-      data?.videoContents.filter(
-        (videoContent) => videoContent.videoContentType.name === "main",
-      )[0]?.id ?? 1;
-    const trailerId =
-      data?.videoContents.filter(
-        (videoContent) => videoContent.videoContentType.name === "trailer",
-      )[0]?.id ?? 1;
+    const videoId = data?.videoContents.filter(
+      (videoContent) => videoContent.videoContentType.name === "main",
+    )[0]?.id;
+    const trailerId = data?.videoContents.filter(
+      (videoContent) => videoContent.videoContentType.name === "trailer",
+    )[0]?.id;
     const mediaId = data?.id;
     const castMembers = data?.mediaCastMembers.map((mediaCastMember) => {
       const { id, castMember } = mediaCastMember;
@@ -32,6 +30,7 @@ export function useDetailsData(id: number | string) {
         image: castMember?.castMemberImage.image.url ?? "",
         birthDate,
         deathDate,
+
         gender: sex,
         country:
           castMember?.country?.name ?? castMember?.country?.id.toString() ?? "",
