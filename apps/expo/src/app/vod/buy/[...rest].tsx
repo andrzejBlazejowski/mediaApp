@@ -17,7 +17,7 @@ export default function DetailsPage() {
   return (
     <SafeAreaView>
       <Stack.Screen options={{ title: "buy video" }} />
-      <View>
+      <View style={styles.container}>
         <Text variant="titleLarge">
           Are you sure you want to buy access to {name ? name : "this"} video
           {price ? `, for ${price} usd` : ""}?
@@ -34,19 +34,11 @@ export default function DetailsPage() {
 }
 
 const styles = StyleSheet.create({
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    padding: 4,
-  },
-  item: {
-    height: Dimensions.get("window").width / 2,
-    width: "50%",
-    padding: 4,
-  },
-  photo: {
+  container: {
+    flexDirection: "column",
+    justifyContent: "center",
+    padding: 20,
     height: "100%",
-    width: "100%",
-    padding: 4,
+    gap: 25,
   },
 });
