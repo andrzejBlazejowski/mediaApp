@@ -11,7 +11,9 @@
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "push": "drizzle-kit push:mysql",
     "studio": "drizzle-kit studio",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "migration:generate": "drizzle-kit generate:mysql",
+    "migration:push": "tbd..."
   },
   "dependencies": {
     "@planetscale/database": "^1.11.0",

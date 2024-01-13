@@ -8,7 +8,6 @@ import { Menu } from "./components/";
 // This is the main layout of the app
 // It wraps your pages with the providers they need
 export const RootLayout = () => {
-  ImageSourcePropType;
   return (
     <TRPCProvider>
       {/*
