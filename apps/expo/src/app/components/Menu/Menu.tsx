@@ -7,6 +7,7 @@ import { useMenuData } from "~/app/hooks/";
 export function Menu() {
   const router = useRouter();
   const { menuItems, title } = useMenuData();
+  console.warn(menuItems);
 
   return (
     <Drawer.Section title={title}>

@@ -7,11 +7,11 @@ import { Stack } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Index = () => {
-  const [userInfo, setUserInfo] = useState(null);
-  const [request, response, loginRequest] = Google.useAuthRequest({
-    androidClientId:
-      "615555735082-c1n2rq3v0id50f2lvgduc4s45l36kjks.apps.googleusercontent.com",
-  });
+  // const [userInfo, setUserInfo] = useState(null);
+  // const [request, response, loginRequest] = Google.useAuthRequest({
+  //   androidClientId:
+  //     "615555735082-c1n2rq3v0id50f2lvgduc4s45l36kjks.apps.googleusercontent.com",
+  // });
 
   AsyncStorage;
   return (
@@ -19,7 +19,7 @@ const Index = () => {
       {/* Changes page title visible on the header */}
       <Stack.Screen options={{ title: "Home Page" }} />
       <View className="h-full w-full p-4">
-        {!userInfo && (
+        {/* {!userInfo && (
           <Button
             mode="contained"
             icon="google"
@@ -27,8 +27,8 @@ const Index = () => {
           >
             Please Login
           </Button>
-        )}
-        {userInfo && <Text variant="displaySmall"> Logged In :D</Text>}
+        )} */}
+        {<Text variant="displaySmall"> Logged In :D</Text>}
       </View>
     </SafeAreaView>
   );

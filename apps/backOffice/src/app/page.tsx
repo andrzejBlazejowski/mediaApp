@@ -1,13 +1,13 @@
+// export const runtime = "edge";
 import { Suspense } from "react";
 
+import { api } from "~/utils/api";
 import { AuthShowcase } from "./_components/auth-showcase";
 import {
   CreatePostForm,
   PostCardSkeleton,
   PostList,
 } from "./_components/posts";
-
-// export const runtime = "edge";
 
 export default function HomePage() {
   return (

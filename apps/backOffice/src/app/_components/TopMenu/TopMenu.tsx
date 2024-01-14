@@ -62,6 +62,11 @@ const menuComponents = {
       description: "loream ipsum",
     },
     {
+      title: "media list",
+      href: "/media/list",
+      description: "loream ipsum",
+    },
+    {
       title: "media list medias",
       href: "/media/list/medias",
       description: "loream ipsum",

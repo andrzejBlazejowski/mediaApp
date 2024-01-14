@@ -1,0 +1,1 @@
+ALTER TABLE `menuLinkImages` DROP COLUMN `menuLinkId`;

@@ -6,8 +6,8 @@ import { api } from "~/utils/api";
 import { SelectUi } from ".";
 import { SelectProps } from "./select.types";
 
-export default function ScreenSelect(props: SelectProps) {
-  const rawData = api.screen.all.useQuery();
+export default function MenuLinkSelect(props: SelectProps) {
+  const rawData = api.menuLink.all.useQuery();
   const options = useMemo(() => {
     const options =
       !rawData.data || rawData.data.length === 0
@@ -22,5 +22,7 @@ export default function ScreenSelect(props: SelectProps) {
     return options;
   }, [rawData]);
 
-  return <SelectUi {...props} placeholder="select Screen" options={options} />;
+  return (
+    <SelectUi {...props} placeholder="select menu link" options={options} />
+  );
 }

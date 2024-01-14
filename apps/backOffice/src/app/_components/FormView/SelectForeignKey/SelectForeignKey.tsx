@@ -14,14 +14,17 @@ import InvoiceTypeSelect from "./InvoiceTypeSelect";
 import MediaCategorySelect from "./MediaCategorySelect";
 import MediaImageTypeSelect from "./MediaImageTypeSelect";
 import MediaListSelect from "./MediaListSelect";
+import MediaListTypeSelect from "./MediaListTypeSelect";
 import MediaSelect from "./MediaSelect";
 import MenuLinkImageTypeSelect from "./MenuLinkImageTypeSelect ";
+import MenuLinkSelect from "./MenuLinkSelect";
 import MenuPlatformTypeSelect from "./MenuPlatformTypeSelect";
 import MenuSelect from "./MenuSelect";
 import MenuTypeSelect from "./MenuTypeSelect";
 import PeopleSelect from "./PeopleSelect";
 import PlatformSelect from "./PlatformSelect";
 import PurchaseTypeSelect from "./PurchaseTypeSelect";
+import ScreenSelect from "./ScreenSelect";
 import ScreenTypeSelect from "./ScreenTypeSelect";
 import { SelectProps } from "./select.types";
 import SexKeySelect from "./SexKeySelect";
@@ -76,6 +79,8 @@ export default function SelectForeignKey({
       return <BrandingColorTypeSelect {...props} />;
     case "brandingId":
       return <BrandingSelect {...props} />;
+    case "destinationScreenId":
+      return <ScreenSelect {...props} />;
     case "vodScreenId":
       return <VodScreenSelect {...props} />;
     case "vodScreenTypeId":
@@ -100,6 +105,10 @@ export default function SelectForeignKey({
       return <UserSelect {...props} />;
     case "purchaseTypeId":
       return <PurchaseTypeSelect {...props} />;
+    case "menuLinkId":
+      return <MenuLinkSelect {...props} />;
+    case "mediaListTypeId":
+      return <MediaListTypeSelect {...props} />;
     case "invoiceTypeId":
       return <InvoiceTypeSelect {...props} />;
     case "videoId":
