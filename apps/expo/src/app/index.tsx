@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as Google from "expo-auth-session/providers/google";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Index = () => {
+  const router = useRouter();
   // const [userInfo, setUserInfo] = useState(null);
   // const [request, response, loginRequest] = Google.useAuthRequest({
   //   androidClientId:
@@ -28,6 +28,11 @@ const Index = () => {
             Please Login
           </Button>
         )} */}
+        <Button
+          mode="contained"
+          icon="google"
+          onPress={() => router.replace(`/vod/details/1`)}
+        ></Button>
         {<Text variant="displaySmall"> Logged In :D</Text>}
       </View>
     </SafeAreaView>

@@ -7,7 +7,6 @@ import { useMenuData } from "~/app/hooks/";
 export function Menu() {
   const router = useRouter();
   const { menuItems, title } = useMenuData();
-  console.warn(menuItems);
 
   return (
     <Drawer.Section title={title}>
@@ -16,7 +15,9 @@ export function Menu() {
           focusedIcon={{ uri: menuLink.url }}
           key={menuLink.id}
           label={menuLink.name}
-          onPress={() => router.replace(`/vod/details/${menuLink.id}`)}
+          onPress={() =>
+            router.replace(`/${menuLink.segment}/${menuLink.destinationId}`)
+          }
         />
       ))}
     </Drawer.Section>

@@ -96,6 +96,11 @@ export const expoRouter = createTRPCRouter({
                           image: true,
                         },
                       },
+                      destinationScreen: {
+                        with: {
+                          screenType: true,
+                        },
+                      },
                     },
                   },
                 },
