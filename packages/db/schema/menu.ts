@@ -84,7 +84,6 @@ export const menuTypesInsertSchema = createInsertSchema(menuTypes);
 export const menuLinkImages = mysqlTable(
   "menuLinkImages",
   {
-    menuLinkId: int("menuLinkId").notNull(),
     imageId: int("imageId").notNull(),
 
     ...dictionaryColumns,
@@ -96,10 +95,6 @@ export const menuLinkImages = mysqlTable(
 );
 
 export const menuLinkImagesRelations = relations(menuLinkImages, ({ one }) => ({
-  menuLink: one(menuLinks, {
-    fields: [menuLinkImages.menuLinkId],
-    references: [menuLinks.id],
-  }),
   image: one(images, {
     fields: [menuLinkImages.imageId],
     references: [images.id],

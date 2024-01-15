@@ -32,6 +32,39 @@ export const expoRouter = createTRPCRouter({
         },
       });
     }),
+  getVodScreenDetails: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.vodScreens.findFirst({
+        where: eq(schema.vodScreens.id, input.id),
+        with: {
+          vodScreenMediaLists: {
+            with: {
+              mediaList: {
+                with: {
+                  mediaListType: true,
+                  mediaListMedias: {
+                    with: {
+                      media: {
+                        with: {
+                          mediaViewImpressions: true,
+                          mediaImages: {
+                            with: {
+                              image: true,
+                              mediaImageType: true,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    }),
   getMediaDetails: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
@@ -94,6 +127,11 @@ export const expoRouter = createTRPCRouter({
                       menuLinkImage: {
                         with: {
                           image: true,
+                        },
+                      },
+                      destinationScreen: {
+                        with: {
+                          screenType: true,
                         },
                       },
                     },

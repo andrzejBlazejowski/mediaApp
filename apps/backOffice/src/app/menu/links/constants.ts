@@ -12,7 +12,7 @@ export const uiSchema = {
   },
   destinationScreenId: {
     classes: "w-1/4 inline-block m-2",
-    type: InputTypes.number,
+    type: InputTypes.foreignKey,
   },
   name: {
     classes: "w-1/4 inline-block m-2",

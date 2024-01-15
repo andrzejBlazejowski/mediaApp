@@ -24,6 +24,14 @@ export const imageRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.images).values(input);
     }),
+  update: protectedProcedure
+    .input(imagesInsertSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.images)
+        .set(input)
+        .where(eq(schema.images.id, input.id ?? 0));
+    }),
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.images).where(eq(schema.images.id, input));
   }),

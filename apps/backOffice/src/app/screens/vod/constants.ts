@@ -16,4 +16,4 @@ export const uiSchema = {
   },
 } as IuiSchema;
 
-export const title = "vod screen type";
+export const title = "vod screen ";

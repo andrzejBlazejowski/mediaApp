@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { api } from "~/utils/api";
 
@@ -7,7 +7,6 @@ export function useBrandingData(client: string) {
   const { data } = api.expo.getBranding.useQuery({
     client,
   });
-
   return useMemo(() => {
     const colors = data
       ? data.brandingColors.reduce(

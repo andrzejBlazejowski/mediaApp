@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 
+import { api } from "~/utils/api";
 import { ThemeToggle } from "../ThemeToggle";
 
 type MenuComponents = Record<string, MenuComponent[]>;
@@ -59,6 +60,11 @@ const menuComponents = {
     {
       title: "media view Impresions",
       href: "/media/media-view-impressions",
+      description: "loream ipsum",
+    },
+    {
+      title: "media list",
+      href: "/media/list",
       description: "loream ipsum",
     },
     {
@@ -261,7 +267,38 @@ const menuComponents = {
   ],
 };
 
+export function useMenuData() {
+  const platform = "android";
+
+  const rawData = api.expo.getMenu.useQuery({ platform });
+  const { data } = rawData;
+
+  interface MenuItem {
+    name: string;
+    id: number;
+    url: string;
+    type: "article" | "vod/list" | "vod/grid";
+  }
+
+  return React.useMemo(() => {
+    const menuItems: MenuItem[] = data?.menuPlatforms[0]
+      ? data.menuPlatforms[0].menu.menuLinks.map((menuLink) => {
+          return {
+            name: menuLink.name ?? menuLink.id.toString(),
+            id: menuLink.id,
+            url: menuLink.menuLinkImage.image.url,
+            type: "article",
+          };
+        })
+      : [];
+    const title: string = data?.menuPlatforms[0]?.menu.name ?? "";
+    return { menuItems, title };
+  }, [data]);
+}
+
 export function TopMenu() {
+  const { menuItems, title } = useMenuData();
+
   return (
     <NavigationMenu>
       <NavigationMenuList>

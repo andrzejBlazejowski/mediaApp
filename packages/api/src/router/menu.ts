@@ -140,7 +140,6 @@ export const menuLinkImageRouter = createTRPCRouter({
     return ctx.db.query.menuLinkImages.findMany({
       orderBy: desc(schema.menuLinkImages.id),
       with: {
-        menuLink: true,
         image: true,
       },
     });
@@ -152,7 +151,6 @@ export const menuLinkImageRouter = createTRPCRouter({
       return ctx.db.query.menuLinkImages.findFirst({
         where: eq(schema.menuLinkImages.id, input.id),
         with: {
-          menuLink: true,
           image: true,
         },
       });

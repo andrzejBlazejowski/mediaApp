@@ -2,44 +2,62 @@
 
 import React, { useMemo } from "react";
 
+import type { TableViewProps } from "~/app/_components/TableView";
+import { TableView } from "~/app/_components/TableView";
 import { api } from "~/utils/api";
-import type { TableViewProps } from "../_components/TableView";
-import { TableView } from "../_components/TableView";
+import { title } from "./constants";
 
 export default function Page() {
-  const videos = api.video.all.useQuery();
+  const utils = api.useUtils();
+
+  const rawData = api.video.all.useQuery();
+  const deleteRow = api.video.delete.useMutation();
+  const invalidate = utils.video.all.invalidate;
+  const headersConfig = {
+    id: {
+      orderNumber: 0,
+      name: "id",
+      label: "id",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    name: {
+      orderNumber: 1,
+      name: "name",
+      label: "name",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+    description: {
+      orderNumber: 2,
+      name: "description",
+      label: "description",
+      classNames: "w-[100px]",
+      sortable: true,
+    },
+  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
-      !videos.data || videos.data.length === 0
+      !rawData.data || rawData.data.length === 0
         ? []
-        : videos.data.map((video) => {
+        : rawData.data.map((row) => {
             return {
-              url: { value: video.url },
-              id: { value: video.id.toString() },
+              id: { value: row.id.toString() },
+              name: { value: row.name },
+              description: { value: row.description },
             };
           });
     return {
-      title: "media video content list",
+      title: title + " list",
       data: data,
-      headersConfig: {
-        url: {
-          orderNumber: 0,
-          name: "url",
-          label: "url",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
-        id: {
-          orderNumber: 0,
-          name: "id",
-          label: "id",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
+      headersConfig,
+      onDeleteRow: async (id) => {
+        await deleteRow.mutateAsync(id);
+        await invalidate();
       },
     } as TableViewProps;
-  }, [videos]);
+  }, [rawData]);
 
   return <TableView {...mediaIndexProps}></TableView>;
 }

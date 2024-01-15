@@ -13,8 +13,8 @@ export const screens = mysqlTable(
     screenTypeId: int("screenTypeId").notNull(),
     //TODO:  need to think about that more...
     //TODO: manage screen content I want to set video OR audio OR Article content
-    articleScreenId: int("screenContentId"),
-    vodScreenId: int("screenContentId"),
+    articleScreenId: int("articleScreenId"),
+    vodScreenId: int("vodScreenId"),
 
     ...dictionaryColumns,
     ...baseColumns,

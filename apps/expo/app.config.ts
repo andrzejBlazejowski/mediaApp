@@ -1,9 +1,9 @@
 import type { ExpoConfig } from "@expo/config";
 
 const defineConfig = (): ExpoConfig => ({
-  name: "expo",
-  slug: "expo",
-  scheme: "expo",
+  name: "media.app.pinz",
+  slug: "media.app.pinz",
+  scheme: "mediaApp",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -18,11 +18,12 @@ const defineConfig = (): ExpoConfig => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "your.bundle.identifier",
+    bundleIdentifier: "media.app.pinz",
     supportsTablet: true,
   },
   android: {
-    package: "your.bundle.identifier",
+    //client id : 615555735082-c1n2rq3v0id50f2lvgduc4s45l36kjks.apps.googleusercontent.com
+    package: "media.app.pinz",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#1F104A",
@@ -30,7 +31,7 @@ const defineConfig = (): ExpoConfig => ({
   },
   // extra: {
   //   eas: {
-  //     projectId: "your-eas-project-id",
+  //     projectId: "b65799ea-8718-42d5-8a97-4040b2f44c10",
   //   },
   // },
   experiments: {

@@ -36,7 +36,7 @@ export default function ListPage() {
                       url={url}
                       isInList
                       type={type}
-                      onPress={() => router.replace(`/vod/player/${id}`)}
+                      onPress={() => router.replace(`/vod/details/${id}`)}
                     />
                   </View>
                 );

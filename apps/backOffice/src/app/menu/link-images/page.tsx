@@ -28,13 +28,6 @@ export default function Page() {
       classNames: "w-[100px]",
       sortable: true,
     },
-    menuLink: {
-      orderNumber: 2,
-      name: "menuLink",
-      label: "menu link",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
     image: {
       orderNumber: 3,
       name: "image",
@@ -52,11 +45,8 @@ export default function Page() {
             return {
               id: { value: row.id.toString() },
               name: { value: row.name },
-              menuLink: {
-                value: row?.menuLink?.name ?? row.menuLinkId.toString() ?? "",
-              },
               image: {
-                value: row?.image?.name ?? row.imageId.toString() ?? "",
+                value: row.imageId.toString() ?? "",
               },
             };
           });
