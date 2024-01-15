@@ -3,35 +3,43 @@ import { useMemo } from "react";
 import { api } from "~/utils/api";
 import { GridAssetTypeEnum } from "../../utils";
 
+const getAssetsType = (type: string | null | undefined) => {
+  switch (type) {
+    case "COVER":
+      return GridAssetTypeEnum.COVER;
+    case "FRAME":
+      return GridAssetTypeEnum.FRAME;
+    default:
+      return GridAssetTypeEnum.COVER;
+  }
+};
+
 export function useGridData(id: number | string) {
   if (!id || typeof id !== "string") throw new Error("unreachable");
-  // const { data } = api.expo.getArticle.useQuery({
-  //   id: typeof id === "string" ? parseInt(id) : id,
-  // });
+  const { data } = api.expo.getVodScreenDetails.useQuery({
+    id: typeof id === "string" ? parseInt(id) : id,
+  });
 
   return useMemo(() => {
-    // const { title, content } = data ?? { title: "loading", content: "loading" };
-    // const name = data ? data.name ?? data?.id?.toString() : "";
-    // const images = data
-    //   ? data.articleScreenImages.map((image) => image?.image?.url ?? "")
-    //   : [];
-
-    // const firstImageUrl = images.length > 0 ? images[0] : null;
-    // const isMoreThanOneImage = images.length >= 1;
-    const assets = [
-      {
-        id: 4,
-        name: "John Wick 10",
-        url: "https://unsplash.com/photos/va9218QJFAk/download?ixid=M3wxMjA3fDF8MXxhbGx8MXx8fHx8fDJ8fDE3MDQ2Mzc4NDh8&force=true&w=640",
-      },
-      {
-        id: 3,
-        name: "Wonder Woman",
-        url: "https://unsplash.com/photos/WpOMM4uE-F8/download?ixid=M3wxMjA3fDF8MXxhbGx8Nnx8fHx8fDJ8fDE3MDQ2Mzc4NDh8&force=true&w=640",
-      },
-    ];
-    const title = " grid";
-    const assetsType = GridAssetTypeEnum.COVER;
+    const { name, vodScreenMediaLists } = data ?? { name: "loading" };
+    const title = name;
+    const mediaList = vodScreenMediaLists?.[0]?.mediaList;
+    const assetsType = getAssetsType(mediaList?.mediaListType?.name);
+    const assets =
+      mediaList?.mediaListMedias.map(({ media }) => {
+        return {
+          id: media.id,
+          name: media.name,
+          url: media.mediaImages.reduce(
+            (acc, current) => {
+              return getAssetsType(current?.mediaImageType.name) === assetsType
+                ? current?.image.url
+                : acc;
+            },
+            media.mediaImages[0]?.image?.url,
+          ),
+        };
+      }) ?? [];
     return { assets, title, assetsType };
   }, []);
 }

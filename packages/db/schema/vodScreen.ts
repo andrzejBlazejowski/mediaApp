@@ -21,6 +21,7 @@ export const vodScreens = mysqlTable(
 
 export const vodScreensRelations = relations(vodScreens, ({ many, one }) => ({
   screens: many(screens),
+  vodScreenMediaLists: many(vodScreenMediaLists),
   vodScreenType: one(vodScreenTypes, {
     fields: [vodScreens.vodScreenTypeId],
     references: [vodScreenTypes.id],

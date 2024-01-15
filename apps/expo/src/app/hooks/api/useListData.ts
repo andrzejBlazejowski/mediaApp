@@ -1,80 +1,56 @@
 import { useMemo } from "react";
 
-import { ListAssetTypeEnum } from "~/app/utils";
 import { api } from "~/utils/api";
+import { ListAssetTypeEnum } from "../../utils";
+
+const getAssetsType = (type: string | null | undefined) => {
+  switch (type) {
+    case "COVER":
+      return ListAssetTypeEnum.COVER;
+    case "FRAME":
+      return ListAssetTypeEnum.FRAME;
+    default:
+      return ListAssetTypeEnum.COVER;
+  }
+};
 
 export function useListData(id: number | string) {
   if (!id || typeof id !== "string") throw new Error("unreachable");
-  // const { data } = api.expo.getArticle.useQuery({
-  //   id: typeof id === "string" ? parseInt(id) : id,
-  // });
+  const { data } = api.expo.getVodScreenDetails.useQuery({
+    id: typeof id === "string" ? parseInt(id) : id,
+  });
 
   return useMemo(() => {
-    // const { title, content } = data ?? { title: "loading", content: "loading" };
-    // const name = data ? data.name ?? data?.id?.toString() : "";
-    // const images = data
-    //   ? data.articleScreenImages.map((image) => image?.image?.url ?? "")
-    //   : [];
+    const { name, vodScreenMediaLists } = data ?? { name: "loading" };
+    const title = name;
+    const lists = vodScreenMediaLists?.map((vodScreenMediaList) => {
+      const { name, id } = vodScreenMediaList;
 
-    // const firstImageUrl = images.length > 0 ? images[0] : null;
-    // const isMoreThanOneImage = images.length >= 1;
-    const lists = [
-      {
-        title: "action movies",
-        listId: 3,
-        type: ListAssetTypeEnum.FRAME,
-        assets: [
-          {
-            id: 2,
-            name: "antmania",
-            url: "https://unsplash.com/photos/SWt3Kw2gFAg/download?ixid=M3wxMjA3fDB8MXxhbGx8MTB8fHx8fHwyfHwxNzA0NjM3ODQ4fA&force=true&w=640",
-          },
-          {
-            id: 4,
-            name: "John Wick 10",
-            url: "https://unsplash.com/photos/va9218QJFAk/download?ixid=M3wxMjA3fDF8MXxhbGx8MXx8fHx8fDJ8fDE3MDQ2Mzc4NDh8&force=true&w=640",
-          },
-          {
-            id: 3,
-            name: "Wonder Woman",
-            url: "https://unsplash.com/photos/WpOMM4uE-F8/download?ixid=M3wxMjA3fDF8MXxhbGx8Nnx8fHx8fDJ8fDE3MDQ2Mzc4NDh8&force=true&w=640",
-          },
-          {
-            id: 1,
-            name: "Wonder Woman 2",
-            url: "https://unsplash.com/photos/dFWxgWx2XSs/download?ixid=M3wxMjA3fDB8MXxhbGx8MTN8fHx8fHwyfHwxNzA0NjM3ODQ4fA&force=true&w=640",
-          },
-        ],
-      },
-      {
-        title: "now on tv",
-        listId: 4,
-        type: ListAssetTypeEnum.COVER,
-        assets: [
-          {
-            id: 4,
-            name: "John Wick 10",
-            url: "https://unsplash.com/photos/va9218QJFAk/download?ixid=M3wxMjA3fDF8MXxhbGx8MXx8fHx8fDJ8fDE3MDQ2Mzc4NDh8&force=true&w=640",
-          },
-          {
-            id: 3,
-            name: "Wonder Woman",
-            url: "https://unsplash.com/photos/WpOMM4uE-F8/download?ixid=M3wxMjA3fDF8MXxhbGx8Nnx8fHx8fDJ8fDE3MDQ2Mzc4NDh8&force=true&w=640",
-          },
-          {
-            id: 2,
-            name: "antmania",
-            url: "https://unsplash.com/photos/SWt3Kw2gFAg/download?ixid=M3wxMjA3fDB8MXxhbGx8MTB8fHx8fHwyfHwxNzA0NjM3ODQ4fA&force=true&w=640",
-          },
-          {
-            id: 1,
-            name: "Wonder Woman 2",
-            url: "https://unsplash.com/photos/dFWxgWx2XSs/download?ixid=M3wxMjA3fDB8MXxhbGx8MTN8fHx8fHwyfHwxNzA0NjM3ODQ4fA&force=true&w=640",
-          },
-        ],
-      },
-    ];
-    const title = " list";
+      const mediaList = vodScreenMediaList?.mediaList;
+      const assetsType = getAssetsType(mediaList?.mediaListType?.name);
+      const assets =
+        mediaList?.mediaListMedias.map(({ media }) => {
+          return {
+            id: media.id,
+            name: media.name,
+            url: media.mediaImages.reduce(
+              (acc, current) => {
+                return getAssetsType(current?.mediaImageType.name) ===
+                  assetsType
+                  ? current?.image.url
+                  : acc;
+              },
+              media.mediaImages[0]?.image?.url,
+            ),
+          };
+        }) ?? [];
+      return {
+        title: name ?? "list " + id,
+        listId: id,
+        type: assetsType,
+        assets,
+      };
+    });
     return { lists, title };
   }, []);
 }
