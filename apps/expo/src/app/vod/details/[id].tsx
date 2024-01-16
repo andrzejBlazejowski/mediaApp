@@ -35,10 +35,18 @@ export default function DetailsPage() {
     router.push(`/vod/player/${trailerId}`);
   };
 
-  console.log(`isFree : ${isFree}`);
-  console.log(`isBought : ${isBought}`);
-  console.log(`trailerId : ${trailerId}`);
-  console.log(`videoId : ${videoId}`);
+  console.log(`isFree : ${id}`);
+  console.log(
+    imgUrl,
+    videoId,
+    trailerId,
+    mediaId,
+    title,
+    content,
+    castMembers,
+    isFree,
+    isBought,
+  );
 
   return (
     <SafeAreaView>

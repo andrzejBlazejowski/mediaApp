@@ -31,7 +31,7 @@ export default function GridPage() {
                   title={asset.name}
                   url={asset.url ?? ""}
                   type={assetsType}
-                  onPress={() => router.push(`/vod/details/${id}`)}
+                  onPress={() => router.push(`/vod/details/${asset.id}`)}
                 />
               </View>
             ))}
