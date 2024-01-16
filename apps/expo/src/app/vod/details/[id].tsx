@@ -26,14 +26,19 @@ export default function DetailsPage() {
   } = useDetailsData(typeof id === "string" ? id : "1");
 
   const buy = () => {
-    router.replace(`/vod/buy/${mediaId}/${title}`);
+    router.push(`/vod/buy/${mediaId}/${title}`);
   };
   const watchMain = () => {
-    router.replace(`/vod/player/${videoId}`);
+    router.push(`/vod/player/${videoId}`);
   };
   const watchTrailer = () => {
-    router.replace(`/vod/player/${trailerId}`);
+    router.push(`/vod/player/${trailerId}`);
   };
+
+  console.log(`isFree : ${isFree}`);
+  console.log(`isBought : ${isBought}`);
+  console.log(`trailerId : ${trailerId}`);
+  console.log(`videoId : ${videoId}`);
 
   return (
     <SafeAreaView>
@@ -49,7 +54,7 @@ export default function DetailsPage() {
               <Button onPress={watchMain}>Watch Main</Button>
             )}
           </Card.Actions>
-          <Card.Content key="cover">
+          <Card.Content key="castMembers">
             <Text variant="bodyMedium">{content}</Text>
             {castMembers && (
               <View style={[styles.grid]}>

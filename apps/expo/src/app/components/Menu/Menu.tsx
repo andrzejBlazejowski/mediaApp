@@ -16,7 +16,7 @@ export function Menu() {
           key={menuLink.id}
           label={menuLink.name}
           onPress={() =>
-            router.replace(`/${menuLink.segment}/${menuLink.destinationId}`)
+            router.push(`/${menuLink.segment}/${menuLink.destinationId}`)
           }
         />
       ))}

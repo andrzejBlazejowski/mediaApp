@@ -21,9 +21,9 @@ export function useListData(id: number | string) {
   });
 
   return useMemo(() => {
-    const { name, vodScreenMediaLists } = data ?? { name: "loading" };
+    const { name, vodScreen } = data ?? { name: "loading" };
     const title = name;
-    const lists = vodScreenMediaLists?.map((vodScreenMediaList) => {
+    const lists = vodScreen?.vodScreenMediaLists?.map((vodScreenMediaList) => {
       const { name, id } = vodScreenMediaList;
 
       const mediaList = vodScreenMediaList?.mediaList;
@@ -52,5 +52,5 @@ export function useListData(id: number | string) {
       };
     });
     return { lists, title };
-  }, []);
+  }, [data]);
 }

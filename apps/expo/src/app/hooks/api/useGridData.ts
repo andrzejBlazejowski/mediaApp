@@ -21,9 +21,9 @@ export function useGridData(id: number | string) {
   });
 
   return useMemo(() => {
-    const { name, vodScreenMediaLists } = data ?? { name: "loading" };
+    const { name, vodScreen } = data ?? { name: "loading" };
     const title = name;
-    const mediaList = vodScreenMediaLists?.[0]?.mediaList;
+    const mediaList = vodScreen?.vodScreenMediaLists?.[0]?.mediaList;
     const assetsType = getAssetsType(mediaList?.mediaListType?.name);
     const assets =
       mediaList?.mediaListMedias.map(({ media }) => {
