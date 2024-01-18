@@ -20,10 +20,13 @@ export function useGridData(id: number | string) {
     id: typeof id === "string" ? parseInt(id) : id,
   });
 
+  console.log(id);
+  console.log(data);
+
   return useMemo(() => {
-    const { name, vodScreenMediaLists } = data ?? { name: "loading" };
+    const { name, vodScreen } = data ?? { name: "loading" };
     const title = name;
-    const mediaList = vodScreenMediaLists?.[0]?.mediaList;
+    const mediaList = vodScreen?.vodScreenMediaLists?.[0]?.mediaList;
     const assetsType = getAssetsType(mediaList?.mediaListType?.name);
     const assets =
       mediaList?.mediaListMedias.map(({ media }) => {
@@ -41,5 +44,5 @@ export function useGridData(id: number | string) {
         };
       }) ?? [];
     return { assets, title, assetsType };
-  }, []);
+  }, [data]);
 }

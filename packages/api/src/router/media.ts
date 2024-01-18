@@ -15,18 +15,26 @@ import {
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediaRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.medias.findMany({
-      orderBy: desc(schema.medias.id),
-      with: {
-        mediaCategory: true,
-        mediaImages: true,
-        mediaCastMembers: true,
-        mediaViewImpressions: true,
-        videoContents: true,
-      },
-    });
-  }),
+  all: publicProcedure
+    .input(
+      z.object({
+        sortr: z.array(z.string()).optional(),
+        filter: z.object({ column: z.string(), value: z.string() }).optional(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      const { sort, filter } = input;
+      return ctx.db.query.medias.findMany({
+        orderBy: desc(schema.medias.id),
+        with: {
+          mediaCategory: true,
+          mediaImages: true,
+          mediaCastMembers: true,
+          mediaViewImpressions: true,
+          videoContents: true,
+        },
+      });
+    }),
 
   byId: publicProcedure
     .input(z.object({ id: z.number() }))

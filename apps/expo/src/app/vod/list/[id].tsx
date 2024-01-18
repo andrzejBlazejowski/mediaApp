@@ -16,34 +16,41 @@ export default function ListPage() {
   const { id } = useGlobalSearchParams();
   const { lists, title } = useListData(typeof id === "string" ? id : "1");
 
+  console.log("lists");
+  console.log(lists);
+
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title }} />
+      <Stack.Screen options={{ title: title ?? "" }} />
       <ScrollView>
-        {lists?.map(({ assets, type, title, listId }) => (
-          <>
-            <Text variant="">{title}</Text>
-            <ScrollView
-              horizontal={true}
-              key={listId + title + type}
-              style={[styles.grid]}
-            >
-              {assets.map(({ name, url, id }) => {
-                return (
-                  <View key={listId + title + name + id} style={styles.item}>
-                    <Asset
-                      title={name}
-                      url={url}
-                      isInList
-                      type={type}
-                      onPress={() => router.replace(`/vod/details/${id}`)}
-                    />
-                  </View>
-                );
-              })}
-            </ScrollView>
-          </>
-        ))}
+        {lists?.map(({ assets, type, title, listId }) => {
+          console.log("assets : ");
+          console.log(assets);
+          return (
+            <>
+              <Text variant="bodyLarge">{title}</Text>
+              <ScrollView
+                horizontal={true}
+                key={listId + title + type}
+                style={[styles.grid]}
+              >
+                {assets.map(({ name, url, id }) => {
+                  return (
+                    <View key={listId + title + name + id} style={styles.item}>
+                      <Asset
+                        title={name}
+                        url={url ?? ""}
+                        isInList
+                        type={type}
+                        onPress={() => router.push(`/vod/details/${id}`)}
+                      />
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </>
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );

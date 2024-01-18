@@ -6,10 +6,10 @@ const defineConfig = (): ExpoConfig => ({
   scheme: "mediaApp",
   version: "1.0.0",
   orientation: "portrait",
-  icon: "./assets/icon.png",
+  icon: "./assets/mediaAppLogoExtended.png",
   userInterfaceStyle: "light",
   splash: {
-    image: "./assets/icon.png",
+    image: "./assets/mediaAppLogoExtended.png",
     resizeMode: "contain",
     backgroundColor: "#1F104A",
   },
@@ -25,7 +25,7 @@ const defineConfig = (): ExpoConfig => ({
     //client id : 615555735082-c1n2rq3v0id50f2lvgduc4s45l36kjks.apps.googleusercontent.com
     package: "media.app.pinz",
     adaptiveIcon: {
-      foregroundImage: "./assets/icon.png",
+      foregroundImage: "./assets/mediaAppLogoExtended.png",
       backgroundColor: "#1F104A",
     },
   },

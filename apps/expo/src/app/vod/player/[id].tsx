@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
+import { Button } from "react-native-paper";
 import { ResizeMode, Video } from "expo-av";
-import { Stack, useGlobalSearchParams } from "expo-router";
+import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
 import { usePlayerData } from "~/app/hooks/";
 
 export default function PlayerPage() {
+  const router = useRouter();
   const videoRef = useRef(null);
   const { id } = useGlobalSearchParams();
   const { title, url } = usePlayerData(typeof id === "string" ? id : "1");
@@ -19,7 +21,15 @@ export default function PlayerPage() {
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title }} />
+      <Stack.Screen
+        options={{
+          headerTitle: (props) => (
+            <Button icon="arrow-left" mode="text" onPress={() => router.back()}>
+              {title}
+            </Button>
+          ),
+        }}
+      />
       <View>
         <Video
           ref={videoRef}

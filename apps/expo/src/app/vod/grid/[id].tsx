@@ -17,9 +17,11 @@ export default function GridPage() {
     typeof id === "string" ? id : "1",
   );
 
+  console.log(assets);
+
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title }} />
+      <Stack.Screen options={{ title: title ?? "" }} />
       <ScrollView>
         {assets && (
           <View style={[styles.grid]}>
@@ -27,9 +29,9 @@ export default function GridPage() {
               <View key={asset.id} style={styles.item}>
                 <Asset
                   title={asset.name}
-                  url={asset.url}
+                  url={asset.url ?? ""}
                   type={assetsType}
-                  onPress={() => router.replace(`/vod/details/${id}`)}
+                  onPress={() => router.push(`/vod/details/${asset.id}`)}
                 />
               </View>
             ))}

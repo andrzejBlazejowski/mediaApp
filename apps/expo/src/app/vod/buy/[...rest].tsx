@@ -22,7 +22,7 @@ export default function DetailsPage() {
     await mutateAsync({ mediaId: parseInt(id ?? "1") });
   };
   const onCancel = () => {
-    router.replace(`/vod/details/${id}`);
+    router.push(`/vod/details/${id}`);
   };
   return (
     <SafeAreaView>

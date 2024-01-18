@@ -8,7 +8,7 @@ export function SignIn({
   ...props
 }: { provider: OAuthProviders } & ComponentProps<"button">) {
   return (
-    <form action={`/api/auth/signin/${provider}`} method="post">
+    <form className="" action={`/api/auth/signin/${provider}`} method="post">
       <button {...props} />
       <CSRF_experimental />
     </form>

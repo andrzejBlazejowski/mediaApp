@@ -35,23 +35,27 @@ export const expoRouter = createTRPCRouter({
   getVodScreenDetails: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
-      return ctx.db.query.vodScreens.findFirst({
-        where: eq(schema.vodScreens.id, input.id),
+      return ctx.db.query.screens.findFirst({
+        where: eq(schema.screens.id, input.id),
         with: {
-          vodScreenMediaLists: {
+          vodScreen: {
             with: {
-              mediaList: {
+              vodScreenMediaLists: {
                 with: {
-                  mediaListType: true,
-                  mediaListMedias: {
+                  mediaList: {
                     with: {
-                      media: {
+                      mediaListType: true,
+                      mediaListMedias: {
                         with: {
-                          mediaViewImpressions: true,
-                          mediaImages: {
+                          media: {
                             with: {
-                              image: true,
-                              mediaImageType: true,
+                              mediaViewImpressions: true,
+                              mediaImages: {
+                                with: {
+                                  image: true,
+                                  mediaImageType: true,
+                                },
+                              },
                             },
                           },
                         },

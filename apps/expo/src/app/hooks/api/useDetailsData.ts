@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import { vodTypeEnum } from "~/app/utils";
 import { api } from "~/utils/api";
 
 export function useDetailsData(id: number | string) {
@@ -16,10 +17,11 @@ export function useDetailsData(id: number | string) {
     const content = data?.shortDescription;
     const imgUrl = data?.mediaImages[0]?.image?.url ?? "";
     const videoId = data?.videoContents.filter(
-      (videoContent) => videoContent.videoContentType.name === "main",
+      (videoContent) => videoContent.videoContentType.name === vodTypeEnum.MAIN,
     )[0]?.id;
     const trailerId = data?.videoContents.filter(
-      (videoContent) => videoContent.videoContentType.name === "trailer",
+      (videoContent) =>
+        videoContent.videoContentType.name === vodTypeEnum.TRAILER,
     )[0]?.id;
     const mediaId = data?.id;
     const castMembers = data?.mediaCastMembers.map((mediaCastMember) => {
