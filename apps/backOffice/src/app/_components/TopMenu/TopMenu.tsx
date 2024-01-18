@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import { api } from "~/utils/api";
+import { AuthButtons } from "../auth-showcase";
 import { ThemeToggle } from "../ThemeToggle";
 
 type MenuComponents = Record<string, MenuComponent[]>;
@@ -296,7 +297,7 @@ export function useMenuData() {
   }, [data]);
 }
 
-export function TopMenu() {
+export function TopMenu({ children }: { children: JSX.Element }) {
   const { menuItems, title } = useMenuData();
 
   return (
@@ -323,6 +324,8 @@ export function TopMenu() {
           </NavigationMenuItem>
         ))}
         <ThemeToggle />
+        {children}
+        {/* <AuthButtons /> */}
       </NavigationMenuList>
     </NavigationMenu>
   );

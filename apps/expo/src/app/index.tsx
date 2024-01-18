@@ -28,12 +28,12 @@ const Index = () => {
             Please Login
           </Button>
         )} */}
-        <Button
+        {/* <Button
           mode="contained"
           icon="google"
           onPress={() => router.replace(`/vod/details/1`)}
-        ></Button>
-        {<Text variant="displaySmall"> Logged In :D</Text>}
+        ></Button> */}
+        {<Text variant="displaySmall"> Loading... </Text>}
       </View>
     </SafeAreaView>
   );
