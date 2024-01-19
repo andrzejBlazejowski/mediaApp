@@ -18,7 +18,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 export const mediaRouter = createTRPCRouter({
   all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.medias;
-    const { sort, filter } = input;
+    const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
         //@ts-expect-error

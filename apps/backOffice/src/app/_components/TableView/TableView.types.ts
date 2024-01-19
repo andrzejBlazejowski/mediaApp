@@ -13,12 +13,19 @@ type Field = FieldText;
 export type Row = Record<string, Field>;
 export type Rows = Row[];
 
+export enum SortTypes {
+  Asc = "asc",
+  Desc = "desc",
+  None = "none",
+}
+
 export interface Header {
   name: string;
   label: string;
-  sortable: boolean;
   classNames: string;
   orderNumber: number;
+  sortable?: boolean;
+  sortDirection?: SortTypes;
 }
 
 export type HeadersConfig = Record<string, Header>;
@@ -28,4 +35,6 @@ export interface TableViewProps {
   data: Rows;
   headersConfig?: HeadersConfig;
   onDeleteRow?: (id: number) => void;
+  onSortByColumn?: (column: string, sortDirection: SortTypes) => void;
+  onFilter?: (column: string, value: string) => void;
 }

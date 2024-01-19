@@ -1,8 +1,16 @@
 import { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Pencil, Plus, Trash } from "lucide-react";
+import {
+  ArrowDownNarrowWide,
+  ArrowDownUp,
+  ArrowUpNarrowWide,
+  Pencil,
+  Plus,
+  Trash,
+} from "lucide-react";
 
-import { Row, TableViewProps } from ".";
+import type { Row, TableViewProps } from ".";
+import { SortTypes } from ".";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -12,15 +20,19 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { useSortByColumn } from "./useSortByColumn";
 
 export function TableView({
   title,
   data,
   headersConfig,
   onDeleteRow,
+  onSortByColumn,
+  onFilter,
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
+  const { sortByColumn, getSortIcon } = useSortByColumn(onSortByColumn);
 
   const getOrderedHeaderElements = () => {
     if (headersConfig) {
@@ -28,11 +40,29 @@ export function TableView({
         .sort(([aKey, aValue], [bKey, bValue]) => {
           return headersConfig ? aValue.orderNumber - bValue.orderNumber : 0;
         })
-        .map(([key, header]) => (
-          <TableHead key={header.name} className={header.classNames}>
-            {header.label}
-          </TableHead>
-        ));
+        .map(
+          ([
+            key,
+            {
+              name,
+              classNames,
+              sortable,
+              label,
+              sortDirection = SortTypes.None,
+            },
+          ]) => (
+            <TableHead key={name} className={classNames}>
+              <Button
+                size="default"
+                onClick={() => sortByColumn({ name, sortDirection, sortable })}
+                variant="destructive"
+              >
+                {label}
+                {getSortIcon(sortDirection)}
+              </Button>
+            </TableHead>
+          ),
+        );
     } else if (data[0]) {
       return Object.entries(data[0]).map(([key]) => (
         <TableHead key={key} className="w-[100px]">
