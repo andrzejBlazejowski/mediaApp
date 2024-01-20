@@ -5,7 +5,7 @@ import {
   ArrowUpNarrowWide,
 } from "lucide-react";
 
-import { SortTypes } from "./TableView.types";
+import { SortTypes } from "../TableView.types";
 
 export const useSortByColumn = (
   onSortByColumn?: (column: string, sortDirection: SortTypes) => void,
@@ -18,18 +18,6 @@ export const useSortByColumn = (
       case SortTypes.Desc:
       default:
         return SortTypes.Asc;
-    }
-  }, []);
-
-  const getSortIcon = useCallback((sortDirection: SortTypes) => {
-    switch (sortDirection) {
-      case SortTypes.Asc:
-        return <ArrowUpNarrowWide />;
-      case SortTypes.Desc:
-        return <ArrowDownNarrowWide />;
-      case SortTypes.None:
-      default:
-        return <ArrowDownUp />;
     }
   }, []);
 
@@ -50,5 +38,5 @@ export const useSortByColumn = (
     [onSortByColumn, toggleSortValue],
   );
 
-  return { getSortIcon, sortByColumn };
+  return sortByColumn;
 };

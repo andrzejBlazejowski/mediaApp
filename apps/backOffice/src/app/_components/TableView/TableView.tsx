@@ -1,13 +1,6 @@
 import { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  ArrowDownNarrowWide,
-  ArrowDownUp,
-  ArrowUpNarrowWide,
-  Pencil,
-  Plus,
-  Trash,
-} from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 
 import type { Row, TableViewProps } from ".";
 import { SortTypes } from ".";
@@ -20,7 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useSortByColumn } from "./useSortByColumn";
+import { FilterForm, SortIcon } from "./components";
+import { useFiltering, useSortByColumn } from "./hooks/";
 
 export function TableView({
   title,
@@ -32,17 +26,28 @@ export function TableView({
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
-  const { sortByColumn, getSortIcon } = useSortByColumn(onSortByColumn);
+  const sortByColumn = useSortByColumn(onSortByColumn);
+  const {
+    filterData,
+    onFilterColumnChange,
+    onFilterButtonPressed,
+    currentColumnForFilter,
+    currentFilterValue,
+    onFilterValueChange,
+    isFilterButtonDisabled,
+  } = useFiltering({
+    onFilter,
+  });
 
   const getOrderedHeaderElements = () => {
     if (headersConfig) {
       return Object.entries(headersConfig)
-        .sort(([aKey, aValue], [bKey, bValue]) => {
+        .sort(([, aValue], [, bValue]) => {
           return headersConfig ? aValue.orderNumber - bValue.orderNumber : 0;
         })
         .map(
           ([
-            key,
+            ,
             {
               name,
               classNames,
@@ -58,7 +63,7 @@ export function TableView({
                 variant="destructive"
               >
                 {label}
-                {getSortIcon(sortDirection)}
+                <SortIcon sortDirection={sortDirection} />
               </Button>
             </TableHead>
           ),
@@ -123,6 +128,15 @@ export function TableView({
           <Plus />
         </Button>
       </h2>
+      <FilterForm
+        onColumnChange={onFilterColumnChange}
+        onValueChange={onFilterValueChange}
+        onButtonPressed={onFilterButtonPressed}
+        currentColumn={currentColumnForFilter}
+        currentValue={currentFilterValue}
+        isButtonDisabled={isFilterButtonDisabled}
+        headersConfig={headersConfig}
+      />
       <Table>
         <TableHeader>
           <TableRow>
