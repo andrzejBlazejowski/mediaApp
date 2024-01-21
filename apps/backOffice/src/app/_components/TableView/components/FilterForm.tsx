@@ -38,46 +38,52 @@ export function FilterForm({
   }
 
   return (
-    <div className="m-auto w-1/2">
-      <Select key="select-filter-column" onValueChange={onColumnChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="choose table collumn to filter in" />
-        </SelectTrigger>
-        <SelectContent>
-          {typeof headersConfig !== "undefined" ? (
-            Object.entries(headersConfig).map(([key, config]) => (
-              <SelectItem
-                key={config.name + config.label + key}
-                value={config.name}
-              >
-                {config.label}
+    <div className="mb-5 mt-10 flex justify-evenly border-b pb-10">
+      <div className=" ">
+        <Select key="select-filter-column" onValueChange={onColumnChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="choose table collumn to filter in" />
+          </SelectTrigger>
+          <SelectContent>
+            {typeof headersConfig !== "undefined" ? (
+              Object.entries(headersConfig).map(([key, config]) => (
+                <SelectItem
+                  key={config.name + config.label + key}
+                  value={config.name}
+                >
+                  {config.label}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem key="filter_id" value="id">
+                Id
               </SelectItem>
-            ))
-          ) : (
-            <SelectItem key="filter_id" value="id">
-              Id
-            </SelectItem>
-          )}
-        </SelectContent>
-      </Select>
+            )}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <FilterValueInput
-        key="filter-value-input"
-        type={inputType}
-        name={currentColumn}
-        value={currentValue}
-        onChange={(value) =>
-          onValueChange(typeof value === "number" ? value.toString() : value)
-        }
-      />
+      <div className="inline w-1/2 ">
+        <FilterValueInput
+          key="filter-value-input"
+          type={inputType}
+          name={currentColumn}
+          value={currentValue}
+          onChange={(value) =>
+            onValueChange(typeof value === "number" ? value.toString() : value)
+          }
+        />
+      </div>
 
-      <Button
-        key="filter-button"
-        disabled={isButtonDisabled}
-        onClick={onButtonPressed}
-      >
-        Filter
-      </Button>
+      <div className="inline ">
+        <Button
+          key="filter-button"
+          disabled={isButtonDisabled}
+          onClick={onButtonPressed}
+        >
+          Filter
+        </Button>
+      </div>
     </div>
   );
 }
