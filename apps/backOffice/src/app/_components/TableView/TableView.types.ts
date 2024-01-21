@@ -1,3 +1,5 @@
+import { IuiSchema } from "../FormView/FormView.types";
+
 interface FieldCommon {
   name?: string;
 }
@@ -37,4 +39,5 @@ export interface TableViewProps {
   onDeleteRow?: (id: number) => void;
   onSortByColumn?: (column: string, sortDirection: SortTypes) => void;
   onFilter?: (column: string, value: string) => void;
+  uiSchema?: IuiSchema;
 }

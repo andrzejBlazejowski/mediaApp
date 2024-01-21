@@ -23,6 +23,7 @@ export function TableView({
   onDeleteRow,
   onSortByColumn,
   onFilter,
+  uiSchema,
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();

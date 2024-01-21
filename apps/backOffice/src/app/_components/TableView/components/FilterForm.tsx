@@ -1,16 +1,16 @@
 import React from "react";
+
+import { InputTypes, IuiSchema } from "../../FormView/FormView.types";
+import { Button } from "../../ui/button";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
-
-import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
+} from "../../ui/select";
 import { HeadersConfig } from "../TableView.types";
+import FilterValueInput from "./FilterValueInput";
 
 export function FilterForm({
   onColumnChange,
@@ -20,6 +20,7 @@ export function FilterForm({
   currentValue,
   isButtonDisabled,
   headersConfig,
+  uiSchema,
 }: {
   headersConfig?: HeadersConfig;
   onColumnChange: (value: string) => void;
@@ -28,38 +29,55 @@ export function FilterForm({
   currentValue: string;
   currentColumn: string;
   isButtonDisabled: boolean;
+  uiSchema?: IuiSchema;
 }) {
+  let inputType = InputTypes.text;
+  if (typeof uiSchema !== "undefined" && uiSchema[currentColumn]) {
+    const columnSchema = uiSchema[currentColumn];
+    inputType = columnSchema?.type ?? InputTypes.text;
+  }
+
   return (
-    <>
-      <Select onValueChange={onColumnChange} defaultValue={currentColumn}>
+    <div className="m-auto w-1/2">
+      <Select key="select-filter-column" onValueChange={onColumnChange}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="choose table collumn to filter in" />
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup>
-            {typeof headersConfig !== "undefined" ? (
-              Object.entries(headersConfig).map(([key, config]) => (
-                <SelectItem
-                  key={config.name + config.label + key}
-                  value={config.name}
-                >
-                  {config.label}
-                </SelectItem>
-              ))
-            ) : (
-              <SelectItem key="filter_id" value="id">
-                Id
+          {typeof headersConfig !== "undefined" ? (
+            Object.entries(headersConfig).map(([key, config]) => (
+              <SelectItem
+                key={config.name + config.label + key}
+                value={config.name}
+              >
+                {config.label}
               </SelectItem>
-            )}
-          </SelectGroup>
+            ))
+          ) : (
+            <SelectItem key="filter_id" value="id">
+              Id
+            </SelectItem>
+          )}
         </SelectContent>
       </Select>
 
-      <Input />
+      <FilterValueInput
+        key="filter-value-input"
+        type={inputType}
+        name={currentColumn}
+        value={currentValue}
+        onChange={(value) =>
+          onValueChange(typeof value === "number" ? value.toString() : value)
+        }
+      />
 
-      <Button disabled={isButtonDisabled} onClick={onButtonPressed}>
+      <Button
+        key="filter-button"
+        disabled={isButtonDisabled}
+        onClick={onButtonPressed}
+      >
         Filter
       </Button>
-    </>
+    </div>
   );
 }
