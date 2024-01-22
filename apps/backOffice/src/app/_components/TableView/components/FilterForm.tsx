@@ -19,22 +19,27 @@ export function FilterForm({
   currentColumn,
   currentValue,
   isButtonDisabled,
+  onClearButtonPressed,
+  isClearButtonDisabled,
   headersConfig,
-  uiSchema,
 }: {
   headersConfig?: HeadersConfig;
   onColumnChange: (value: string) => void;
   onValueChange: (value: string) => void;
   onButtonPressed: () => void;
+  onClearButtonPressed: () => void;
   currentValue: string;
   currentColumn: string;
   isButtonDisabled: boolean;
-  uiSchema?: IuiSchema;
+  isClearButtonDisabled: boolean;
 }) {
   let inputType = InputTypes.text;
-  if (typeof uiSchema !== "undefined" && uiSchema[currentColumn]) {
-    const columnSchema = uiSchema[currentColumn];
+  let columnName = currentColumn;
+
+  if (typeof headersConfig !== "undefined" && headersConfig[currentColumn]) {
+    const columnSchema = headersConfig[currentColumn];
     inputType = columnSchema?.type ?? InputTypes.text;
+    columnName = columnSchema?.foreignKey ?? currentColumn;
   }
 
   return (
@@ -46,14 +51,17 @@ export function FilterForm({
           </SelectTrigger>
           <SelectContent>
             {typeof headersConfig !== "undefined" ? (
-              Object.entries(headersConfig).map(([key, config]) => (
-                <SelectItem
-                  key={config.name + config.label + key}
-                  value={config.name}
-                >
-                  {config.label}
-                </SelectItem>
-              ))
+              Object.entries(headersConfig).map(
+                ([key, config]) =>
+                  config.filterable !== false && (
+                    <SelectItem
+                      key={config.name + config.label + key}
+                      value={config.name}
+                    >
+                      {config.label}
+                    </SelectItem>
+                  ),
+              )
             ) : (
               <SelectItem key="filter_id" value="id">
                 Id
@@ -67,7 +75,7 @@ export function FilterForm({
         <FilterValueInput
           key="filter-value-input"
           type={inputType}
-          name={currentColumn}
+          name={columnName}
           value={currentValue}
           onChange={(value) =>
             onValueChange(typeof value === "number" ? value.toString() : value)
@@ -82,6 +90,16 @@ export function FilterForm({
           onClick={onButtonPressed}
         >
           Filter
+        </Button>
+      </div>
+
+      <div className="inline ">
+        <Button
+          key="clear-filter-button"
+          disabled={isClearButtonDisabled}
+          onClick={onClearButtonPressed}
+        >
+          Clear
         </Button>
       </div>
     </div>

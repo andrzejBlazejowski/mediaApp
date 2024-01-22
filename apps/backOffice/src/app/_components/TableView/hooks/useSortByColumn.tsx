@@ -11,12 +11,16 @@ export const useSortByColumn = (
   onSortByColumn?: (column: string, sortDirection: SortTypes) => void,
 ) => {
   const toggleSortValue = useCallback((sortDirection: SortTypes) => {
+    console.log("=================");
+    console.log(sortDirection);
     switch (sortDirection) {
       case SortTypes.Asc:
+        console.log("desc");
         return SortTypes.Desc;
       case SortTypes.None:
       case SortTypes.Desc:
       default:
+        console.log("asc");
         return SortTypes.Asc;
     }
   }, []);

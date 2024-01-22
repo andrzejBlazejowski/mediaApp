@@ -1,8 +1,4 @@
-import { IuiSchema } from "../FormView/FormView.types";
-
-interface FieldCommon {
-  name?: string;
-}
+import { InputTypes } from "../FormView/FormView.types";
 
 interface FieldText {
   value: string;
@@ -27,7 +23,10 @@ export interface Header {
   classNames: string;
   orderNumber: number;
   sortable?: boolean;
+  filterable?: boolean;
   sortDirection?: SortTypes;
+  foreignKey?: string;
+  type?: InputTypes;
 }
 
 export type HeadersConfig = Record<string, Header>;
@@ -39,5 +38,5 @@ export interface TableViewProps {
   onDeleteRow?: (id: number) => void;
   onSortByColumn?: (column: string, sortDirection: SortTypes) => void;
   onFilter?: (column: string, value: string) => void;
-  uiSchema?: IuiSchema;
+  onFilterClear?: () => void;
 }

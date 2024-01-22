@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { Pencil, Plus, Trash } from "lucide-react";
 
 import type { Row, TableViewProps } from ".";
@@ -23,21 +24,23 @@ export function TableView({
   onDeleteRow,
   onSortByColumn,
   onFilter,
-  uiSchema,
+  onFilterClear,
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
   const sortByColumn = useSortByColumn(onSortByColumn);
   const {
-    filterData,
     onFilterColumnChange,
     onFilterButtonPressed,
     currentColumnForFilter,
     currentFilterValue,
     onFilterValueChange,
     isFilterButtonDisabled,
+    onClearButtonPressed,
+    isClearButtonDisabled,
   } = useFiltering({
     onFilter,
+    onFilterClear,
   });
 
   const getOrderedHeaderElements = () => {
@@ -58,14 +61,21 @@ export function TableView({
             },
           ]) => (
             <TableHead key={name} className={classNames}>
-              <Button
-                size="default"
-                onClick={() => sortByColumn({ name, sortDirection, sortable })}
-                variant="destructive"
-              >
-                {label}
-                <SortIcon sortDirection={sortDirection} />
-              </Button>
+              <div className="flex items-center justify-evenly">
+                <span key={`head-label-${name}`}>{label}</span>
+                {sortable && (
+                  <Button
+                    key={`head-sort-button-${name}`}
+                    size="default"
+                    onClick={() =>
+                      sortByColumn({ name, sortDirection, sortable })
+                    }
+                    variant="outline"
+                  >
+                    <SortIcon sortDirection={sortDirection} />
+                  </Button>
+                )}
+              </div>
             </TableHead>
           ),
         );
@@ -137,6 +147,8 @@ export function TableView({
         currentValue={currentFilterValue}
         isButtonDisabled={isFilterButtonDisabled}
         headersConfig={headersConfig}
+        onClearButtonPressed={onClearButtonPressed}
+        isClearButtonDisabled={isClearButtonDisabled}
       />
       <Table>
         <TableHeader>

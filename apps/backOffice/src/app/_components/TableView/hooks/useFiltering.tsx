@@ -2,12 +2,15 @@ import { useCallback, useState } from "react";
 
 export const useFiltering = ({
   onFilter,
+  onFilterClear,
 }: {
   onFilter?: (column: string, value: string) => void;
+  onFilterClear?: () => void;
 }) => {
   const [currentColumnForFilter, setCurrentColumnForFilter] = useState("");
   const [currentFilterValue, setCurrentFilterValue] = useState("");
   const [isFilterButtonDisabled, setIsFilterButtonDisabled] = useState(true);
+  const [isClearButtonDisabled, setIsClearButtonDisabled] = useState(false);
 
   const filterData = useCallback(
     (column: string, value: string) => {
@@ -36,6 +39,16 @@ export const useFiltering = ({
       onFilter(currentColumnForFilter, currentFilterValue);
       setIsFilterButtonDisabled(true);
     }
+    setIsClearButtonDisabled(false);
+  }, [currentColumnForFilter, currentFilterValue, onFilter]);
+
+  const onClearButtonPressed = useCallback(() => {
+    if (onFilterClear) {
+      onFilterClear();
+      setIsFilterButtonDisabled(false);
+      setIsClearButtonDisabled(true);
+    }
+    setIsClearButtonDisabled(true);
   }, [currentColumnForFilter, currentFilterValue, onFilter]);
 
   return {
@@ -46,5 +59,7 @@ export const useFiltering = ({
     currentFilterValue,
     onFilterValueChange,
     isFilterButtonDisabled,
+    onClearButtonPressed,
+    isClearButtonDisabled,
   };
 };

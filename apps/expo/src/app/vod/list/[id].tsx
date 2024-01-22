@@ -15,17 +15,11 @@ export default function ListPage() {
   const router = useRouter();
   const { id } = useGlobalSearchParams();
   const { lists, title } = useListData(typeof id === "string" ? id : "1");
-
-  console.log("lists");
-  console.log(lists);
-
   return (
     <SafeAreaView>
       <Stack.Screen options={{ title: title ?? "" }} />
       <ScrollView>
         {lists?.map(({ assets, type, title, listId }) => {
-          console.log("assets : ");
-          console.log(assets);
           return (
             <>
               <Text variant="bodyLarge">{title}</Text>
