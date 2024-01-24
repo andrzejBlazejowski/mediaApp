@@ -2,47 +2,69 @@
 
 import React, { useMemo } from "react";
 
+import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import type { TableViewProps } from "~/app/_components/TableView";
-import { TableView } from "~/app/_components/TableView";
+import { SortTypes, TableView } from "~/app/_components/TableView";
+import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
+  const initialHeadersConfig = useMemo(
+    () => ({
+      id: {
+        orderNumber: 0,
+        name: "id",
+        label: "id",
+        classNames: "w-[100px]",
+        sortable: true,
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      value: {
+        orderNumber: 1,
+        name: "value",
+        label: "value",
+        classNames: "w-[100px]",
+        sortable: true,
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      branding: {
+        orderNumber: 2,
+        name: "branding",
+        label: "branding",
+        classNames: "w-[100px]",
+        sortable: true,
+        filterable: true,
+        sortDirection: SortTypes.None,
+        foreignKey: "brandingId",
+        type: InputTypes.foreignKey,
+      },
+      type: {
+        orderNumber: 3,
+        name: "type",
+        label: "type",
+        classNames: "w-[100px]",
+        sortable: true,
+        filterable: true,
+        sortDirection: SortTypes.None,
+        foreignKey: "brandingColorTypeId",
+        type: InputTypes.foreignKey,
+      },
+    }),
+    [],
+  );
 
-  const rawData = api.brandingColor.all.useQuery();
+  const { headersConfig, setHeadersConfig } =
+    useHeadersConfig(initialHeadersConfig);
+  const { sort, onSortByColumn } = useSort(setHeadersConfig);
+  const { filter, onFilter, onFilterClear } = useFilter();
+
+  const rawData = api.brandingColor.all.useQuery({ sort, filter });
   const deleteRow = api.brandingColor.delete.useMutation();
   const invalidate = utils.brandingColor.all.invalidate;
-  const headersConfig = {
-    id: {
-      orderNumber: 0,
-      name: "id",
-      label: "id",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    value: {
-      orderNumber: 1,
-      name: "value",
-      label: "value",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    branding: {
-      orderNumber: 2,
-      name: "branding",
-      label: "branding",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    type: {
-      orderNumber: 3,
-      name: "type",
-      label: "type",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -67,6 +89,9 @@ export default function Page() {
       title: title + " list",
       data: data,
       headersConfig,
+      onSortByColumn,
+      onFilter,
+      onFilterClear,
       onDeleteRow: async (id) => {
         await deleteRow.mutateAsync(id);
         await invalidate();
