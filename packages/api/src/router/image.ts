@@ -1,14 +1,31 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
-import { images, imagesInsertSchema } from "@media/db/schema/image";
+import { imagesInsertSchema } from "@media/db/schema/image";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const imageRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.images.findMany({ orderBy: desc(schema.images.id) });
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.images;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
+    return ctx.db.query.images.findMany({
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
+    });
   }),
 
   byId: publicProcedure

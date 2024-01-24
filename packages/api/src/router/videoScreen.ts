@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -8,16 +8,32 @@ import {
   vodScreenTypesInsertSchema,
 } from "@media/db/schema/vodScreen";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const vodScreenRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.vodScreens;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.vodScreens.findMany({
-      orderBy: desc(schema.vodScreens.id),
       with: {
         screens: true,
         vodScreenType: true,
       },
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
@@ -53,9 +69,23 @@ export const vodScreenRouter = createTRPCRouter({
 });
 
 export const vodScreenTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.vodScreenTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.vodScreenTypes.findMany({
-      orderBy: desc(schema.vodScreenTypes.id),
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
@@ -87,13 +117,28 @@ export const vodScreenTypeRouter = createTRPCRouter({
 });
 
 export const vodScreenMediaListRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.vodScreenMediaLists;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.vodScreenMediaLists.findMany({
-      orderBy: desc(schema.vodScreenMediaLists.id),
       with: {
         vodScreen: true,
         mediaList: true,
       },
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure

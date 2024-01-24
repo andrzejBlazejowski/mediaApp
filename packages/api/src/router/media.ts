@@ -29,7 +29,6 @@ export const mediaRouter = createTRPCRouter({
       }) ?? [];
 
     return ctx.db.query.medias.findMany({
-      orderBy,
       with: {
         mediaCategory: true,
         mediaImages: true,
@@ -37,6 +36,8 @@ export const mediaRouter = createTRPCRouter({
         mediaViewImpressions: true,
         videoContents: true,
       },
+
+      orderBy,
       ...(filter && {
         //@ts-expect-error
         where: (table, { like }) => like(table[filter.column], filter?.value),
@@ -79,14 +80,30 @@ export const mediaRouter = createTRPCRouter({
 });
 
 export const videoContentRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.videoContents;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
+
     return ctx.db.query.videoContents.findMany({
-      orderBy: desc(schema.videoContents.id),
       with: {
         videoContentType: true,
         media: true,
         video: true,
       },
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -123,9 +140,24 @@ export const videoContentRouter = createTRPCRouter({
 });
 
 export const videoContentTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.videoContentTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
+
     return ctx.db.query.videoContentTypes.findMany({
-      orderBy: desc(schema.videoContentTypes.id),
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -159,9 +191,23 @@ export const videoContentTypeRouter = createTRPCRouter({
 });
 
 export const mediaCategoyRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.mediaCategories;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.mediaCategories.findMany({
-      orderBy: desc(schema.mediaCategories.id),
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -195,7 +241,17 @@ export const mediaCategoyRouter = createTRPCRouter({
 });
 
 export const mediaImageRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.medias;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.mediaImages.findMany({
       orderBy: desc(schema.mediaImages.id),
       with: {
@@ -242,9 +298,23 @@ export const mediaImageRouter = createTRPCRouter({
 });
 
 export const mediaImageTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.mediaImageTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.mediaImageTypes.findMany({
-      orderBy: desc(schema.mediaImageTypes.id),
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -279,12 +349,27 @@ export const mediaImageTypeRouter = createTRPCRouter({
 });
 
 export const mediaViewImpressionRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.mediaViewImpressions;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.mediaViewImpressions.findMany({
-      orderBy: desc(schema.mediaViewImpressions.id),
       with: {
         media: true,
       },
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
 

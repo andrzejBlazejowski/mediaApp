@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -8,16 +8,32 @@ import {
   mediaListTypesInsertSchema,
 } from "@media/db/schema/mediaList";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediaListRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.mediaLists;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.mediaLists.findMany({
-      orderBy: desc(schema.mediaLists.id),
       with: {
         mediaListType: true,
         mediaListMedias: true,
       },
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
@@ -53,9 +69,23 @@ export const mediaListRouter = createTRPCRouter({
 });
 
 export const mediaListTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.mediaListTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.mediaListTypes.findMany({
-      orderBy: desc(schema.mediaListTypes.id),
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
@@ -87,13 +117,28 @@ export const mediaListTypeRouter = createTRPCRouter({
 });
 
 export const mediaListMediaRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.mediaListMedias;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.mediaListMedias.findMany({
-      orderBy: desc(schema.mediaListMedias.id),
       with: {
         mediaList: true,
         media: true,
       },
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure

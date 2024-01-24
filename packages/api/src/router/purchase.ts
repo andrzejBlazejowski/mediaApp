@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -8,16 +8,32 @@ import {
   purchaseTypesInsertSchema,
 } from "@media/db/schema/purchase";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const purchaseRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.purchases;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.purchases.findMany({
-      orderBy: desc(schema.purchases.id),
       with: {
         purchaseType: true,
         user: true,
       },
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
@@ -54,13 +70,28 @@ export const purchaseRouter = createTRPCRouter({
 });
 
 export const purchaseItemRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.purchaseItems;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.purchaseItems.findMany({
-      orderBy: desc(schema.purchaseItems.id),
       with: {
         purchase: true,
         media: true,
       },
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
@@ -96,10 +127,25 @@ export const purchaseItemRouter = createTRPCRouter({
 });
 
 export const purchaseTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.purchaseTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.purchaseTypes.findMany({
-      orderBy: desc(schema.purchaseTypes.id),
       with: {},
+
+      orderBy,
+      ...(filter && {
+        //@ts-expect-error
+        where: (table, { like }) => like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
