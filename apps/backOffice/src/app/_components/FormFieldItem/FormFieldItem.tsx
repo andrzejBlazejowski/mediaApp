@@ -7,18 +7,17 @@ import { FormField } from "../ui/form";
 
 export function FormFieldItem({
   uiSchema,
-  key,
+  name,
   form,
 }: {
   uiSchema: IuiSchema;
-  key: string;
+  name: string;
   form?: UseFormReturn<any>;
 }) {
   return (
     <FormField
       {...(typeof form !== "undefined" ? { control: form.control } : {})}
-      name={key}
-      key={key}
+      name={name}
       render={({ field }) => {
         const ui = uiSchema[field.name];
         const classes =

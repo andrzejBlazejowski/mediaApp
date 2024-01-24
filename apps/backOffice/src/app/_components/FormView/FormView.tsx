@@ -76,7 +76,14 @@ export default function FormView({
           if (hiddenFeilds.includes(key)) {
             return null;
           }
-          return <FormFieldItem uiSchema={uiSchema} key={key} form={form} />;
+          return (
+            <FormFieldItem
+              uiSchema={uiSchema}
+              key={key}
+              name={key}
+              form={form}
+            />
+          );
         })}
         <div className="flex justify-center">
           <Button type="submit">Submit</Button>
