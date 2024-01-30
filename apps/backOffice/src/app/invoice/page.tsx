@@ -3,46 +3,70 @@
 import React, { useMemo } from "react";
 
 import type { TableViewProps } from "~/app/_components/TableView";
-import { TableView } from "~/app/_components/TableView";
+import { SortTypes, TableView } from "~/app/_components/TableView";
 import { api } from "~/utils/api";
+import { InputTypes } from "../_components/FormView/FormView.types";
+import { useFilter, useHeadersConfig, useSort } from "../_lib/hooks";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
+  const initialHeadersConfig = useMemo(
+    () => ({
+      id: {
+        orderNumber: 0,
+        name: "id",
+        label: "id",
+        classNames: "w-[100px]",
+        sortable: true,
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      type: {
+        orderNumber: 1,
+        name: "type",
+        label: "type",
+        classNames: "w-[100px]",
+        sortable: true,
+        filterable: true,
+        sortDirection: SortTypes.None,
+        foreignKey: "invoiceTypeId",
+        type: InputTypes.foreignKey,
+      },
+      media: {
+        orderNumber: 2,
+        name: "media",
+        label: "media",
+        classNames: "w-[100px]",
+        filterable: true,
+        sortable: true,
+        sortDirection: SortTypes.None,
+        foreignKey: "mediaId",
+        type: InputTypes.foreignKey,
+      },
+      user: {
+        orderNumber: 3,
+        name: "user",
+        label: "user",
+        classNames: "w-[100px]",
+        sortable: true,
+        filterable: true,
+        sortDirection: SortTypes.None,
+        foreignKey: "UserId",
+        type: InputTypes.foreignKey,
+      },
+    }),
+    [],
+  );
 
-  const rawData = api.invoice.all.useQuery();
+  const { headersConfig, setHeadersConfig } =
+    useHeadersConfig(initialHeadersConfig);
+  const { sort, onSortByColumn } = useSort(setHeadersConfig);
+  const { filter, onFilter, onFilterClear } = useFilter();
+
+  const rawData = api.invoice.all.useQuery({ sort, filter });
   const deleteRow = api.invoice.delete.useMutation();
   const invalidate = utils.invoice.all.invalidate;
-  const headersConfig = {
-    id: {
-      orderNumber: 0,
-      name: "id",
-      label: "id",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    type: {
-      orderNumber: 1,
-      name: "type",
-      label: "type",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    media: {
-      orderNumber: 2,
-      name: "media",
-      label: "media",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    user: {
-      orderNumber: 3,
-      name: "user",
-      label: "user",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -63,6 +87,10 @@ export default function Page() {
       title: title + " list",
       data: data,
       headersConfig,
+      onSortByColumn,
+      onFilter,
+      onFilterClear,
+
       onDeleteRow: async (id) => {
         await deleteRow.mutateAsync(id);
         await invalidate();

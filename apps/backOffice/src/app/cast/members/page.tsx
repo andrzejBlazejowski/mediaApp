@@ -19,6 +19,7 @@ export default function Page() {
         label: "id",
         classNames: "w-[100px]",
 
+        sortable: true,
         filterable: true,
         sortDirection: SortTypes.None,
       },
@@ -28,6 +29,7 @@ export default function Page() {
         label: "firstName",
         classNames: "w-[100px]",
 
+        sortable: true,
         filterable: true,
         sortDirection: SortTypes.None,
         foreignKey: "countryId",
@@ -40,6 +42,7 @@ export default function Page() {
         classNames: "w-[100px]",
         hidden: true,
 
+        sortable: true,
         filterable: true,
         sortDirection: SortTypes.None,
         foreignKey: "countryId",
@@ -51,6 +54,7 @@ export default function Page() {
         label: "role",
         classNames: "w-[100px]",
 
+        sortable: true,
         filterable: true,
         sortDirection: SortTypes.None,
 

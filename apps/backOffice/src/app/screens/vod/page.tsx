@@ -3,39 +3,61 @@
 import React, { useMemo } from "react";
 
 import type { TableViewProps } from "~/app/_components/TableView";
-import { TableView } from "~/app/_components/TableView";
+import { SortTypes, TableView } from "~/app/_components/TableView";
+import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
 
-  const rawData = api.vodScreen.all.useQuery();
+  const initialHeadersConfig = useMemo(
+    () => ({
+      id: {
+        orderNumber: 0,
+        name: "id",
+        label: "id",
+        classNames: "w-[100px]",
+
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      name: {
+        orderNumber: 1,
+        name: "name",
+        label: "name",
+        classNames: "w-[100px]",
+
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      type: {
+        orderNumber: 2,
+        name: "type",
+        label: "type",
+        classNames: "w-[100px]",
+
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+    }),
+    [],
+  );
+
+  const { headersConfig, setHeadersConfig } =
+    useHeadersConfig(initialHeadersConfig);
+  const { sort, onSortByColumn } = useSort(setHeadersConfig);
+  const { filter, onFilter, onFilterClear } = useFilter();
+
+  const rawData = api.vodScreen.all.useQuery({ sort, filter });
   const deleteRow = api.vodScreen.delete.useMutation();
   const invalidate = utils.vodScreen.all.invalidate;
-  const headersConfig = {
-    id: {
-      orderNumber: 0,
-      name: "id",
-      label: "id",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    name: {
-      orderNumber: 1,
-      name: "name",
-      label: "name",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    type: {
-      orderNumber: 2,
-      name: "type",
-      label: "type",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -54,6 +76,11 @@ export default function Page() {
       title: title + " list",
       data: data,
       headersConfig,
+
+      onSortByColumn,
+      onFilter,
+      onFilterClear,
+
       onDeleteRow: async (id) => {
         await deleteRow.mutateAsync(id);
         await invalidate();

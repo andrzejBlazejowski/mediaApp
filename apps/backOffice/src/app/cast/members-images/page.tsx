@@ -4,51 +4,55 @@ import React, { useMemo } from "react";
 
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
+import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
-import { useHeadersConfig, useSort, useFilter } from "~/app/_lib/hooks";
 
 export default function Page() {
   const utils = api.useUtils();
   const initialHeadersConfig = useMemo(
-    () => (  {
+    () => ({
       id: {
         orderNumber: 0,
         name: "id",
         label: "id",
         classNames: "w-[100px]",
-        
-  filterable: true,
-  sortDirection: SortTypes.None,
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
       },
       name: {
         orderNumber: 1,
         name: "name",
         label: "name",
         classNames: "w-[100px]",
-        
-  filterable: true,
-  sortDirection: SortTypes.None,
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
       },
       media: {
         orderNumber: 1,
         name: "media",
         label: "media",
         classNames: "w-[100px]",
-        
-  filterable: true,
-  sortDirection: SortTypes.None,
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
       },
       image: {
         orderNumber: 2,
         name: "image",
         label: "image",
         classNames: "w-[100px]",
-        
-  filterable: true,
-  sortDirection: SortTypes.None,
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
       },
-    } ),
+    }),
     [],
   );
 
@@ -57,14 +61,9 @@ export default function Page() {
   const { sort, onSortByColumn } = useSort(setHeadersConfig);
   const { filter, onFilter, onFilterClear } = useFilter();
 
-
-
-  
-
-  const rawData = api.castMemberImage.all.useQuery(  { sort, filter });
+  const rawData = api.castMemberImage.all.useQuery({ sort, filter });
   const deleteRow = api.castMemberImage.delete.useMutation();
   const invalidate = utils.castMemberImage.all.invalidate;
-  const headersConfig =;
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -85,7 +84,7 @@ export default function Page() {
       onSortByColumn,
       onFilter,
       onFilterClear,
-    
+
       onDeleteRow: async (id) => {
         await deleteRow.mutateAsync(id);
         await invalidate();

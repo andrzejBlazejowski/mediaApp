@@ -26,7 +26,7 @@ export default function Page() {
         name: "name",
         label: "name",
         classNames: "w-[100px]",
-
+        sortable: true,
         filterable: true,
         sortDirection: SortTypes.None,
       },

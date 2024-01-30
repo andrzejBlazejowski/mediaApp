@@ -11,7 +11,7 @@ import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const articleScreenRouter = createTRPCRouter({
-  _all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.articleScreens;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
