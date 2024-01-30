@@ -20,9 +20,6 @@ export function useGridData(id: number | string) {
     id: typeof id === "string" ? parseInt(id) : id,
   });
 
-  console.log(id);
-  console.log(data);
-
   return useMemo(() => {
     const { name, vodScreen } = data ?? { name: "loading" };
     const title = name;

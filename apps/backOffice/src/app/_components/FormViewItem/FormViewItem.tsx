@@ -1,17 +1,17 @@
 import { UseFormRegister } from "react-hook-form";
 
+import type { IFeield } from "../FormView/FormView.types";
+import { InputTypes } from "../FormView/FormView.types";
+import SelectForeignKey from "../FormView/SelectForeignKey/SelectForeignKey";
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import type { IFeield } from "./FormView.types";
-import { InputTypes } from "./FormView.types";
-import SelectForeignKey from "./SelectForeignKey/SelectForeignKey";
 
 interface formItemProps {
   field: IFeield;
   classes: string;
   type?: InputTypes;
-  register: UseFormRegister<any>;
+  register?: UseFormRegister<any>;
 }
 
 export const FormViewItem = ({
@@ -36,7 +36,7 @@ export const FormViewItem = ({
           <Input
             {...field}
             type={getHtmlInputType(type)}
-            {...(getHtmlInputType(type) === "number"
+            {...(getHtmlInputType(type) === "number" && register
               ? register(field.name, { valueAsNumber: true })
               : {})}
           />

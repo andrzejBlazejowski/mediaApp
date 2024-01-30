@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -7,18 +7,38 @@ import {
   screenTypesInsertSchema,
 } from "@media/db/schema/screen";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const screenRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.screens;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.screens.findMany({
-      orderBy: desc(schema.screens.id),
       with: {
         screenType: true,
         menuLinks: true,
         articleScreen: true,
         vodScreen: true,
       },
+
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -56,9 +76,27 @@ export const screenRouter = createTRPCRouter({
 });
 
 export const screenTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.screenTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.screenTypes.findMany({
-      orderBy: desc(schema.screenTypes.id),
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 

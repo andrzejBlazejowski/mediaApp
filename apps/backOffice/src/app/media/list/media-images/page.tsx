@@ -2,12 +2,54 @@
 
 import React, { useMemo } from "react";
 
+import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import type { TableViewProps } from "../../../_components/TableView";
-import { TableView } from "../../../_components/TableView";
+import { SortTypes, TableView } from "../../../_components/TableView";
 
 export default function Page() {
-  const mediaImages = api.mediaImage.all.useQuery();
+  const utils = api.useUtils();
+  const initialHeadersConfig = useMemo(
+    () => ({
+      name: {
+        orderNumber: 0,
+        name: "name",
+        label: "name",
+        classNames: "w-[100px]",
+        filterable: true,
+        sortable: true,
+        sortDirection: SortTypes.None,
+      },
+      mediaId: {
+        orderNumber: 1,
+        name: "mediaId",
+        label: "mediaId",
+        classNames: "w-[100px]",
+        filterable: true,
+        sortable: true,
+        sortDirection: SortTypes.None,
+      },
+      imageId: {
+        orderNumber: 2,
+        name: "imageId",
+        label: "imageId",
+        classNames: "w-[100px]",
+        filterable: true,
+        sortable: true,
+        sortDirection: SortTypes.None,
+      },
+    }),
+    [],
+  );
+
+  const { headersConfig, setHeadersConfig } =
+    useHeadersConfig(initialHeadersConfig);
+  const { sort, onSortByColumn } = useSort(setHeadersConfig);
+  const { filter, onFilter, onFilterClear } = useFilter();
+
+  const mediaImages = api.mediaImage.all.useQuery({ sort, filter });
+  const deleteRow = api.mediaImage.delete.useMutation();
+  const invalidate = utils.mediaImage.all.invalidate;
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -23,29 +65,15 @@ export default function Page() {
     return {
       title: "medias list media images",
       data: data,
-      headersConfig: {
-        name: {
-          orderNumber: 0,
-          name: "name",
-          label: "name",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
-        mediaId: {
-          orderNumber: 1,
-          name: "mediaId",
-          label: "mediaId",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
-        imageId: {
-          orderNumber: 2,
-          name: "imageId",
-          label: "imageId",
-          classNames: "w-[100px]",
-          sortable: true,
-        },
+      onSortByColumn,
+      onFilter,
+      onFilterClear,
+
+      onDeleteRow: async (id) => {
+        await deleteRow.mutateAsync(id);
+        await invalidate();
       },
+      headersConfig,
     } as TableViewProps;
   }, [mediaImages]);
 

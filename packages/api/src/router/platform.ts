@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -7,15 +7,34 @@ import {
   platformsInsertSchema,
 } from "@media/db/schema/platform";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const platformRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.platforms;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.platforms.findMany({
-      orderBy: desc(schema.platforms.id),
       with: {
         menuPlatforms: true,
       },
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
@@ -50,13 +69,31 @@ export const platformRouter = createTRPCRouter({
 });
 
 export const menuPlatformRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.menuPlatforms;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.menuPlatforms.findMany({
-      orderBy: desc(schema.menuPlatforms.id),
       with: {
         platform: true,
         menu: true,
       },
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure

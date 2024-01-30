@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -10,16 +10,36 @@ import {
   brandingsInsertSchema,
 } from "@media/db/schema/branding";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const brandingRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.brandings;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.brandings.findMany({
-      orderBy: desc(schema.brandings.id),
       with: {
         brandingColors: true,
         brandingImages: true,
       },
+
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -57,13 +77,32 @@ export const brandingRouter = createTRPCRouter({
 });
 
 export const brandingColorRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.brandingColors;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.brandingColors.findMany({
-      orderBy: desc(schema.brandingColors.id),
       with: {
         branding: true,
         brandingColorType: true,
       },
+
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -101,12 +140,31 @@ export const brandingColorRouter = createTRPCRouter({
 });
 
 export const brandingColorTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.brandingColorTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.brandingColorTypes.findMany({
-      orderBy: desc(schema.brandingColorTypes.id),
       with: {
         brandingColors: true,
       },
+
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -143,14 +201,33 @@ export const brandingColorTypeRouter = createTRPCRouter({
 });
 
 export const brandingImageRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.brandingImages;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.brandingImages.findMany({
-      orderBy: desc(schema.brandingImages.id),
       with: {
         brandingImageType: true,
         branding: true,
         image: true,
       },
+
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -189,12 +266,31 @@ export const brandingImageRouter = createTRPCRouter({
 });
 
 export const brandingImageTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.brandingImageTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.brandingImageTypes.findMany({
-      orderBy: desc(schema.brandingImageTypes.id),
       with: {
         brandingImages: true,
       },
+
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 

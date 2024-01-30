@@ -7,7 +7,7 @@ import { articleScreensInsertSchema } from "@media/db/schema/articleScreen";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-  // all: publicProcedure.query(({ ctx }) => {
+  // all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
   //   return ctx.db.query.articleScreens.findMany({
   //     orderBy: desc(schema.articleScreens.id),
   //     with: {

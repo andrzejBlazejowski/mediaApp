@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -9,17 +9,36 @@ import {
   menuTypesInsertSchema,
 } from "@media/db/schema/menu";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const menuRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.menus;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.menus.findMany({
-      orderBy: desc(schema.menus.id),
       with: {
         menuLinks: true,
         menuPlatform: true,
         menuType: true,
       },
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -54,14 +73,32 @@ export const menuRouter = createTRPCRouter({
 });
 
 export const menuLinkRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.menuLinks;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.menuLinks.findMany({
-      orderBy: desc(schema.menuLinks.id),
       with: {
         menuLinkImage: true,
         menu: true,
         destinationScreen: true,
       },
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -100,9 +137,27 @@ export const menuLinkRouter = createTRPCRouter({
 });
 
 export const menuTypeRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.menuTypes;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.menuTypes.findMany({
-      orderBy: desc(schema.menuTypes.id),
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 
@@ -136,12 +191,30 @@ export const menuTypeRouter = createTRPCRouter({
 });
 
 export const menuLinkImageRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.menuLinkImages;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.menuLinkImages.findMany({
-      orderBy: desc(schema.menuLinkImages.id),
       with: {
         image: true,
       },
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
 

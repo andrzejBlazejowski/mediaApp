@@ -2,11 +2,11 @@ import React, { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
+import { FormFieldItem } from "../FormFieldItem";
 import { Button } from "../ui/button";
-import { Form, FormField } from "../ui/form";
+import { Form } from "../ui/form";
 import { hiddenFeilds } from "./FormView.constants";
-import { FormViewProps, IFeield } from "./FormView.types";
-import { FormViewItem } from "./FormViewItem";
+import type { FormViewProps } from "./FormView.types";
 
 export default function FormView({
   type,
@@ -25,7 +25,7 @@ export default function FormView({
       const desiredPath = pathname.replace("/add", "");
       Router.push(desiredPath);
     } else if (type === "edit") {
-      const desiredPath = pathname.split("/edit")[0] as string;
+      const desiredPath = pathname.split("/edit")[0]!;
       Router.push(desiredPath);
     }
   }, [pathname, Router]);
@@ -77,23 +77,11 @@ export default function FormView({
             return null;
           }
           return (
-            <FormField
-              control={form.control}
-              name={key}
+            <FormFieldItem
+              uiSchema={uiSchema}
               key={key}
-              render={({ field }) => {
-                const ui = uiSchema[field.name];
-                const classes =
-                  typeof ui !== "undefined" && typeof ui.classes === "string"
-                    ? ui.classes
-                    : "";
-                return FormViewItem({
-                  field: field as unknown as IFeield,
-                  classes: classes,
-                  type: uiSchema[field.name]?.type,
-                  register: form.register,
-                });
-              }}
+              name={key}
+              form={form}
             />
           );
         })}

@@ -17,8 +17,6 @@ export default function GridPage() {
     typeof id === "string" ? id : "1",
   );
 
-  console.log(assets);
-
   return (
     <SafeAreaView>
       <Stack.Screen options={{ title: title ?? "" }} />

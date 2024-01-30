@@ -1,8 +1,10 @@
 import { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { Pencil, Plus, Trash } from "lucide-react";
 
-import { Row, TableViewProps } from ".";
+import type { Row, TableViewProps } from ".";
+import { SortTypes } from ".";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -12,27 +14,72 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { FilterForm, SortIcon } from "./components";
+import { useFiltering, useSortByColumn } from "./hooks/";
 
 export function TableView({
   title,
   data,
   headersConfig,
   onDeleteRow,
+  onSortByColumn,
+  onFilter,
+  onFilterClear,
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
+  const sortByColumn = useSortByColumn(onSortByColumn);
+  const {
+    onFilterColumnChange,
+    onFilterButtonPressed,
+    currentColumnForFilter,
+    currentFilterValue,
+    onFilterValueChange,
+    isFilterButtonDisabled,
+    onClearButtonPressed,
+    isClearButtonDisabled,
+  } = useFiltering({
+    onFilter,
+    onFilterClear,
+    headersConfig,
+  });
 
   const getOrderedHeaderElements = () => {
     if (headersConfig) {
       return Object.entries(headersConfig)
-        .sort(([aKey, aValue], [bKey, bValue]) => {
+        .sort(([, aValue], [, bValue]) => {
           return headersConfig ? aValue.orderNumber - bValue.orderNumber : 0;
         })
-        .map(([key, header]) => (
-          <TableHead key={header.name} className={header.classNames}>
-            {header.label}
-          </TableHead>
-        ));
+        .map(
+          ([
+            ,
+            {
+              name,
+              classNames,
+              sortable,
+              label,
+              sortDirection = SortTypes.None,
+            },
+          ]) => (
+            <TableHead key={name} className={classNames}>
+              <div className="flex items-center justify-evenly">
+                <span key={`head-label-${name}`}>{label}</span>
+                {sortable && (
+                  <Button
+                    key={`head-sort-button-${name}`}
+                    size="default"
+                    onClick={() =>
+                      sortByColumn({ name, sortDirection, sortable })
+                    }
+                    variant="outline"
+                  >
+                    <SortIcon sortDirection={sortDirection} />
+                  </Button>
+                )}
+              </div>
+            </TableHead>
+          ),
+        );
     } else if (data[0]) {
       return Object.entries(data[0]).map(([key]) => (
         <TableHead key={key} className="w-[100px]">
@@ -87,12 +134,23 @@ export function TableView({
 
   return (
     <>
-      <h2 className="mt-6 scroll-m-20 border-b pb-2 text-center text-3xl font-semibold tracking-tight first:mt-0">
+      <h2 className="mt-6 scroll-m-20 border-b pb-10 text-center text-3xl font-semibold tracking-tight first:mt-0">
         {title}
         <Button className=" ml-6" onClick={onAddRow}>
           <Plus />
         </Button>
       </h2>
+      <FilterForm
+        onColumnChange={onFilterColumnChange}
+        onValueChange={onFilterValueChange}
+        onButtonPressed={onFilterButtonPressed}
+        currentColumn={currentColumnForFilter}
+        currentValue={currentFilterValue}
+        isButtonDisabled={isFilterButtonDisabled}
+        headersConfig={headersConfig}
+        onClearButtonPressed={onClearButtonPressed}
+        isClearButtonDisabled={isClearButtonDisabled}
+      />
       <Table>
         <TableHeader>
           <TableRow>

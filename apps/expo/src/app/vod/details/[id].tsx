@@ -35,19 +35,6 @@ export default function DetailsPage() {
     router.push(`/vod/player/${trailerId}`);
   };
 
-  console.log(`isFree : ${id}`);
-  console.log(
-    imgUrl,
-    videoId,
-    trailerId,
-    mediaId,
-    title,
-    content,
-    castMembers,
-    isFree,
-    isBought,
-  );
-
   return (
     <SafeAreaView>
       <Stack.Screen options={{ title: title }} />

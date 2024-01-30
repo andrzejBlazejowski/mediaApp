@@ -2,54 +2,80 @@
 
 import React, { useMemo } from "react";
 
+import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import type { TableViewProps } from "~/app/_components/TableView";
-import { TableView } from "~/app/_components/TableView";
+import { SortTypes, TableView } from "~/app/_components/TableView";
+import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
 
-  const rawData = api.brandingImage.all.useQuery();
+  const initialHeadersConfig = useMemo(
+    () => ({
+      id: {
+        orderNumber: 0,
+        name: "id",
+        label: "id",
+        classNames: "w-[100px]",
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      name: {
+        orderNumber: 1,
+        name: "name",
+        label: "name",
+        classNames: "w-[100px]",
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      type: {
+        orderNumber: 0,
+        name: "type",
+        label: "type",
+        classNames: "w-[100px]",
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+        foreignKey: "brandingImageTypeId",
+        type: InputTypes.foreignKey,
+      },
+      branding: {
+        orderNumber: 0,
+        name: "branding",
+        label: "branding",
+        classNames: "w-[100px]",
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+        foreignKey: "brandingId",
+        type: InputTypes.foreignKey,
+      },
+      image: {
+        orderNumber: 0,
+        name: "image",
+        label: "image",
+        classNames: "w-[100px]",
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+        foreignKey: "imageId",
+        type: InputTypes.foreignKey,
+      },
+    }),
+    [],
+  );
+  const { headersConfig, setHeadersConfig } =
+    useHeadersConfig(initialHeadersConfig);
+  const { sort, onSortByColumn } = useSort(setHeadersConfig);
+  const { filter, onFilter, onFilterClear } = useFilter();
+
+  const rawData = api.brandingImage.all.useQuery({ sort, filter });
   const deleteRow = api.brandingImage.delete.useMutation();
   const invalidate = utils.brandingImage.all.invalidate;
-  const headersConfig = {
-    id: {
-      orderNumber: 0,
-      name: "id",
-      label: "id",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    name: {
-      orderNumber: 1,
-      name: "name",
-      label: "name",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    type: {
-      orderNumber: 0,
-      name: "type",
-      label: "type",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    branding: {
-      orderNumber: 0,
-      name: "branding",
-      label: "branding",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    image: {
-      orderNumber: 0,
-      name: "image",
-      label: "image",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -75,6 +101,11 @@ export default function Page() {
       title: title + " list",
       data: data,
       headersConfig,
+
+      onSortByColumn,
+      onFilter,
+      onFilterClear,
+
       onDeleteRow: async (id) => {
         await deleteRow.mutateAsync(id);
         await invalidate();

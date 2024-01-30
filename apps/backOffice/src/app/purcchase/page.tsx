@@ -3,39 +3,60 @@
 import React, { useMemo } from "react";
 
 import type { TableViewProps } from "~/app/_components/TableView";
-import { TableView } from "~/app/_components/TableView";
+import { SortTypes, TableView } from "~/app/_components/TableView";
+import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
+  const initialHeadersConfig = useMemo(
+    () => ({
+      id: {
+        orderNumber: 0,
+        name: "id",
+        label: "id",
+        classNames: "w-[100px]",
 
-  const rawData = api.purchase.all.useQuery();
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      type: {
+        orderNumber: 1,
+        name: "type",
+        label: "type",
+        classNames: "w-[100px]",
+
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+      user: {
+        orderNumber: 2,
+        name: "user",
+        label: "user",
+        classNames: "w-[100px]",
+
+        sortable: true,
+
+        filterable: true,
+        sortDirection: SortTypes.None,
+      },
+    }),
+    [],
+  );
+
+  const { headersConfig, setHeadersConfig } =
+    useHeadersConfig(initialHeadersConfig);
+  const { sort, onSortByColumn } = useSort(setHeadersConfig);
+  const { filter, onFilter, onFilterClear } = useFilter();
+
+  const rawData = api.purchase.all.useQuery({ sort, filter });
   const deleteRow = api.purchase.delete.useMutation();
   const invalidate = utils.purchase.all.invalidate;
-  const headersConfig = {
-    id: {
-      orderNumber: 0,
-      name: "id",
-      label: "id",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    type: {
-      orderNumber: 1,
-      name: "type",
-      label: "type",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-    user: {
-      orderNumber: 2,
-      name: "user",
-      label: "user",
-      classNames: "w-[100px]",
-      sortable: true,
-    },
-  };
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -59,6 +80,10 @@ export default function Page() {
       title: title + " list",
       data: data,
       headersConfig,
+      onSortByColumn,
+      onFilter,
+      onFilterClear,
+
       onDeleteRow: async (id) => {
         await deleteRow.mutateAsync(id);
         await invalidate();

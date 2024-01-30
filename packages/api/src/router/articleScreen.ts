@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -7,16 +7,36 @@ import {
   articleScreensInsertSchema,
 } from "@media/db/schema/articleScreen";
 
+import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const articleScreenRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.articleScreens;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.articleScreens.findMany({
-      orderBy: desc(schema.articleScreens.id),
       with: {
         articleScreenImages: true,
         screens: true,
       },
+
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
@@ -53,13 +73,32 @@ export const articleScreenRouter = createTRPCRouter({
 });
 
 export const articleScreenImageRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    const schemaTable = schema.articleScreenImages;
+    const { sort, filter } = input ?? { sort: [] };
+    const orderBy =
+      sort?.map((column) => {
+        //@ts-expect-error
+        const schemaCollumn = schemaTable[column.column];
+        return column.direction === "asc"
+          ? asc(schemaCollumn)
+          : desc(schemaCollumn);
+      }) ?? [];
     return ctx.db.query.articleScreenImages.findMany({
-      orderBy: desc(schema.articleScreenImages.id),
       with: {
         articleScreen: true,
         image: true,
       },
+
+      orderBy,
+      ...(filter && {
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
+      }),
     });
   }),
   byId: publicProcedure
