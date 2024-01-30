@@ -33,8 +33,12 @@ export const brandingRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -92,8 +96,12 @@ export const brandingColorRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -150,8 +158,12 @@ export const brandingColorTypeRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -209,8 +221,12 @@ export const brandingImageRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -268,8 +284,12 @@ export const brandingImageTypeRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),

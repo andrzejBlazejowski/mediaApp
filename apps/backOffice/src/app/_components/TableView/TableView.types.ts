@@ -37,6 +37,6 @@ export interface TableViewProps {
   headersConfig?: HeadersConfig;
   onDeleteRow?: (id: number) => void;
   onSortByColumn?: (column: string, sortDirection: SortTypes) => void;
-  onFilter?: (column: string, value: string) => void;
+  onFilter?: (column: string, value: string, eq: boolean) => void;
   onFilterClear?: () => void;
 }

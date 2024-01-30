@@ -1,23 +1,20 @@
 import { useCallback, useState } from "react";
 
+import { HeadersConfig } from "../TableView.types";
+
 export const useFiltering = ({
   onFilter,
   onFilterClear,
+  headersConfig,
 }: {
-  onFilter?: (column: string, value: string) => void;
+  onFilter?: (column: string, value: string, eq: boolean) => void;
   onFilterClear?: () => void;
+  headersConfig?: HeadersConfig;
 }) => {
   const [currentColumnForFilter, setCurrentColumnForFilter] = useState("");
   const [currentFilterValue, setCurrentFilterValue] = useState("");
   const [isFilterButtonDisabled, setIsFilterButtonDisabled] = useState(true);
   const [isClearButtonDisabled, setIsClearButtonDisabled] = useState(false);
-
-  const filterData = useCallback(
-    (column: string, value: string) => {
-      onFilter && onFilter(column, value);
-    },
-    [onFilter],
-  );
 
   const onFilterColumnChange = useCallback((value: string) => {
     setCurrentColumnForFilter(value);
@@ -36,11 +33,16 @@ export const useFiltering = ({
 
   const onFilterButtonPressed = useCallback(() => {
     if (onFilter) {
-      onFilter(currentColumnForFilter, currentFilterValue);
+      const headerConfig =
+        headersConfig && headersConfig[currentColumnForFilter];
+      if (headerConfig && typeof headerConfig.foreignKey !== "undefined") {
+      } else {
+        onFilter(currentColumnForFilter, currentFilterValue, false);
+      }
       setIsFilterButtonDisabled(true);
     }
     setIsClearButtonDisabled(false);
-  }, [currentColumnForFilter, currentFilterValue, onFilter]);
+  }, [currentColumnForFilter, currentFilterValue, onFilter, headersConfig]);
 
   const onClearButtonPressed = useCallback(() => {
     if (onFilterClear) {
@@ -52,7 +54,6 @@ export const useFiltering = ({
   }, [currentColumnForFilter, currentFilterValue, onFilter]);
 
   return {
-    filterData,
     onFilterColumnChange,
     onFilterButtonPressed,
     currentColumnForFilter,

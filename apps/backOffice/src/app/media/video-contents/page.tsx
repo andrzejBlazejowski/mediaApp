@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 
+import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import type { TableViewProps } from "../../_components/TableView";
@@ -31,6 +32,8 @@ export default function Page() {
 
         filterable: true,
         sortDirection: SortTypes.None,
+        foreignKey: "mediaId",
+        type: InputTypes.foreignKey,
       },
       video: {
         orderNumber: 2,
@@ -41,6 +44,8 @@ export default function Page() {
 
         filterable: true,
         sortDirection: SortTypes.None,
+        foreignKey: "videoId",
+        type: InputTypes.foreignKey,
       },
       type: {
         orderNumber: 3,
@@ -51,6 +56,8 @@ export default function Page() {
 
         filterable: true,
         sortDirection: SortTypes.None,
+        foreignKey: "videoContentTypeId",
+        type: InputTypes.foreignKey,
       },
     }),
     [],

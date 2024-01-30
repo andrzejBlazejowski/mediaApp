@@ -26,8 +26,12 @@ export const clientAppDictionaryRouter = createTRPCRouter({
     return ctx.db.query.clientAppDictionaries.findMany({
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -76,8 +80,12 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
     return ctx.db.query.backOfficeDictionaries.findMany({
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -126,8 +134,12 @@ export const countryRouter = createTRPCRouter({
     return ctx.db.query.countries.findMany({
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),

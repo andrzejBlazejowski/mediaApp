@@ -22,8 +22,12 @@ export const imageRouter = createTRPCRouter({
     return ctx.db.query.images.findMany({
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),

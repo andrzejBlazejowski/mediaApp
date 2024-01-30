@@ -34,8 +34,12 @@ export const castMemberRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -94,8 +98,12 @@ export const castMemberImageRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -148,8 +156,12 @@ export const castRoleRouter = createTRPCRouter({
     return ctx.db.query.castRoles.findMany({
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -203,8 +215,12 @@ export const mediaCastMemberRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -261,8 +277,12 @@ export const peopleRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),

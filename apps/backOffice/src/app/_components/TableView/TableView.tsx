@@ -41,6 +41,7 @@ export function TableView({
   } = useFiltering({
     onFilter,
     onFilterClear,
+    headersConfig,
   });
 
   const getOrderedHeaderElements = () => {

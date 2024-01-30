@@ -31,8 +31,12 @@ export const vodScreenRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -83,8 +87,12 @@ export const vodScreenTypeRouter = createTRPCRouter({
     return ctx.db.query.vodScreenTypes.findMany({
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),
@@ -136,8 +144,12 @@ export const vodScreenMediaListRouter = createTRPCRouter({
 
       orderBy,
       ...(filter && {
-        //@ts-expect-error
-        where: (table, { like }) => like(table[filter.column], filter?.value),
+        where: (table, { like, eq }) =>
+          filter.eq
+            ? //@ts-expect-error
+              eq(table[filter.column], filter?.value)
+            : //@ts-expect-error
+              like(table[filter.column], filter?.value),
       }),
     });
   }),

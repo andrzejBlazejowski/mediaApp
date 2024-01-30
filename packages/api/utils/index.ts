@@ -7,6 +7,8 @@ export const allQuerySchema = z
         z.object({ column: z.string(), direction: z.enum(["desc", "asc"]) }),
       )
       .optional(),
-    filter: z.object({ column: z.string(), value: z.string() }).optional(),
+    filter: z
+      .object({ column: z.string(), value: z.string(), eq: z.boolean() })
+      .optional(),
   })
   .optional();
