@@ -28,6 +28,23 @@ export const {
         },
       };
     },
+
+    async signIn({ user, account, profile, email, credentials }) {
+      console.warn(
+        "sign in - get.ts",
+        "user : ",
+        user,
+        "account : ",
+        account,
+        "profile : ",
+        profile,
+        "email : ",
+        email,
+        "credentials",
+        credentials,
+      );
+      return true;
+    },
     // @TODO - if you wanna have auth on the edge
     jwt: ({ token, profile }) => {
       if (profile?.id) {
@@ -38,6 +55,7 @@ export const {
     },
     // @TODO
     authorized({ request, auth }) {
+      console.warn("authorized - get.ts");
       return !!auth?.user;
     },
   },

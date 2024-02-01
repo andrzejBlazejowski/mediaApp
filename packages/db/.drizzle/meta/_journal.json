@@ -22,6 +22,13 @@
       "when": 1705231740989,
       "tag": "0002_eminent_sunspot",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1706763485145,
+      "tag": "0003_harsh_war_machine",
+      "breakpoints": true
     }
   ]
 }

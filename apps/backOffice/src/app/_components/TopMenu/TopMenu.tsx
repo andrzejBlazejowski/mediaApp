@@ -15,7 +15,6 @@ import {
 import { cn } from "@/lib/utils";
 
 import { api } from "~/utils/api";
-import { AuthButtons } from "../auth-showcase";
 import { ThemeToggle } from "../ThemeToggle";
 
 type MenuComponents = Record<string, MenuComponent[]>;

@@ -53,6 +53,28 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
 }));
 
+export const privilages = mySqlTable(
+  "privilage",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    userId: varchar("userId", { length: 255 }).notNull(),
+    media: int("media").notNull(),
+    branding: int("branding").notNull(),
+    cast: int("cast").notNull(),
+    screens: int("screens").notNull(),
+    dictionary: int("dictionary").notNull(),
+    menu: int("menu").notNull(),
+    purcchase: int("purcchase").notNull(),
+  },
+  (account) => ({
+    userIdIdx: index("userId_idx").on(account.userId),
+  }),
+);
+
+export const privilagesRelations = relations(privilages, ({ one }) => ({
+  user: one(users, { fields: [privilages.userId], references: [users.id] }),
+}));
+
 export const sessions = mySqlTable(
   "session",
   {

@@ -51,6 +51,7 @@ export const {
       return baseUrl;
     },
     async signIn({ user, account, profile, email, credentials }) {
+      // console.warn(profile);
       return true;
     },
     // @TODO - if you wanna have auth on the edge
@@ -63,6 +64,8 @@ export const {
     },
     // @TODO
     authorized({ request, auth }) {
+      console.warn("authorized - index.ts");
+
       return !!auth?.user;
     },
   },
