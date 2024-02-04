@@ -8,6 +8,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { mySqlTable } from "./_table";
 
@@ -75,6 +76,8 @@ export const privilages = mySqlTable(
 export const privilagesRelations = relations(privilages, ({ one }) => ({
   user: one(users, { fields: [privilages.userId], references: [users.id] }),
 }));
+
+export const privilagesInsertSchema = createInsertSchema(privilages);
 
 export const sessions = mySqlTable(
   "session",
