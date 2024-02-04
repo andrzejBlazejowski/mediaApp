@@ -11,7 +11,7 @@ import { allQuerySchema } from "../../utils";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const articleScreenRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: protectedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.articleScreens;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -39,7 +39,7 @@ export const articleScreenRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.articleScreens.findFirst({

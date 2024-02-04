@@ -22,8 +22,9 @@ export const users = mySqlTable("user", {
   image: varchar("image", { length: 255 }),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   accounts: many(accounts),
+  privilage: one(privilages),
 }));
 
 export const accounts = mySqlTable(

@@ -2,11 +2,29 @@ import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
-import { articleScreensInsertSchema } from "@media/db/schema/articleScreen";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { allQuerySchema } from "../../utils";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
+  all: protectedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+    return ctx.db.query.users.findMany({
+      orderBy: desc(schema.users.id),
+      with: {
+        privilage: true,
+      },
+    });
+  }),
+  byId: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.users.findFirst({
+        where: eq(schema.users.id, input.id),
+        with: {
+          privilage: true,
+        },
+      });
+    }),
   // all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
   //   return ctx.db.query.articleScreens.findMany({
   //     orderBy: desc(schema.articleScreens.id),

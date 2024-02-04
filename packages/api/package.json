@@ -17,14 +17,15 @@
     "@trpc/client": "^10.40.0",
     "@trpc/server": "^10.40.0",
     "superjson": "1.13.1",
+    "trpc-shield": "^0.4.3",
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "drizzle-orm": "^0.28.6",
-    "@planetscale/database": "^1.11.0",
     "@media/eslint-config": "^0.2.0",
     "@media/prettier-config": "^0.1.0",
     "@media/tsconfig": "^0.1.0",
+    "@planetscale/database": "^1.11.0",
+    "drizzle-orm": "^0.28.6",
     "eslint": "^8.50.0",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2"

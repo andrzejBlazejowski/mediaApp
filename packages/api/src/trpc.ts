@@ -6,13 +6,15 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
+import type { inferAsyncReturnType } from "@trpc/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
+import { allow, and, deny, not, or, rule, shield } from "trpc-shield";
 import { ZodError } from "zod";
 
 import { auth } from "@media/auth";
 import type { Session } from "@media/auth";
-import { db } from "@media/db";
+import { articleScreen, db, eq, schema } from "@media/db";
 
 /**
  * 1. CONTEXT
@@ -82,6 +84,9 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   },
 });
 
+// 2.1 export the context type
+export type TRPCContext = inferAsyncReturnType<typeof createTRPCContext>;
+
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
  *
@@ -120,13 +125,47 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
-/**
- * Protected (authed) procedure
- *
- * If you want a query or mutation to ONLY be accessible to logged in users, use
- * this. It verifies the session is valid and guarantees ctx.session.user is not
- * null
- *
- * @see https://trpc.io/docs/procedures
- */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+const isViewAllowed = rule<TRPCContext>()(async (
+  ctx,
+  type,
+  path,
+  input,
+  rawInput,
+) => {
+  console.warn("=========================================");
+  const userId = ctx.session?.user?.id?.toString() ?? "0";
+  // console.warn(
+  //   "@ TODO - create a rule to check if user is allowed to recieve data",
+  // );
+  // console.warn(path);
+  // ctx.db.query.users.query;
+  console.log(
+    ctx.db.query.users.findFirst({
+      where: eq(schema.users.id, userId),
+      with: {
+        privilage: true,
+      },
+    }),
+  );
+  console.warn("=========================================");
+
+  return ctx.session?.user !== null;
+});
+
+export const permissions = shield<TRPCContext>({
+  query: {
+    all: not(isViewAllowed),
+    byId: allow,
+  },
+  mutation: {
+    create: allow,
+    update: allow,
+    delete: allow,
+  },
+});
+
+export const permissionsMiddleware = t.middleware(permissions);
+
+export const protectedProcedure = t.procedure
+  .use(enforceUserIsAuthed)
+  .use(permissionsMiddleware);
