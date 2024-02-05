@@ -5,10 +5,10 @@ import { schema } from "@media/db";
 import { privilagesInsertSchema } from "@media/db/schema/auth";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-  all: protectedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.users;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -25,14 +25,21 @@ export const userRouter = createTRPCRouter({
       },
 
       orderBy,
-      ...(filter && {
-        where: (table, { like, eq }) =>
-          filter.eq
+      where: (table, { like, eq, not, and }) => {
+        const excludeSuperAdmin = not(
+          eq(table.id, "c5637392-fc8c-48a6-a61f-3f2e0d80fcca"),
+        );
+        return filter
+          ? filter.eq
             ? //@ts-expect-error
-              eq(table[filter.column], filter?.value)
-            : //@ts-expect-error
-              like(table[filter.column], filter?.value),
-      }),
+              and(eq(table[filter.column], filter?.value), excludeSuperAdmin)
+            : and(
+                //@ts-expect-error
+                like(table[filter.column], filter?.value),
+                excludeSuperAdmin,
+              )
+          : excludeSuperAdmin;
+      },
     });
   }),
 
@@ -62,16 +69,25 @@ export const userPrivilegeRouter = createTRPCRouter({
       }) ?? [];
     return ctx.db.query.privilages.findMany({
       orderBy,
-      ...(filter && {
-        where: (table, { like, eq }) =>
-          filter.eq
+
+      where: (table, { like, eq, and, not }) => {
+        const excludeSuperAdmin = not(
+          eq(table.id, "c5637392-fc8c-48a6-a61f-3f2e0d80fcca"),
+        );
+        return filter
+          ? filter.eq
             ? //@ts-expect-error
-              eq(table[filter.column], filter?.value)
-            : //@ts-expect-error
-              like(table[filter.column], filter?.value),
-      }),
+              and(eq(table[filter.column], filter?.value), excludeSuperAdmin)
+            : and(
+                //@ts-expect-error
+                like(table[filter.column], filter?.value),
+                excludeSuperAdmin,
+              )
+          : not(eq(table.id, "c5637392-fc8c-48a6-a61f-3f2e0d80fcca"));
+      },
     });
   }),
+
   byId: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
@@ -85,6 +101,7 @@ export const userPrivilegeRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.privilages).values(input);
     }),
+
   update: protectedProcedure
     .input(privilagesInsertSchema)
     .mutation(({ ctx, input }) => {
