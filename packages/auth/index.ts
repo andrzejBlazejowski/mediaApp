@@ -52,6 +52,22 @@ export const {
     },
     async signIn({ user, account, profile, email, credentials }) {
       // console.warn(profile);
+      const privilage = await db.query.privilages.findFirst({
+        where: (table, { eq }) => eq(table.userId, user.id),
+      });
+      !privilage &&
+        db.insert(privilages).values({
+          id: user.id,
+          userId: user.id,
+          media: 1,
+          branding: 1,
+          cast: 1,
+          screens: 1,
+          dictionary: 1,
+          menu: 1,
+          purcchase: 1,
+        });
+      return true;
       return true;
     },
     // @TODO - if you wanna have auth on the edge
