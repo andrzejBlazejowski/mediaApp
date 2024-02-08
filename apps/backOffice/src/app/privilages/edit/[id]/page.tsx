@@ -7,12 +7,18 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 
+import {
+  getAccessIntValue,
+  isDeleteAccess,
+  isReadAccess,
+  isWriteAccess,
+  privilagesHeaders,
+} from "@media/auth";
 import { auth } from "@media/db";
 
 import type { IFeield } from "~/app/_components/FormView/FormView.types";
 import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import { FormViewItem } from "~/app/_components/FormViewItem";
-import { Checkbox } from "~/app/_components/ui/checkbox";
 import { Form, FormField } from "~/app/_components/ui/form";
 import {
   Table,
@@ -50,48 +56,6 @@ export default function Page() {
     purchase_write: boolean;
     purchase_delete: boolean;
   }
-
-  enum accesses {
-    read = 1,
-    write = 2,
-    delete = 4,
-  }
-
-  const isReadAccess = (val = 0) => {
-    return (val & accesses.read) === accesses.read;
-  };
-  const isWriteAccess = (val = 0) => {
-    return (val & accesses.write) === accesses.write;
-  };
-  const isDeleteAccess = (val = 0) => {
-    return (val & accesses.delete) === accesses.delete;
-  };
-
-  const getAccessIntValue = ({
-    read,
-    write,
-    deleteAcc,
-  }: {
-    read: boolean;
-    write: boolean;
-    deleteAcc: boolean;
-  }) => {
-    let value = 0;
-    if (read) value += accesses.read;
-    if (write) value += accesses.write;
-    if (deleteAcc) value += accesses.delete;
-    return value;
-  };
-
-  const privilagesHeaders = [
-    "media",
-    "branding",
-    "cast",
-    "screens",
-    "dictionary",
-    "menu",
-    "purchase",
-  ];
 
   const utils = api.useUtils();
 

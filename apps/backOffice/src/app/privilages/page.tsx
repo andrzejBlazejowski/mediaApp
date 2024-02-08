@@ -93,7 +93,7 @@ export default function Page() {
   return (
     <>
       <Toaster />
-      <TableView {...mediaIndexProps}></TableView>
+      <TableView {...mediaIndexProps} isAddButtonVisible={false}></TableView>
     </>
   );
 }

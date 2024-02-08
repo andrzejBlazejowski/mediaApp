@@ -125,7 +125,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
-const isViewAllowed = rule<TRPCContext>()(async (
+const isReadAllowed = rule<TRPCContext>()(async (
   ctx,
   type,
   path,
@@ -133,39 +133,82 @@ const isViewAllowed = rule<TRPCContext>()(async (
   rawInput,
 ) => {
   console.warn("=========================================");
+  console.warn("type : ", type);
+  console.warn("path : ", path);
+  console.warn("input : ", input);
+  console.warn("rawInput : ", rawInput);
   const userId = ctx.session?.user?.id?.toString() ?? "0";
   // console.warn(
   //   "@ TODO - create a rule to check if user is allowed to recieve data",
   // );
   // console.warn(path);
   // ctx.db.query.users.query;
-  console.log(
-    ctx.db.query.users.findFirst({
-      where: eq(schema.users.id, userId),
-      with: {
-        privilage: true,
-      },
-    }),
-  );
   console.warn("=========================================");
 
   return ctx.session?.user !== null;
 });
 
+const isWriteAllowed = rule<TRPCContext>()(async (
+  ctx,
+  type,
+  path,
+  input,
+  rawInput,
+) => {
+  console.warn("=========================================");
+  console.warn("type : ", type);
+  console.warn("path : ", path);
+  console.warn("input : ", input);
+  console.warn("rawInput : ", rawInput);
+  const userId = ctx.session?.user?.id?.toString() ?? "0";
+  // console.warn(
+  //   "@ TODO - create a rule to check if user is allowed to recieve data",
+  // );
+  // console.warn(path);
+  // ctx.db.query.users.query;
+  console.warn("=========================================");
+
+  return ctx.session?.user !== null;
+});
+
+const isDeleteAllowed = rule<TRPCContext>()(async (
+  ctx,
+  type,
+  path,
+  input,
+  rawInput,
+) => {
+  console.warn("=========================================");
+  console.warn("type : ", type);
+  console.warn("path : ", path);
+  console.warn("input : ", input);
+  console.warn("rawInput : ", rawInput);
+  const userId = ctx.session?.user?.id?.toString() ?? "0";
+  // console.warn(
+  //   "@ TODO - create a rule to check if user is allowed to recieve data",
+  // );
+  // console.warn(path);
+  // ctx.db.query.users.query;
+  console.warn("=========================================");
+
+  return ctx.session?.user !== null;
+});
 export const permissions = shield<TRPCContext>({
   query: {
-    all: not(isViewAllowed),
-    byId: allow,
+    all: isReadAllowed,
+    byId: isReadAllowed,
   },
   mutation: {
-    create: allow,
-    update: allow,
-    delete: allow,
+    create: isWriteAllowed,
+    update: isWriteAllowed,
+    delete: isDeleteAllowed,
   },
 });
 
 export const permissionsMiddleware = t.middleware(permissions);
 
-export const protectedProcedure = t.procedure
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+export const permitedProcedure = t.procedure
   .use(enforceUserIsAuthed)
   .use(permissionsMiddleware);

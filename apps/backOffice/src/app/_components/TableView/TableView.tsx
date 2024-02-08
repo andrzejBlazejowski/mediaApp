@@ -25,6 +25,7 @@ export function TableView({
   onSortByColumn,
   onFilter,
   onFilterClear,
+  isAddButtonVisible = true,
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
@@ -136,9 +137,11 @@ export function TableView({
     <>
       <h2 className="mt-6 scroll-m-20 border-b pb-10 text-center text-3xl font-semibold tracking-tight first:mt-0">
         {title}
-        <Button className=" ml-6" onClick={onAddRow}>
-          <Plus />
-        </Button>
+        {isAddButtonVisible && (
+          <Button className=" ml-6" onClick={onAddRow}>
+            <Plus />
+          </Button>
+        )}
       </h2>
       <FilterForm
         onColumnChange={onFilterColumnChange}

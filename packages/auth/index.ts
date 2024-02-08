@@ -3,7 +3,8 @@ import type { DefaultSession } from "@auth/core/types";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 
-import { db, privilages, tableCreator } from "@media/db";
+import { db, tableCreator } from "@media/db";
+import { privilages } from "@media/db/schema/auth";
 
 import { env } from "./env.mjs";
 
@@ -12,6 +13,7 @@ export type { Session } from "next-auth";
 // Update this whenever adding new providers so that the client can
 export const providers = ["discord"] as const;
 export type OAuthProviders = (typeof providers)[number];
+export * from "./lib/index";
 
 declare module "next-auth" {
   interface Session {
@@ -55,8 +57,8 @@ export const {
       const privilage = await db.query.privilages.findFirst({
         where: (table, { eq }) => eq(table.userId, user.id),
       });
-      !privilage &&
-        (await db.insert(privilages).values({
+      if (!privilage) {
+        await db.insert(privilages).values({
           id: user.id,
           userId: user.id,
           media: 1,
@@ -66,8 +68,8 @@ export const {
           dictionary: 1,
           menu: 1,
           purcchase: 1,
-        }));
-      return true;
+        });
+      }
       return true;
     },
     // @TODO - if you wanna have auth on the edge

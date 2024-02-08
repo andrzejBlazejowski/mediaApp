@@ -8,10 +8,15 @@ import {
 } from "@media/db/schema/articleScreen";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  permitedProcedure,
+  protectedProcedure,
+  publicProcedure,
+} from "../trpc";
 
 export const articleScreenRouter = createTRPCRouter({
-  all: protectedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.articleScreens;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
