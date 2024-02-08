@@ -38,6 +38,8 @@ export const FormViewItem = ({
           <Input
             {...field}
             type={getHtmlInputType(type)}
+            {...(type === InputTypes.checkbox &&
+              field.value && { checked: true })}
             {...(getHtmlInputType(type) === "number" && register
               ? register(field.name, { valueAsNumber: true })
               : {})}

@@ -46,33 +46,41 @@ export default function Page() {
     menu_read: boolean;
     menu_write: boolean;
     menu_delete: boolean;
-    purcchase_read: boolean;
-    purcchase_write: boolean;
-    purcchase_delete: boolean;
+    purchase_read: boolean;
+    purchase_write: boolean;
+    purchase_delete: boolean;
   }
 
-  const privileges = {
-    media_read: true,
-    media_write: true,
-    media_delete: true,
-    branding_read: true,
-    branding_write: true,
-    branding_delete: true,
-    cast_read: true,
-    cast_write: true,
-    cast_delete: true,
-    screens_read: true,
-    screens_write: true,
-    screens_delete: true,
-    dictionary_read: true,
-    dictionary_write: true,
-    dictionary_delete: true,
-    menu_read: true,
-    menu_write: true,
-    menu_delete: true,
-    purcchase_read: true,
-    purcchase_write: true,
-    purcchase_delete: true,
+  enum accesses {
+    read = 1,
+    write = 2,
+    delete = 4,
+  }
+
+  const isReadAccess = (val = 0) => {
+    return (val & accesses.read) === accesses.read;
+  };
+  const isWriteAccess = (val = 0) => {
+    return (val & accesses.write) === accesses.write;
+  };
+  const isDeleteAccess = (val = 0) => {
+    return (val & accesses.delete) === accesses.delete;
+  };
+
+  const getAccessIntValue = ({
+    read,
+    write,
+    deleteAcc,
+  }: {
+    read: boolean;
+    write: boolean;
+    deleteAcc: boolean;
+  }) => {
+    let value = 0;
+    if (read) value += accesses.read;
+    if (write) value += accesses.write;
+    if (deleteAcc) value += accesses.delete;
+    return value;
   };
 
   const privilagesHeaders = [
@@ -82,7 +90,7 @@ export default function Page() {
     "screens",
     "dictionary",
     "menu",
-    "purcchase",
+    "purchase",
   ];
 
   const utils = api.useUtils();
@@ -102,7 +110,32 @@ export default function Page() {
 
   useEffect(() => {
     // TODO: parse ints to booleans
-    // if (rawData.data) form.reset(rawData.data);
+    if (rawData.data) {
+      const parsedData = {
+        media_read: isReadAccess(rawData.data.privilage?.media),
+        media_write: isWriteAccess(rawData.data.privilage?.media),
+        media_delete: isDeleteAccess(rawData.data.privilage?.media),
+        branding_read: isReadAccess(rawData.data.privilage?.branding),
+        branding_write: isWriteAccess(rawData.data.privilage?.branding),
+        branding_delete: isDeleteAccess(rawData.data.privilage?.branding),
+        cast_read: isReadAccess(rawData.data.privilage?.cast),
+        cast_write: isWriteAccess(rawData.data.privilage?.cast),
+        cast_delete: isDeleteAccess(rawData.data.privilage?.cast),
+        screens_read: isReadAccess(rawData.data.privilage?.screens),
+        screens_write: isWriteAccess(rawData.data.privilage?.screens),
+        screens_delete: isDeleteAccess(rawData.data.privilage?.screens),
+        dictionary_read: isReadAccess(rawData.data.privilage?.dictionary),
+        dictionary_write: isWriteAccess(rawData.data.privilage?.dictionary),
+        dictionary_delete: isDeleteAccess(rawData.data.privilage?.dictionary),
+        menu_read: isReadAccess(rawData.data.privilage?.menu),
+        menu_write: isWriteAccess(rawData.data.privilage?.menu),
+        menu_delete: isDeleteAccess(rawData.data.privilage?.menu),
+        purchase_read: isReadAccess(rawData.data.privilage?.purcchase),
+        purchase_write: isWriteAccess(rawData.data.privilage?.purcchase),
+        purchase_delete: isDeleteAccess(rawData.data.privilage?.purcchase),
+      };
+      form.reset(parsedData);
+    }
   }, [rawData.data]);
 
   const { mutateAsync, error } = privilageRoute.update.useMutation({
@@ -121,10 +154,47 @@ export default function Page() {
   }, [goBack]);
 
   const onSubmit = async (values: formType) => {
-    // TODO: parse booleans to ints
-    // const result = await mutateAsync(values);
+    const result = await mutateAsync({
+      media: getAccessIntValue({
+        read: values.media_read,
+        write: values.media_write,
+        deleteAcc: values.media_delete,
+      }),
+      branding: getAccessIntValue({
+        read: values.branding_read,
+        write: values.branding_write,
+        deleteAcc: values.branding_delete,
+      }),
+      cast: getAccessIntValue({
+        read: values.cast_read,
+        write: values.cast_write,
+        deleteAcc: values.cast_delete,
+      }),
+      screens: getAccessIntValue({
+        read: values.screens_read,
+        write: values.screens_write,
+        deleteAcc: values.screens_delete,
+      }),
+      dictionary: getAccessIntValue({
+        read: values.dictionary_read,
+        write: values.dictionary_write,
+        deleteAcc: values.dictionary_delete,
+      }),
+      menu: getAccessIntValue({
+        read: values.menu_read,
+        write: values.menu_write,
+        deleteAcc: values.menu_delete,
+      }),
+      purcchase: getAccessIntValue({
+        read: values.purchase_read,
+        write: values.purchase_write,
+        deleteAcc: values.purchase_delete,
+      }),
+      userId: id,
+      id: id,
+    });
     await invalidate();
-    // return result;
+    return result;
   };
 
   const onValidSubmit = useCallback(

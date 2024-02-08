@@ -3,7 +3,7 @@ import type { DefaultSession } from "@auth/core/types";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 
-import { db, tableCreator } from "@media/db";
+import { db, privilages, tableCreator } from "@media/db";
 
 import { env } from "./env.mjs";
 
@@ -56,7 +56,7 @@ export const {
         where: (table, { eq }) => eq(table.userId, user.id),
       });
       !privilage &&
-        db.insert(privilages).values({
+        (await db.insert(privilages).values({
           id: user.id,
           userId: user.id,
           media: 1,
@@ -66,7 +66,7 @@ export const {
           dictionary: 1,
           menu: 1,
           purcchase: 1,
-        });
+        }));
       return true;
       return true;
     },
