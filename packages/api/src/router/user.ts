@@ -5,10 +5,14 @@ import { schema } from "@media/db";
 import { privilagesInsertSchema } from "@media/db/schema/auth";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, permitedProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  permitedProcedure,
+  protectedProcedure,
+} from "../trpc";
 
 export const userRouter = createTRPCRouter({
-  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: protectedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.users;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -43,7 +47,7 @@ export const userRouter = createTRPCRouter({
     });
   }),
 
-  byId: permitedProcedure
+  byId: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.users.findFirst({
@@ -56,7 +60,7 @@ export const userRouter = createTRPCRouter({
 });
 
 export const userPrivilegeRouter = createTRPCRouter({
-  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: protectedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.privilages;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -88,7 +92,7 @@ export const userPrivilegeRouter = createTRPCRouter({
     });
   }),
 
-  byId: permitedProcedure
+  byId: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.privilages.findFirst({
