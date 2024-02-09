@@ -5,10 +5,10 @@ import { schema } from "@media/db";
 import { privilagesInsertSchema } from "@media/db/schema/auth";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.users;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -43,7 +43,7 @@ export const userRouter = createTRPCRouter({
     });
   }),
 
-  byId: protectedProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.users.findFirst({
@@ -56,7 +56,7 @@ export const userRouter = createTRPCRouter({
 });
 
 export const userPrivilegeRouter = createTRPCRouter({
-  all: protectedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.privilages;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -88,7 +88,7 @@ export const userPrivilegeRouter = createTRPCRouter({
     });
   }),
 
-  byId: protectedProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.privilages.findFirst({
@@ -96,13 +96,13 @@ export const userPrivilegeRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(privilagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.privilages).values(input);
     }),
 
-  update: protectedProcedure
+  update: permitedProcedure
     .input(privilagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -111,7 +111,7 @@ export const userPrivilegeRouter = createTRPCRouter({
         .where(eq(schema.privilages.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.string()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.string()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.privilages)
       .where(eq(schema.privilages.id, input));

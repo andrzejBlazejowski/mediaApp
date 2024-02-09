@@ -1,4 +1,4 @@
-import { accesses } from "./types";
+import { accesses, privilagesAreas } from "./types";
 
 export const isReadAccess = (val = 0) => {
   return (val & accesses.read) === accesses.read;
@@ -35,3 +35,67 @@ export const privilagesHeaders = [
   "menu",
   "purchase",
 ];
+
+export const getPrivilageArea = (path: string) => {
+  const router = path.split(".")[0] || "";
+  const medias = [
+    "media",
+    " videoContent",
+    "videoContentType",
+    "mediaCategory",
+    "mediaImage",
+    "mediaImageType",
+    "mediaViewImpression",
+    "mediaList",
+    "mediaListMedia",
+    "mediaListType",
+    "video",
+    "image",
+  ];
+  if (medias.includes(router)) return privilagesAreas.media;
+  const brandings = [
+    "branding",
+    "brandingColor",
+    "brandingColorType",
+    "brandingImage",
+    "brandingImageType",
+  ];
+  if (brandings.includes(router)) return privilagesAreas.branding;
+  const cast = [
+    "castMember",
+    "castMemberImage",
+    "castRole",
+    "mediaCastMember",
+    "people",
+  ];
+  if (cast.includes(router)) return privilagesAreas.cast;
+  const screen = [
+    "screen",
+    "screenType",
+    "articleScreen",
+    "articleScreenImage",
+    "vodScreen",
+    "vodScreenType",
+    "vodScreenMediaList",
+  ];
+  if (screen.includes(router)) return privilagesAreas.screens;
+  const dictionary = [
+    "clientAppDictionary",
+    "backOfficeDictionary",
+    "country",
+    "platform",
+    "menuPlatform",
+  ];
+  if (dictionary.includes(router)) return privilagesAreas.dictionary;
+  const menu = ["menu", "menuLink", "menuType", "menuLinkImage"];
+  if (menu.includes(router)) return privilagesAreas.menu;
+  const purchase = [
+    "purchase",
+    "purchaseItem",
+    "invoice",
+    "invoiceType",
+    "invoiceTemplate",
+  ];
+  if (purchase.includes(router)) return privilagesAreas.purchase;
+  return privilagesAreas.media;
+};

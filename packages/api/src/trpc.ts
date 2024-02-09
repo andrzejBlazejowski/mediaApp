@@ -9,12 +9,18 @@
 import type { inferAsyncReturnType } from "@trpc/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import { allow, and, deny, not, or, rule, shield } from "trpc-shield";
+import { not, rule, shield } from "trpc-shield";
 import { ZodError } from "zod";
 
-import { auth } from "@media/auth";
+import {
+  auth,
+  getPrivilageArea,
+  isDeleteAccess,
+  isReadAccess,
+  isWriteAccess,
+} from "@media/auth";
 import type { Session } from "@media/auth";
-import { articleScreen, db, eq, schema } from "@media/db";
+import { db } from "@media/db";
 
 /**
  * 1. CONTEXT
@@ -132,20 +138,9 @@ const isReadAllowed = rule<TRPCContext>()(async (
   input,
   rawInput,
 ) => {
-  console.warn("=========================================");
-  console.warn("type : ", type);
-  console.warn("path : ", path);
-  console.warn("input : ", input);
-  console.warn("rawInput : ", rawInput);
-  const userId = ctx.session?.user?.id?.toString() ?? "0";
-  // console.warn(
-  //   "@ TODO - create a rule to check if user is allowed to recieve data",
-  // );
-  // console.warn(path);
-  // ctx.db.query.users.query;
-  console.warn("=========================================");
+  const privilageValue = await getPrivilageValue({ ctx, path });
 
-  return ctx.session?.user !== null;
+  return isReadAccess(privilageValue);
 });
 
 const isWriteAllowed = rule<TRPCContext>()(async (
@@ -155,20 +150,9 @@ const isWriteAllowed = rule<TRPCContext>()(async (
   input,
   rawInput,
 ) => {
-  console.warn("=========================================");
-  console.warn("type : ", type);
-  console.warn("path : ", path);
-  console.warn("input : ", input);
-  console.warn("rawInput : ", rawInput);
-  const userId = ctx.session?.user?.id?.toString() ?? "0";
-  // console.warn(
-  //   "@ TODO - create a rule to check if user is allowed to recieve data",
-  // );
-  // console.warn(path);
-  // ctx.db.query.users.query;
-  console.warn("=========================================");
+  const privilageValue = await getPrivilageValue({ ctx, path });
 
-  return ctx.session?.user !== null;
+  return isWriteAccess(privilageValue);
 });
 
 const isDeleteAllowed = rule<TRPCContext>()(async (
@@ -178,24 +162,29 @@ const isDeleteAllowed = rule<TRPCContext>()(async (
   input,
   rawInput,
 ) => {
-  console.warn("=========================================");
-  console.warn("type : ", type);
-  console.warn("path : ", path);
-  console.warn("input : ", input);
-  console.warn("rawInput : ", rawInput);
-  const userId = ctx.session?.user?.id?.toString() ?? "0";
-  // console.warn(
-  //   "@ TODO - create a rule to check if user is allowed to recieve data",
-  // );
-  // console.warn(path);
-  // ctx.db.query.users.query;
-  console.warn("=========================================");
+  const privilageValue = await getPrivilageValue({ ctx, path });
 
-  return ctx.session?.user !== null;
+  return isDeleteAccess(privilageValue);
 });
+
+const getPrivilageValue = async ({
+  ctx,
+  path,
+}: {
+  ctx: TRPCContext;
+  path: string;
+}) => {
+  const userId = ctx.session?.user?.id?.toString() ?? "0";
+  const area = getPrivilageArea(path);
+  const privilage = await db.query.privilages.findFirst({
+    where: (table, { eq }) => eq(table.userId, userId),
+  });
+  return privilage?.[area] ?? 0;
+};
+
 export const permissions = shield<TRPCContext>({
   query: {
-    all: isReadAllowed,
+    all: not(isReadAllowed),
     byId: isReadAllowed,
   },
   mutation: {

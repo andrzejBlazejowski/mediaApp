@@ -5,10 +5,10 @@ import { schema } from "@media/db";
 import { genresInsertSchema } from "@media/db/schema/genre";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const genreRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.genres;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -32,19 +32,19 @@ export const genreRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.genres.findFirst({
         where: eq(schema.genres.id, input.id),
       });
     }),
-  create: protectedProcedure
+  create: permitedProcedure
     .input(genresInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.genres).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(genresInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -53,7 +53,7 @@ export const genreRouter = createTRPCRouter({
         .where(eq(schema.genres.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.genres).where(eq(schema.genres.id, input));
   }),
 });

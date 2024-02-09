@@ -2,14 +2,14 @@ import { z } from "zod";
 
 import { desc, eq, schema } from "@media/db";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const postRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
+  all: permitedProcedure.query(({ ctx }) => {
     return ctx.db.query.post.findMany({ orderBy: desc(schema.post.id) });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.post.findFirst({
@@ -17,7 +17,7 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(
       z.object({
         title: z.string().min(1),
@@ -28,7 +28,7 @@ export const postRouter = createTRPCRouter({
       return ctx.db.insert(schema.post).values(input);
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.post).where(eq(schema.post.id, input));
   }),
 });
