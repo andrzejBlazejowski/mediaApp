@@ -184,7 +184,7 @@ const getPrivilageValue = async ({
 
 export const permissions = shield<TRPCContext>({
   query: {
-    all: not(isReadAllowed),
+    all: isReadAllowed,
     byId: isReadAllowed,
   },
   mutation: {

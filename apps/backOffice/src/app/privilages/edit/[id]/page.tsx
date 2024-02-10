@@ -7,13 +7,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-import {
-  getAccessIntValue,
-  isDeleteAccess,
-  isReadAccess,
-  isWriteAccess,
-  privilagesHeaders,
-} from "@media/auth";
 import { auth } from "@media/db";
 
 import type { IFeield } from "~/app/_components/FormView/FormView.types";
@@ -29,6 +22,13 @@ import {
   TableRow,
 } from "~/app/_components/ui/table";
 import { api } from "~/utils/api";
+import {
+  getAccessIntValue,
+  isDeleteAccess,
+  isReadAccess,
+  isWriteAccess,
+  privilagesHeaders,
+} from "./utils";
 
 export default function Page() {
   const pathname = usePathname();
@@ -73,7 +73,6 @@ export default function Page() {
   const form = useForm<formType>({});
 
   useEffect(() => {
-    // TODO: parse ints to booleans
     if (rawData.data) {
       const parsedData = {
         media_read: isReadAccess(rawData.data.privilage?.media),

@@ -47,7 +47,7 @@ export default function FormView({
       if (onSubmit) {
         try {
           const result = await onSubmit(data);
-          goBack();
+          if (result) goBack();
         } catch (error) {
           alert("Error submitting data.");
         }

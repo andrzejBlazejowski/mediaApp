@@ -1,5 +1,5 @@
-import type { IuiSchema } from "../_components/FormView/FormView.types";
-import { InputTypes } from "../_components/FormView/FormView.types";
+import type { IuiSchema } from "~/app/_components/FormView/FormView.types";
+import { InputTypes } from "~/app/_components/FormView/FormView.types";
 
 export const uiSchema = {
   shortDescription: {
