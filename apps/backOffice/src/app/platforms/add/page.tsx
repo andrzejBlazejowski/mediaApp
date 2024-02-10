@@ -30,6 +30,8 @@ export default function Page() {
     },
   });
 
+  const { toast } = useToast();
+
   const onSubmit = async (values: z.infer<insetType>) => {
     try {
       const result = await mutateAsync(values);
