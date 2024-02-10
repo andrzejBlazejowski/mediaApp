@@ -10,10 +10,10 @@ import {
 } from "@media/db/schema/menu";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const menuRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.menus;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -42,7 +42,7 @@ export const menuRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.menus.findFirst({
@@ -53,12 +53,12 @@ export const menuRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(menusInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menus).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(menusInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -67,13 +67,13 @@ export const menuRouter = createTRPCRouter({
         .where(eq(schema.menus.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.menus).where(eq(schema.menus.id, input));
   }),
 });
 
 export const menuLinkRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.menuLinks;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -102,7 +102,7 @@ export const menuLinkRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.menuLinks.findFirst({
@@ -115,12 +115,12 @@ export const menuLinkRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(menuLinksInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menuLinks).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(menuLinksInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -129,7 +129,7 @@ export const menuLinkRouter = createTRPCRouter({
         .where(eq(schema.menuLinks.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.menuLinks)
       .where(eq(schema.menuLinks.id, input));
@@ -137,7 +137,7 @@ export const menuLinkRouter = createTRPCRouter({
 });
 
 export const menuTypeRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.menuTypes;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -161,7 +161,7 @@ export const menuTypeRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.menuTypes.findFirst({
@@ -169,12 +169,12 @@ export const menuTypeRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(menuTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menuTypes).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(menuTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -183,7 +183,7 @@ export const menuTypeRouter = createTRPCRouter({
         .where(eq(schema.menuTypes.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.menuTypes)
       .where(eq(schema.menuTypes.id, input));
@@ -191,7 +191,7 @@ export const menuTypeRouter = createTRPCRouter({
 });
 
 export const menuLinkImageRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.menuLinkImages;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -218,7 +218,7 @@ export const menuLinkImageRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.menuLinkImages.findFirst({
@@ -229,12 +229,12 @@ export const menuLinkImageRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(menuLinkImagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menuLinkImages).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(menuLinkImagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -243,7 +243,7 @@ export const menuLinkImageRouter = createTRPCRouter({
         .where(eq(schema.menuLinkImages.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.menuLinkImages)
       .where(eq(schema.menuLinkImages.id, input));

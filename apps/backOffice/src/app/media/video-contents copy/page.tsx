@@ -4,12 +4,15 @@ import React, { useMemo } from "react";
 
 import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
-import type { TableViewProps } from "../../_components/TableView";
-import { SortTypes, TableView } from "../../_components/TableView";
+import type { TableViewProps } from "../~/app/_components/TableView";
+import { SortTypes, TableView } from "../~/app/_components/TableView";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
+
+  const { toast } = useToast();
+
   const initialHeadersConfig = useMemo(
     () => ({
       id: {
@@ -85,8 +88,16 @@ export default function Page() {
       onFilter,
       onFilterClear,
       onDeleteRow: async (id) => {
-        await deleteRow.mutateAsync(id);
-        await invalidate();
+        try {
+          await deleteRow.mutateAsync(id);
+          await invalidate();
+        } catch (e) {
+          toast({
+            variant: "destructive",
+            title: "Action not permited",
+            description: "You can not delete.",
+          });
+        }
       },
     } as TableViewProps;
   }, [rawData]);

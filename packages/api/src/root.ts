@@ -58,6 +58,7 @@ import {
   purchaseTypeRouter,
 } from "./router/purchase";
 import { screenRouter, screenTypeRouter } from "./router/screen";
+import { userPrivilegeRouter, userRouter } from "./router/user";
 import { videoRouter } from "./router/video";
 import {
   vodScreenMediaListRouter,
@@ -111,6 +112,8 @@ export const appRouter = createTRPCRouter({
   purchaseType: purchaseTypeRouter,
   screen: screenRouter,
   screenType: screenTypeRouter,
+  user: userRouter,
+  userPrivilege: userPrivilegeRouter,
   video: videoRouter,
   vodScreen: vodScreenRouter,
   vodScreenType: vodScreenTypeRouter,

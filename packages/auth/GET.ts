@@ -3,6 +3,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 
 import { db, tableCreator } from "@media/db";
+import { privilages } from "@media/db/schema/auth";
 
 import { env } from "./env.mjs";
 
@@ -28,6 +29,38 @@ export const {
         },
       };
     },
+
+    async signIn({ user, account, profile, email, credentials }) {
+      console.warn(
+        "sign in - get.ts",
+        "user : ",
+        user,
+        "account : ",
+        account,
+        "profile : ",
+        profile,
+        "email : ",
+        email,
+        "credentials",
+        credentials,
+      );
+      const privilage = await db.query.privilages.findFirst({
+        where: (table, { eq }) => eq(table.userId, user.id),
+      });
+      !privilage &&
+        db.insert(privilages).values({
+          id: user.id,
+          userId: user.id,
+          media: 1,
+          branding: 1,
+          cast: 1,
+          screens: 1,
+          dictionary: 1,
+          menu: 1,
+          purcchase: 1,
+        });
+      return true;
+    },
     // @TODO - if you wanna have auth on the edge
     jwt: ({ token, profile }) => {
       if (profile?.id) {
@@ -38,6 +71,7 @@ export const {
     },
     // @TODO
     authorized({ request, auth }) {
+      console.warn("authorized - get.ts");
       return !!auth?.user;
     },
   },

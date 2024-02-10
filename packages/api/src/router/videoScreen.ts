@@ -9,10 +9,10 @@ import {
 } from "@media/db/schema/vodScreen";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const vodScreenRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.vodScreens;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -40,7 +40,7 @@ export const vodScreenRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.vodScreens.findFirst({
@@ -52,12 +52,12 @@ export const vodScreenRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(vodScreensInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.vodScreens).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(vodScreensInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -65,7 +65,7 @@ export const vodScreenRouter = createTRPCRouter({
         .set(input)
         .where(eq(schema.vodScreens.id, input.id ?? 0));
     }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.vodScreens)
       .where(eq(schema.vodScreens.id, input));
@@ -73,7 +73,7 @@ export const vodScreenRouter = createTRPCRouter({
 });
 
 export const vodScreenTypeRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.vodScreenTypes;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -96,7 +96,7 @@ export const vodScreenTypeRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.vodScreenTypes.findFirst({
@@ -104,12 +104,12 @@ export const vodScreenTypeRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(vodScreenTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.vodScreenTypes).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(vodScreenTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -117,7 +117,7 @@ export const vodScreenTypeRouter = createTRPCRouter({
         .set(input)
         .where(eq(schema.vodScreenTypes.id, input.id ?? 0));
     }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.vodScreenTypes)
       .where(eq(schema.vodScreenTypes.id, input));
@@ -125,7 +125,7 @@ export const vodScreenTypeRouter = createTRPCRouter({
 });
 
 export const vodScreenMediaListRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.vodScreenMediaLists;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -153,7 +153,7 @@ export const vodScreenMediaListRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.vodScreenMediaLists.findFirst({
@@ -165,12 +165,12 @@ export const vodScreenMediaListRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(vodScreenMediaListsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.vodScreenMediaLists).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(vodScreenMediaListsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -178,7 +178,7 @@ export const vodScreenMediaListRouter = createTRPCRouter({
         .set(input)
         .where(eq(schema.vodScreenMediaLists.id, input.id ?? 0));
     }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.vodScreenMediaLists)
       .where(eq(schema.vodScreenMediaLists.id, input));

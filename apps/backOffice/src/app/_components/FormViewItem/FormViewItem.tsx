@@ -12,6 +12,7 @@ interface formItemProps {
   classes: string;
   type?: InputTypes;
   register?: UseFormRegister<any>;
+  isLabelVisible?: boolean;
 }
 
 export const FormViewItem = ({
@@ -19,9 +20,10 @@ export const FormViewItem = ({
   classes,
   type,
   register,
+  isLabelVisible = true,
 }: formItemProps) => (
   <FormItem className={classes}>
-    <FormLabel>{field.name}</FormLabel>
+    {isLabelVisible && <FormLabel>{field.name}</FormLabel>}
     {type === InputTypes.foreignKey ? (
       <SelectForeignKey
         foreignKey={field.name}
@@ -36,6 +38,8 @@ export const FormViewItem = ({
           <Input
             {...field}
             type={getHtmlInputType(type)}
+            {...(type === InputTypes.checkbox &&
+              field.value && { checked: true })}
             {...(getHtmlInputType(type) === "number" && register
               ? register(field.name, { valueAsNumber: true })
               : {})}

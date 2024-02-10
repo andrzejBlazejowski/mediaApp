@@ -55,8 +55,16 @@ export default function Page() {
       data: data,
       headersConfig,
       onDeleteRow: async (id) => {
-        await deleteRow.mutateAsync(id);
-        await invalidate();
+        try {
+          await deleteRow.mutateAsync(id);
+          await invalidate();
+        } catch (e) {
+          toast({
+            variant: "destructive",
+            title: "Action not permited",
+            description: "You can not delete.",
+          });
+        }
       },
     } as TableViewProps;
   }, [rawData]);

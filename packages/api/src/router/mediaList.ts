@@ -9,10 +9,10 @@ import {
 } from "@media/db/schema/mediaList";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const mediaListRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.mediaLists;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -40,7 +40,7 @@ export const mediaListRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaLists.findFirst({
@@ -52,12 +52,12 @@ export const mediaListRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(mediaListsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaLists).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(mediaListsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -65,7 +65,7 @@ export const mediaListRouter = createTRPCRouter({
         .set(input)
         .where(eq(schema.mediaLists.id, input.id ?? 0));
     }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.mediaLists)
       .where(eq(schema.mediaLists.id, input));
@@ -73,7 +73,7 @@ export const mediaListRouter = createTRPCRouter({
 });
 
 export const mediaListTypeRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.mediaListTypes;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -96,7 +96,7 @@ export const mediaListTypeRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaListTypes.findFirst({
@@ -104,12 +104,12 @@ export const mediaListTypeRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(mediaListTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaListTypes).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(mediaListTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -117,7 +117,7 @@ export const mediaListTypeRouter = createTRPCRouter({
         .set(input)
         .where(eq(schema.mediaListTypes.id, input.id ?? 0));
     }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.mediaListTypes)
       .where(eq(schema.mediaListTypes.id, input));
@@ -125,7 +125,7 @@ export const mediaListTypeRouter = createTRPCRouter({
 });
 
 export const mediaListMediaRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.mediaListMedias;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -153,7 +153,7 @@ export const mediaListMediaRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaListMedias.findFirst({
@@ -165,12 +165,12 @@ export const mediaListMediaRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(mediaListMediasInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaListMedias).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(mediaListMediasInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -178,7 +178,7 @@ export const mediaListMediaRouter = createTRPCRouter({
         .set(input)
         .where(eq(schema.mediaListMedias.id, input.id ?? 0));
     }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.mediaListMedias)
       .where(eq(schema.mediaListMedias.id, input));

@@ -9,24 +9,23 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
-import { AuthButtons } from "../auth-showcase";
 import { ThemeToggle } from "../ThemeToggle";
+import { Toaster } from "../ui/toaster";
 
-type MenuComponents = Record<string, MenuComponent[]>;
+export type MenuComponents = Record<string, MenuComponent[]>;
 
-interface MenuComponent {
+export interface MenuComponent {
   title: string;
   href: string;
   description: string;
 }
 
-const menuComponents = {
+const menuItems: MenuComponents = {
   media: [
     {
       title: "media",
@@ -266,44 +265,57 @@ const menuComponents = {
       description: "loream ipsum",
     },
   ],
-};
+} as MenuComponents;
 
-export function useMenuData() {
-  const platform = "android";
-
-  const rawData = api.expo.getMenu.useQuery({ platform });
-  const { data } = rawData;
-
-  interface MenuItem {
-    name: string;
-    id: number;
-    url: string;
-    type: "article" | "vod/list" | "vod/grid";
-  }
-
-  return React.useMemo(() => {
-    const menuItems: MenuItem[] = data?.menuPlatforms[0]
-      ? data.menuPlatforms[0].menu.menuLinks.map((menuLink) => {
-          return {
-            name: menuLink.name ?? menuLink.id.toString(),
-            id: menuLink.id,
-            url: menuLink.menuLinkImage.image.url,
-            type: "article",
-          };
-        })
-      : [];
-    const title: string = data?.menuPlatforms[0]?.menu.name ?? "";
-    return { menuItems, title };
-  }, [data]);
+enum accesses {
+  read = 1,
+  write = 2,
+  delete = 4,
 }
 
+const isReadAccess = (val = 0) => {
+  return (val & accesses.read) === accesses.read;
+};
+
 export function TopMenu({ children }: { children: JSX.Element }) {
-  const { menuItems, title } = useMenuData();
+  const { data: session, status } = useSession();
+  const userId = session?.user.id ?? "";
+  const rawUser = api.user.byId.useQuery({ id: userId });
+  const userMenuItems = React.useMemo(() => {
+    const privilages = !rawUser.data?.privilage
+      ? {
+          media: 1,
+          screens: 1,
+          branding: 1,
+          cast: 1,
+          dictionary: 1,
+          menu: 1,
+          purcchase: 1,
+        }
+      : rawUser.data.privilage;
+    const menuItem: MenuComponents = {};
+
+    if (isReadAccess(privilages.media)) menuItem.media = menuItems.media || [];
+    if (isReadAccess(privilages.branding))
+      menuItem.branding = menuItems.branding || [];
+    if (isReadAccess(privilages.cast)) menuItem.cast = menuItems.cast || [];
+    if (isReadAccess(privilages.screens))
+      menuItem.screens = menuItems.screens || [];
+    if (isReadAccess(privilages.dictionary))
+      menuItem.dictionary = menuItems.dictionary || [];
+    if (isReadAccess(privilages.menu)) menuItem.menu = menuItems.menu || [];
+    if (isReadAccess(privilages.purcchase))
+      menuItem.purcchase = menuItems.purcchase || [];
+
+    return menuItem;
+  }, [rawUser]);
 
   return (
     <NavigationMenu>
+      <Toaster />
+
       <NavigationMenuList>
-        {Object.entries(menuComponents).map(([key, components]) => (
+        {Object.entries(userMenuItems).map(([key, components]) => (
           <NavigationMenuItem key={key}>
             <NavigationMenuTrigger className="text-foreground">
               {key}

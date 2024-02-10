@@ -8,10 +8,10 @@ import {
 } from "@media/db/schema/platform";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const platformRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.platforms;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -37,7 +37,7 @@ export const platformRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.platforms.findFirst({
@@ -47,12 +47,12 @@ export const platformRouter = createTRPCRouter({
         },
       });
     }),
-  create: protectedProcedure
+  create: permitedProcedure
     .input(platformsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.platforms).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(platformsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -61,7 +61,7 @@ export const platformRouter = createTRPCRouter({
         .where(eq(schema.platforms.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.platforms)
       .where(eq(schema.platforms.id, input));
@@ -69,7 +69,7 @@ export const platformRouter = createTRPCRouter({
 });
 
 export const menuPlatformRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.menuPlatforms;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -96,7 +96,7 @@ export const menuPlatformRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.menuPlatforms.findFirst({
@@ -108,12 +108,12 @@ export const menuPlatformRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(menuPlatformsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.menuPlatforms).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(menuPlatformsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -122,7 +122,7 @@ export const menuPlatformRouter = createTRPCRouter({
         .where(eq(schema.menuPlatforms.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.menuPlatforms)
       .where(eq(schema.menuPlatforms.id, input));

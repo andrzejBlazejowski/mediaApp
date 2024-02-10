@@ -5,10 +5,10 @@ import { schema } from "@media/db";
 import { imagesInsertSchema } from "@media/db/schema/image";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const imageRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.images;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -32,7 +32,7 @@ export const imageRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.images.findFirst({
@@ -40,12 +40,12 @@ export const imageRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(imagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.images).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(imagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -53,7 +53,7 @@ export const imageRouter = createTRPCRouter({
         .set(input)
         .where(eq(schema.images.id, input.id ?? 0));
     }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.images).where(eq(schema.images.id, input));
   }),
 });

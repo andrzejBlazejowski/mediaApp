@@ -11,10 +11,10 @@ import {
 } from "@media/db/schema/cast";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const castMemberRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.castMembers;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -44,7 +44,7 @@ export const castMemberRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.castMembers.findFirst({
@@ -57,12 +57,12 @@ export const castMemberRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(castMembersInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.castMembers).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(castMembersInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -71,7 +71,7 @@ export const castMemberRouter = createTRPCRouter({
         .where(eq(schema.videoContents.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.castMembers)
       .where(eq(schema.castMembers.id, input));
@@ -79,7 +79,7 @@ export const castMemberRouter = createTRPCRouter({
 });
 
 export const castMemberImageRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.castMemberImages;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -108,7 +108,7 @@ export const castMemberImageRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.castMemberImages.findFirst({
@@ -120,12 +120,12 @@ export const castMemberImageRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(castMemberImagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.castMemberImages).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(castMemberImagesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -134,7 +134,7 @@ export const castMemberImageRouter = createTRPCRouter({
         .where(eq(schema.castMemberImages.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.castMemberImages)
       .where(eq(schema.castMemberImages.id, input));
@@ -142,7 +142,7 @@ export const castMemberImageRouter = createTRPCRouter({
 });
 
 export const castRoleRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.castRoles;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -166,7 +166,7 @@ export const castRoleRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.castRoles.findFirst({
@@ -174,12 +174,12 @@ export const castRoleRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(castRolesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.castRoles).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(castRolesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -188,7 +188,7 @@ export const castRoleRouter = createTRPCRouter({
         .where(eq(schema.castRoles.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.castRoles)
       .where(eq(schema.castRoles.id, input));
@@ -196,7 +196,7 @@ export const castRoleRouter = createTRPCRouter({
 });
 
 export const mediaCastMemberRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.mediaCastMembers;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -225,7 +225,7 @@ export const mediaCastMemberRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.mediaCastMembers.findFirst({
@@ -237,12 +237,12 @@ export const mediaCastMemberRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(mediaCastMembersInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.mediaCastMembers).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(mediaCastMembersInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -251,7 +251,7 @@ export const mediaCastMemberRouter = createTRPCRouter({
         .where(eq(schema.mediaCastMembers.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.mediaCastMembers)
       .where(eq(schema.mediaCastMembers.id, input));
@@ -259,7 +259,7 @@ export const mediaCastMemberRouter = createTRPCRouter({
 });
 
 export const peopleRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.people;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -287,7 +287,7 @@ export const peopleRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.people.findFirst({
@@ -298,12 +298,12 @@ export const peopleRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(peopleInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.people).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(peopleInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -312,7 +312,7 @@ export const peopleRouter = createTRPCRouter({
         .where(eq(schema.people.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.people).where(eq(schema.people.id, input));
   }),
 });

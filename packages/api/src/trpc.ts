@@ -6,11 +6,19 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
+import type { inferAsyncReturnType } from "@trpc/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
+import { not, rule, shield } from "trpc-shield";
 import { ZodError } from "zod";
 
-import { auth } from "@media/auth";
+import {
+  auth,
+  getPrivilageArea,
+  isDeleteAccess,
+  isReadAccess,
+  isWriteAccess,
+} from "@media/auth";
 import type { Session } from "@media/auth";
 import { db } from "@media/db";
 
@@ -82,6 +90,9 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   },
 });
 
+// 2.1 export the context type
+export type TRPCContext = inferAsyncReturnType<typeof createTRPCContext>;
+
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
  *
@@ -120,13 +131,73 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
-/**
- * Protected (authed) procedure
- *
- * If you want a query or mutation to ONLY be accessible to logged in users, use
- * this. It verifies the session is valid and guarantees ctx.session.user is not
- * null
- *
- * @see https://trpc.io/docs/procedures
- */
+const isReadAllowed = rule<TRPCContext>()(async (
+  ctx,
+  type,
+  path,
+  input,
+  rawInput,
+) => {
+  const privilageValue = await getPrivilageValue({ ctx, path });
+
+  return isReadAccess(privilageValue);
+});
+
+const isWriteAllowed = rule<TRPCContext>()(async (
+  ctx,
+  type,
+  path,
+  input,
+  rawInput,
+) => {
+  const privilageValue = await getPrivilageValue({ ctx, path });
+
+  return isWriteAccess(privilageValue);
+});
+
+const isDeleteAllowed = rule<TRPCContext>()(async (
+  ctx,
+  type,
+  path,
+  input,
+  rawInput,
+) => {
+  const privilageValue = await getPrivilageValue({ ctx, path });
+
+  return isDeleteAccess(privilageValue);
+});
+
+const getPrivilageValue = async ({
+  ctx,
+  path,
+}: {
+  ctx: TRPCContext;
+  path: string;
+}) => {
+  const userId = ctx.session?.user?.id?.toString() ?? "0";
+  const area = getPrivilageArea(path);
+  const privilage = await db.query.privilages.findFirst({
+    where: (table, { eq }) => eq(table.userId, userId),
+  });
+  return privilage?.[area] ?? 0;
+};
+
+export const permissions = shield<TRPCContext>({
+  query: {
+    all: isReadAllowed,
+    byId: isReadAllowed,
+  },
+  mutation: {
+    create: isWriteAllowed,
+    update: isWriteAllowed,
+    delete: isDeleteAllowed,
+  },
+});
+
+export const permissionsMiddleware = t.middleware(permissions);
+
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+export const permitedProcedure = t.procedure
+  .use(enforceUserIsAuthed)
+  .use(permissionsMiddleware);

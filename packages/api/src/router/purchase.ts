@@ -9,10 +9,10 @@ import {
 } from "@media/db/schema/purchase";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const purchaseRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.purchases;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -40,7 +40,7 @@ export const purchaseRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.purchases.findFirst({
@@ -52,12 +52,12 @@ export const purchaseRouter = createTRPCRouter({
         },
       });
     }),
-  create: protectedProcedure
+  create: permitedProcedure
     .input(purchasesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.purchases).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(purchasesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -66,7 +66,7 @@ export const purchaseRouter = createTRPCRouter({
         .where(eq(schema.purchases.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.purchases)
       .where(eq(schema.purchases.id, input));
@@ -74,7 +74,7 @@ export const purchaseRouter = createTRPCRouter({
 });
 
 export const purchaseItemRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.purchaseItems;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -102,7 +102,7 @@ export const purchaseItemRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.purchaseItems.findFirst({
@@ -113,12 +113,12 @@ export const purchaseItemRouter = createTRPCRouter({
         },
       });
     }),
-  create: protectedProcedure
+  create: permitedProcedure
     .input(purchaseItemsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.purchaseItems).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(purchaseItemsInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -127,7 +127,7 @@ export const purchaseItemRouter = createTRPCRouter({
         .where(eq(schema.purchaseItems.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.purchaseItems)
       .where(eq(schema.purchaseItems.id, input));
@@ -135,7 +135,7 @@ export const purchaseItemRouter = createTRPCRouter({
 });
 
 export const purchaseTypeRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.purchaseTypes;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -160,7 +160,7 @@ export const purchaseTypeRouter = createTRPCRouter({
       }),
     });
   }),
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.purchaseTypes.findFirst({
@@ -168,12 +168,12 @@ export const purchaseTypeRouter = createTRPCRouter({
         with: {},
       });
     }),
-  create: protectedProcedure
+  create: permitedProcedure
     .input(purchaseTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.purchaseTypes).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(purchaseTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -182,7 +182,7 @@ export const purchaseTypeRouter = createTRPCRouter({
         .where(eq(schema.purchaseTypes.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.purchaseTypes)
       .where(eq(schema.purchaseTypes.id, input));

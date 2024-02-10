@@ -39,4 +39,5 @@ export interface TableViewProps {
   onSortByColumn?: (column: string, sortDirection: SortTypes) => void;
   onFilter?: (column: string, value: string, eq: boolean) => void;
   onFilterClear?: () => void;
+  isAddButtonVisible?: boolean;
 }

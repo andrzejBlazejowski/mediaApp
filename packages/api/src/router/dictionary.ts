@@ -9,10 +9,10 @@ import {
 } from "@media/db/schema/dictionary";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const clientAppDictionaryRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.clientAppDictionaries;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -36,7 +36,7 @@ export const clientAppDictionaryRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.clientAppDictionaries.findFirst({
@@ -44,12 +44,12 @@ export const clientAppDictionaryRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(clientAppDictionariesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.clientAppDictionaries).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(clientAppDictionariesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -58,7 +58,7 @@ export const clientAppDictionaryRouter = createTRPCRouter({
         .where(eq(schema.clientAppDictionaries.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.clientAppDictionaries)
       .where(eq(schema.clientAppDictionaries.id, input));
@@ -66,7 +66,7 @@ export const clientAppDictionaryRouter = createTRPCRouter({
 });
 
 export const backOfficeDictionaryRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.backOfficeDictionaries;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -90,7 +90,7 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.backOfficeDictionaries.findFirst({
@@ -98,12 +98,12 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(backOfficeDictionariesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.backOfficeDictionaries).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(backOfficeDictionariesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -112,7 +112,7 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
         .where(eq(schema.backOfficeDictionaries.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.backOfficeDictionaries)
       .where(eq(schema.backOfficeDictionaries.id, input));
@@ -120,7 +120,7 @@ export const backOfficeDictionaryRouter = createTRPCRouter({
 });
 
 export const countryRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.countries;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -144,7 +144,7 @@ export const countryRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.countries.findFirst({
@@ -152,12 +152,12 @@ export const countryRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(countriesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.countries).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(countriesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -166,7 +166,7 @@ export const countryRouter = createTRPCRouter({
         .where(eq(schema.countries.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.countries)
       .where(eq(schema.countries.id, input));

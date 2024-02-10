@@ -8,10 +8,10 @@ import {
 } from "@media/db/schema/screen";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const screenRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.screens;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -42,7 +42,7 @@ export const screenRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.screens.findFirst({
@@ -56,12 +56,12 @@ export const screenRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(screensInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.screens).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(screensInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -70,13 +70,13 @@ export const screenRouter = createTRPCRouter({
         .where(eq(schema.screens.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.screens).where(eq(schema.screens.id, input));
   }),
 });
 
 export const screenTypeRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.screenTypes;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -100,7 +100,7 @@ export const screenTypeRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.screenTypes.findFirst({
@@ -108,12 +108,12 @@ export const screenTypeRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(screenTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.screenTypes).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(screenTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -121,7 +121,7 @@ export const screenTypeRouter = createTRPCRouter({
         .set(input)
         .where(eq(schema.screenTypes.id, input.id ?? 0));
     }),
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.screenTypes)
       .where(eq(schema.screenTypes.id, input));

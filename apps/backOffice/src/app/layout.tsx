@@ -5,7 +5,6 @@ import "~/styles/globals.css";
 
 import { headers } from "next/headers";
 
-import type { Session } from "@media/auth";
 import { auth } from "@media/auth";
 
 import { AuthButtons, TopMenu } from "./_components/";
@@ -25,6 +24,7 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+
   return (
     <html lang="en">
       <body className={["font-sans", fontSans.variable].join(" ")}>

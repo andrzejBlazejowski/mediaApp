@@ -9,10 +9,10 @@ import {
 } from "@media/db/schema/invoice";
 
 import { allQuerySchema } from "../../utils";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, permitedProcedure } from "../trpc";
 
 export const invoiceRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.invoices;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -42,7 +42,7 @@ export const invoiceRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.invoices.findFirst({
@@ -55,12 +55,12 @@ export const invoiceRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(invoicesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoices).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(invoicesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -69,13 +69,13 @@ export const invoiceRouter = createTRPCRouter({
         .where(eq(schema.invoices.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.delete(schema.invoices).where(eq(schema.invoices.id, input));
   }),
 });
 
 export const invoiceTypeRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.invoiceTypes;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -99,7 +99,7 @@ export const invoiceTypeRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.invoiceTypes.findFirst({
@@ -107,12 +107,12 @@ export const invoiceTypeRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(invoiceTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoiceTypes).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(invoiceTypesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -121,7 +121,7 @@ export const invoiceTypeRouter = createTRPCRouter({
         .where(eq(schema.invoiceTypes.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.invoiceTypes)
       .where(eq(schema.invoiceTypes.id, input));
@@ -129,7 +129,7 @@ export const invoiceTypeRouter = createTRPCRouter({
 });
 
 export const invoiceTemplateRouter = createTRPCRouter({
-  all: publicProcedure.input(allQuerySchema).query(({ ctx, input }) => {
+  all: permitedProcedure.input(allQuerySchema).query(({ ctx, input }) => {
     const schemaTable = schema.invoiceTemplates;
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
@@ -153,7 +153,7 @@ export const invoiceTemplateRouter = createTRPCRouter({
     });
   }),
 
-  byId: publicProcedure
+  byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.invoiceTemplates.findFirst({
@@ -161,12 +161,12 @@ export const invoiceTemplateRouter = createTRPCRouter({
       });
     }),
 
-  create: protectedProcedure
+  create: permitedProcedure
     .input(invoiceTemplatesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.insert(schema.invoiceTemplates).values(input);
     }),
-  update: protectedProcedure
+  update: permitedProcedure
     .input(invoiceTemplatesInsertSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db
@@ -175,7 +175,7 @@ export const invoiceTemplateRouter = createTRPCRouter({
         .where(eq(schema.invoiceTemplates.id, input.id ?? 0));
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
+  delete: permitedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.invoiceTemplates)
       .where(eq(schema.invoiceTemplates.id, input));

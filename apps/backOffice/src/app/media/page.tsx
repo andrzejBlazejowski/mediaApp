@@ -2,15 +2,19 @@
 
 import React, { useMemo } from "react";
 
+import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
+import { useToast } from "~/app/_components/ui/use-toast";
 import { api } from "~/utils/api";
-import { InputTypes } from "../_components/FormView/FormView.types";
 import { useFilter, useHeadersConfig, useSort } from "../_lib/hooks";
 import { title, uiSchema } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
+
+  const { toast } = useToast();
+
   const initialHeadersConfig = useMemo(
     () => ({
       id: {
@@ -94,8 +98,16 @@ export default function Page() {
       onFilterClear,
 
       onDeleteRow: async (id) => {
-        await deleteRow.mutateAsync(id);
-        await invalidate();
+        try {
+          await deleteRow.mutateAsync(id);
+          await invalidate();
+        } catch (e) {
+          toast({
+            variant: "destructive",
+            title: "Action not permited",
+            description: "You can not delete.",
+          });
+        }
       },
     } as TableViewProps;
   }, [rawData, headersConfig]);
