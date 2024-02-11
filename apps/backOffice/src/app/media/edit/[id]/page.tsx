@@ -11,6 +11,7 @@ import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
 import { MediaCastMemberLookup } from "~/app/_components/Lookups/MediaCastMemberLookup";
+import { VideoContentLookup } from "~/app/_components/Lookups/VideoContentLookup";
 import { useToast } from "~/app/_components/ui/use-toast";
 import { api } from "~/utils/api";
 import { title, uiSchema } from "../../constants";
@@ -69,6 +70,7 @@ export default function Page() {
     >
       <>
         <MediaCastMemberLookup invalidate={invalidate} id={id} />
+        <VideoContentLookup invalidate={invalidate} id={id} />
         <Button variant="soft">manage video contents</Button>
         <Button variant="soft">manage images</Button>
         <Button variant="soft">manage media lists</Button>
