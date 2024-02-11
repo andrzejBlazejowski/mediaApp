@@ -5,11 +5,13 @@ export const useLookup = ({
   id,
   lookupKey,
   route,
+  invalidate,
 }: {
   key: string;
   id: string;
   lookupKey: string;
   route: any;
+  invalidate: any;
 }) => {
   const rawData = route.all.useQuery({
     filter: { column: key, value: id, eq: true },
@@ -51,6 +53,10 @@ export const useLookup = ({
       toInsert.forEach(async (value: number) => {
         await mutateAsync({ [key]: parseInt(id), [lookupKey]: value });
       });
+    }
+
+    if (toDelete.length > 0 || toInsert.length > 0) {
+      await invalidate();
     }
   };
 
