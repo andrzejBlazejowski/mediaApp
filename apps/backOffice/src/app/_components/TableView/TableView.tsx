@@ -134,12 +134,6 @@ export function TableView({
 
   return (
     <>
-      {isLookupMode && (
-        <div className="mb-10 mt-10 flex justify-around">
-          <Button>Save</Button>
-          <Button>Cancel</Button>
-        </div>
-      )}
       {!isLookupMode && (
         <>
           <h2 className="mt-6 scroll-m-20 border-b pb-10 text-center text-3xl font-semibold tracking-tight first:mt-0">

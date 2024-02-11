@@ -3,14 +3,16 @@
 import { useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@radix-ui/themes";
+import { Button, Dialog, Flex } from "@radix-ui/themes";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
+import { TableView } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
+import { useMediaCastMembers } from "~/app/cast/media-cast-members/useMediaCastMembers";
 import { api } from "~/utils/api";
 import { title, uiSchema } from "../../constants";
 
@@ -57,6 +59,8 @@ export default function Page() {
     }
   };
 
+  const { mediaIndexProps } = useMediaCastMembers(true);
+
   return (
     <FormView
       type="edit"
@@ -67,7 +71,27 @@ export default function Page() {
       zSchema={schema}
     >
       <>
-        <Button variant="soft">manage cast members</Button>
+        <Dialog.Root>
+          <Dialog.Trigger>
+            <Button variant="soft">manage cast members</Button>
+          </Dialog.Trigger>
+
+          <Dialog.Content style={{ maxWidth: "80%" }}>
+            <Flex gap="3" mt="4" justify="end">
+              <Dialog.Close>
+                <Button variant="soft" color="gray">
+                  Cancel
+                </Button>
+              </Dialog.Close>
+              <Dialog.Close>
+                <Button>Save</Button>
+              </Dialog.Close>
+            </Flex>
+            <Dialog.Title>manage cast members</Dialog.Title>
+            <TableView {...mediaIndexProps} />
+          </Dialog.Content>
+        </Dialog.Root>
+
         <Button variant="soft">manage video contents</Button>
         <Button variant="soft">manage images</Button>
         <Button variant="soft">manage media lists</Button>
