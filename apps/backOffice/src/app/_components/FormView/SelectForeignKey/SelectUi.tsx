@@ -1,12 +1,5 @@
 import React from "react";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
+import { Select } from "@radix-ui/themes";
 
 interface SelectProps {
   placeholder?: string;
@@ -27,7 +20,7 @@ export function SelectUi({
   onValueChange,
 }: SelectProps) {
   return (
-    <Select
+    <Select.Root
       defaultValue={defaultValue + ""}
       value={defaultValue + ""}
       onValueChange={(value: string) =>
@@ -35,18 +28,19 @@ export function SelectUi({
         onValueChange(type === "number" ? parseInt(value) : value)
       }
     >
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
+      <Select.Trigger
+        className="w-[180px]"
+        placeholder={placeholder}
+      ></Select.Trigger>
+      <Select.Content>
         {options.map((option) => {
           return (
-            <SelectItem key={option.value} value={option.value}>
+            <Select.Item key={option.value} value={option.value}>
               {option.name}
-            </SelectItem>
+            </Select.Item>
           );
         })}
-      </SelectContent>
-    </Select>
+      </Select.Content>
+    </Select.Root>
   );
 }

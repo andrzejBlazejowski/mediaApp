@@ -1,3 +1,4 @@
+import { TextArea } from "@radix-ui/themes";
 import { UseFormRegister } from "react-hook-form";
 
 import type { IFeield } from "../FormView/FormView.types";
@@ -5,7 +6,6 @@ import { InputTypes } from "../FormView/FormView.types";
 import SelectForeignKey from "../FormView/SelectForeignKey/SelectForeignKey";
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 
 interface formItemProps {
   field: IFeield;
@@ -33,7 +33,7 @@ export const FormViewItem = ({
     ) : (
       <FormControl>
         {type === InputTypes.textArea ? (
-          <Textarea className="block w-full" {...field} />
+          <TextArea className="block w-full" {...field} />
         ) : (
           <Input
             {...field}
