@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Button,
+  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -24,6 +25,7 @@ export function TableView({
   onFilter,
   onFilterClear,
   isAddButtonVisible = true,
+  isLookupMode = false,
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
@@ -132,37 +134,56 @@ export function TableView({
 
   return (
     <>
-      <h2 className="mt-6 scroll-m-20 border-b pb-10 text-center text-3xl font-semibold tracking-tight first:mt-0">
-        {title}
-        {isAddButtonVisible && (
-          <Button className=" ml-6" onClick={onAddRow}>
-            <Plus />
-          </Button>
-        )}
-      </h2>
-      <FilterForm
-        onColumnChange={onFilterColumnChange}
-        onValueChange={onFilterValueChange}
-        onButtonPressed={onFilterButtonPressed}
-        currentColumn={currentColumnForFilter}
-        currentValue={currentFilterValue}
-        isButtonDisabled={isFilterButtonDisabled}
-        headersConfig={headersConfig}
-        onClearButtonPressed={onClearButtonPressed}
-        isClearButtonDisabled={isClearButtonDisabled}
-      />
+      {!isLookupMode && (
+        <>
+          <h2 className="mt-6 scroll-m-20 border-b pb-10 text-center text-3xl font-semibold tracking-tight first:mt-0">
+            {title}
+            {isAddButtonVisible && (
+              <Button className=" ml-6" onClick={onAddRow}>
+                <Plus />
+              </Button>
+            )}
+          </h2>
+          <FilterForm
+            onColumnChange={onFilterColumnChange}
+            onValueChange={onFilterValueChange}
+            onButtonPressed={onFilterButtonPressed}
+            currentColumn={currentColumnForFilter}
+            currentValue={currentFilterValue}
+            isButtonDisabled={isFilterButtonDisabled}
+            headersConfig={headersConfig}
+            onClearButtonPressed={onClearButtonPressed}
+            isClearButtonDisabled={isClearButtonDisabled}
+          />
+        </>
+      )}
       <Table.Root>
         <TableHeader>
           <TableRow>
+            {isLookupMode && (
+              <Table.ColumnHeaderCell key="checkboxes" className="w-[50px]">
+                is added
+              </Table.ColumnHeaderCell>
+            )}
             {getOrderedHeaderElements()}
-            <Table.ColumnHeaderCell key="actions" className="w-[100px]">
-              actions
-            </Table.ColumnHeaderCell>
+            {!isLookupMode && (
+              <Table.ColumnHeaderCell key="actions" className="w-[100px]">
+                actions
+              </Table.ColumnHeaderCell>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((row, index) => (
             <TableRow key={index}>
+              {isLookupMode && (
+                <TableCell
+                  key={index + (crypto?.randomUUID() || "") + "checkbox"}
+                  className="font-medium"
+                >
+                  <Checkbox size="3" defaultChecked />
+                </TableCell>
+              )}
               {getOrderedTableCells(row).map((field) => (
                 <TableCell
                   key={index + (crypto?.randomUUID() || "") + field.value}
@@ -171,27 +192,29 @@ export function TableView({
                   {field.value}
                 </TableCell>
               ))}
-              <TableCell key="actions" className="font-medium">
-                <Button
-                  className=" mr-2"
-                  onClick={() => {
-                    editRow(row);
-                  }}
-                  variant="soft"
-                  color="jade"
-                >
-                  <Pencil />
-                </Button>
-                <Button
-                  onClick={() => {
-                    deleteRow(row);
-                  }}
-                  variant="soft"
-                  color="amber"
-                >
-                  <Trash />
-                </Button>
-              </TableCell>
+              {!isLookupMode && (
+                <TableCell key="actions" className="font-medium">
+                  <Button
+                    className=" mr-2"
+                    onClick={() => {
+                      editRow(row);
+                    }}
+                    variant="soft"
+                    color="jade"
+                  >
+                    <Pencil />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      deleteRow(row);
+                    }}
+                    variant="soft"
+                    color="amber"
+                  >
+                    <Trash />
+                  </Button>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

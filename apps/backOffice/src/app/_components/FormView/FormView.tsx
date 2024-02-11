@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { Button } from "@radix-ui/themes";
 import { ArrowLeft } from "lucide-react";
 
 import { FormFieldItem } from "../FormFieldItem";
-import { Button } from "../ui/button";
 import { Form } from "../ui/form";
 import { hiddenFeilds } from "./FormView.constants";
 import type { FormViewProps } from "./FormView.types";
@@ -15,13 +15,15 @@ export default function FormView({
   zSchema,
   title,
   form,
+  children,
 }: FormViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
   const zShape = Object.entries(zSchema.shape);
+  const isAddForm = type === "add";
 
   const goBack = useCallback(() => {
-    if (type === "add") {
+    if (isAddForm) {
       const desiredPath = pathname.replace("/add", "");
       Router.push(desiredPath);
     } else if (type === "edit") {
@@ -36,7 +38,7 @@ export default function FormView({
 
   const onValidSubmit = useCallback(
     async (data: any) => {
-      if (type === "add") {
+      if (isAddForm) {
         data.createdAt = new Date();
         data.createdBy = "1";
       }
@@ -85,8 +87,10 @@ export default function FormView({
             />
           );
         })}
-        <div className="flex justify-center">
+
+        <div className="flex justify-around ">
           <Button type="submit">Submit</Button>
+          {children && children}
         </div>
       </form>
     </Form>

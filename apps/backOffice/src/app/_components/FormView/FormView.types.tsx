@@ -8,6 +8,7 @@ export interface FormViewProps {
   onSubmit: (values: any) => any;
   uiSchema: IuiSchema;
   zSchema: AnyZodObject;
+  children?: React.ReactNode;
 }
 
 export type IuiSchema = Record<string, { classes: string; type: InputTypes }>;

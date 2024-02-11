@@ -53,7 +53,7 @@ export default function Page() {
       },
       category: {
         orderNumber: 4,
-        name: "Category",
+        name: "category",
         label: "Category",
         classNames: "w-[100px]",
         sortable: true,

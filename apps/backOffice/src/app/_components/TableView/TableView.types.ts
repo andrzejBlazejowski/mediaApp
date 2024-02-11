@@ -40,4 +40,5 @@ export interface TableViewProps {
   onFilter?: (column: string, value: string, eq: boolean) => void;
   onFilterClear?: () => void;
   isAddButtonVisible?: boolean;
+  isLookupMode?: boolean;
 }

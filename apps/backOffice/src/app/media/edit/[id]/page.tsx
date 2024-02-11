@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@radix-ui/themes";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -64,6 +65,13 @@ export default function Page() {
       onSubmit={onSubmit}
       uiSchema={uiSchema}
       zSchema={schema}
-    />
+    >
+      <>
+        <Button variant="soft">manage cast members</Button>
+        <Button variant="soft">manage video contents</Button>
+        <Button variant="soft">manage images</Button>
+        <Button variant="soft">manage media lists</Button>
+      </>
+    </FormView>
   );
 }
