@@ -14,9 +14,6 @@ export default function Page() {
 
   const { toast } = useToast();
 
-
-  const { toast } = useToast();
-
   const initialHeadersConfig = useMemo(
     () => ({
       id: {
@@ -104,7 +101,6 @@ export default function Page() {
       onFilterClear,
 
       onDeleteRow: async (id) => {
-          
         try {
           await deleteRow.mutateAsync(id);
           await invalidate();
