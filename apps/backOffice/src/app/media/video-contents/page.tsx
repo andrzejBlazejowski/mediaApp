@@ -3,10 +3,10 @@
 import React, { useMemo } from "react";
 
 import { InputTypes } from "~/app/_components/FormView/FormView.types";
+import type { TableViewProps } from "~/app/_components/TableView";
+import { SortTypes, TableView } from "~/app/_components/TableView";
 import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
-import type { TableViewProps } from "../~/app/_components/TableView";
-import { SortTypes, TableView } from "../~/app/_components/TableView";
 import { title } from "./constants";
 
 export default function Page() {
