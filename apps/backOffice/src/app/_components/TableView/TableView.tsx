@@ -1,19 +1,17 @@
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@radix-ui/themes";
 import { Pencil, Plus, Trash } from "lucide-react";
 
 import type { Row, TableViewProps } from ".";
 import { SortTypes } from ".";
-import { Button } from "../ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
 import { FilterForm, SortIcon } from "./components";
 import { useFiltering, useSortByColumn } from "./hooks/";
 
@@ -62,13 +60,12 @@ export function TableView({
               sortDirection = SortTypes.None,
             },
           ]) => (
-            <TableHead key={name} className={classNames}>
+            <Table.ColumnHeaderCell key={name} className={classNames}>
               <div className="flex items-center justify-evenly">
                 <span key={`head-label-${name}`}>{label}</span>
                 {sortable && (
                   <Button
                     key={`head-sort-button-${name}`}
-                    size="default"
                     onClick={() =>
                       sortByColumn({ name, sortDirection, sortable })
                     }
@@ -78,14 +75,14 @@ export function TableView({
                   </Button>
                 )}
               </div>
-            </TableHead>
+            </Table.ColumnHeaderCell>
           ),
         );
     } else if (data[0]) {
       return Object.entries(data[0]).map(([key]) => (
-        <TableHead key={key} className="w-[100px]">
+        <Table.ColumnHeaderCell key={key} className="w-[100px]">
           {key}
-        </TableHead>
+        </Table.ColumnHeaderCell>
       ));
     } else {
       return null;
@@ -154,13 +151,13 @@ export function TableView({
         onClearButtonPressed={onClearButtonPressed}
         isClearButtonDisabled={isClearButtonDisabled}
       />
-      <Table>
+      <Table.Root>
         <TableHeader>
           <TableRow>
             {getOrderedHeaderElements()}
-            <TableHead key="actions" className="w-[100px]">
+            <Table.ColumnHeaderCell key="actions" className="w-[100px]">
               actions
-            </TableHead>
+            </Table.ColumnHeaderCell>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -176,21 +173,21 @@ export function TableView({
               ))}
               <TableCell key="actions" className="font-medium">
                 <Button
-                  size="icon"
                   className=" mr-2"
                   onClick={() => {
                     editRow(row);
                   }}
-                  variant="secondary"
+                  variant="soft"
+                  color="jade"
                 >
                   <Pencil />
                 </Button>
                 <Button
-                  size="icon"
                   onClick={() => {
                     deleteRow(row);
                   }}
-                  variant="destructive"
+                  variant="soft"
+                  color="amber"
                 >
                   <Trash />
                 </Button>
@@ -198,7 +195,7 @@ export function TableView({
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table.Root>
     </>
   );
 }

@@ -1,14 +1,7 @@
 import React from "react";
+import { Button, Select } from "@radix-ui/themes";
 
-import { InputTypes, IuiSchema } from "../../FormView/FormView.types";
-import { Button } from "../../ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
+import { InputTypes } from "../../FormView/FormView.types";
 import { HeadersConfig } from "../TableView.types";
 import FilterValueInput from "./FilterValueInput";
 
@@ -45,30 +38,29 @@ export function FilterForm({
   return (
     <div className="mb-5 mt-10 flex justify-evenly border-b pb-10">
       <div className=" ">
-        <Select key="select-filter-column" onValueChange={onColumnChange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="choose table collumn to filter in" />
-          </SelectTrigger>
-          <SelectContent>
+        <Select.Root key="select-filter-column" onValueChange={onColumnChange}>
+          <Select.Trigger placeholder="choose table collumn to filter in" />
+
+          <Select.Content>
             {typeof headersConfig !== "undefined" ? (
               Object.entries(headersConfig).map(
                 ([key, config]) =>
                   config.filterable !== false && (
-                    <SelectItem
+                    <Select.Item
                       key={config.name + config.label + key}
                       value={config.name}
                     >
                       {config.label}
-                    </SelectItem>
+                    </Select.Item>
                   ),
               )
             ) : (
-              <SelectItem key="filter_id" value="id">
+              <Select.Item key="filter_id" value="id">
                 Id
-              </SelectItem>
+              </Select.Item>
             )}
-          </SelectContent>
-        </Select>
+          </Select.Content>
+        </Select.Root>
       </div>
 
       <div className="inline w-1/2 ">
