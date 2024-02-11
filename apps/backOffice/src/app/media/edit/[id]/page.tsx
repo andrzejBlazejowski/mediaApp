@@ -12,7 +12,9 @@ import { media } from "@media/db";
 import FormView from "~/app/_components/FormView/FormView";
 import { TableView } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
+import { useLookup } from "~/app/_lib/hooks/useLookup";
 import { useMediaCastMembers } from "~/app/cast/media-cast-members/useMediaCastMembers";
+import { useCastMembers } from "~/app/cast/members/useCastMembers";
 import { api } from "~/utils/api";
 import { title, uiSchema } from "../../constants";
 
@@ -59,7 +61,21 @@ export default function Page() {
     }
   };
 
-  const { mediaIndexProps } = useMediaCastMembers(true);
+  const key = "mediaId";
+  const LinkRoute = api.mediaCastMember;
+
+  const { lookupData, setLookupData, onSaveLookupLinks } = useLookup({
+    key,
+    lookupKey: "castMemberId",
+    id: id.toString(),
+    route: LinkRoute,
+  });
+
+  const { mediaIndexProps } = useCastMembers({
+    isLookupMode: true,
+    defaultValues: lookupData,
+    setLookupData,
+  });
 
   return (
     <FormView
@@ -84,7 +100,7 @@ export default function Page() {
                 </Button>
               </Dialog.Close>
               <Dialog.Close>
-                <Button>Save</Button>
+                <Button onClick={onSaveLookupLinks}>Save</Button>
               </Dialog.Close>
             </Flex>
             <Dialog.Title>manage cast members</Dialog.Title>

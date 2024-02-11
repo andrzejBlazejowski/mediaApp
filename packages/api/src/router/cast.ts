@@ -209,7 +209,11 @@ export const mediaCastMemberRouter = createTRPCRouter({
       }) ?? [];
     return ctx.db.query.mediaCastMembers.findMany({
       with: {
-        castMember: true,
+        castMember: {
+          with: {
+            person: true,
+          },
+        },
         media: true,
       },
 

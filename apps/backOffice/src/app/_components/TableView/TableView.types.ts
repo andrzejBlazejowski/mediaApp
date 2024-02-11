@@ -1,3 +1,5 @@
+import { Dispatch } from "react";
+
 import { InputTypes } from "../FormView/FormView.types";
 
 interface FieldText {
@@ -41,4 +43,6 @@ export interface TableViewProps {
   onFilterClear?: () => void;
   isAddButtonVisible?: boolean;
   isLookupMode?: boolean;
+  defaultValues?: number[];
+  setLookupData?: Dispatch<any>;
 }

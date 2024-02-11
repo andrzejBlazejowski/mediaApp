@@ -26,6 +26,8 @@ export function TableView({
   onFilterClear,
   isAddButtonVisible = true,
   isLookupMode = false,
+  defaultValues,
+  setLookupData,
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
@@ -132,6 +134,19 @@ export function TableView({
     return res;
   };
 
+  const onIsSelectedChange = (id: string) => {
+    if (isLookupMode && setLookupData) {
+      setLookupData((currentArray: number[]) => {
+        if (currentArray.includes(parseInt(id))) {
+          return currentArray.filter((value: number) => value !== parseInt(id));
+        } else {
+          return [...currentArray, parseInt(id)];
+        }
+      });
+    }
+    return true;
+  };
+
   return (
     <>
       {!isLookupMode && (
@@ -181,7 +196,13 @@ export function TableView({
                   key={index + (crypto?.randomUUID() || "") + "checkbox"}
                   className="font-medium"
                 >
-                  <Checkbox size="3" defaultChecked />
+                  <Checkbox
+                    onClick={() => onIsSelectedChange(row.id?.value ?? "")}
+                    size="3"
+                    {...(defaultValues?.includes(parseInt(row.id?.value ?? "0"))
+                      ? { defaultChecked: true }
+                      : {})}
+                  />
                 </TableCell>
               )}
               {getOrderedTableCells(row).map((field) => (

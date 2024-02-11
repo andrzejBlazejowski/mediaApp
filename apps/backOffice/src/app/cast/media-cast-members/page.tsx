@@ -6,7 +6,7 @@ import { TableView } from "~/app/_components/TableView";
 import { useMediaCastMembers } from "./useMediaCastMembers";
 
 export default function Page() {
-  const { mediaIndexProps } = useMediaCastMembers();
+  const { mediaIndexProps } = useMediaCastMembers({});
 
   return <TableView {...mediaIndexProps}></TableView>;
 }

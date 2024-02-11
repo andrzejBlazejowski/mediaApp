@@ -3,6 +3,7 @@
 import type { Dispatch } from "react";
 import { useMemo } from "react";
 
+import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
@@ -10,7 +11,7 @@ import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
-export const useMediaCastMembers = ({
+export const useCastMembers = ({
   isLookupMode = false,
   defaultValues = [],
   setLookupData,
@@ -31,28 +32,47 @@ export const useMediaCastMembers = ({
         label: "id",
         classNames: "w-[100px]",
 
+        sortable: true,
         filterable: true,
         sortDirection: SortTypes.None,
       },
-      media: {
+      firstName: {
         orderNumber: 1,
-        name: "media",
-        label: "media",
+        name: "firstName",
+        label: "firstName",
         classNames: "w-[100px]",
-        foreginKey: "mediaId",
+
         sortable: true,
         filterable: true,
         sortDirection: SortTypes.None,
+        foreignKey: "countryId",
+        type: InputTypes.foreignKey,
       },
-      castMember: {
+      lastName: {
         orderNumber: 2,
-        name: "castMember",
-        label: "cast member",
+        name: "lastName",
+        label: "lastName",
         classNames: "w-[100px]",
-        foreginKey: "castMemberId",
+        hidden: true,
+
         sortable: true,
         filterable: true,
         sortDirection: SortTypes.None,
+        foreignKey: "countryId",
+        type: InputTypes.foreignKey,
+      },
+      role: {
+        orderNumber: 3,
+        name: "role",
+        label: "role",
+        classNames: "w-[100px]",
+
+        sortable: true,
+        filterable: true,
+        sortDirection: SortTypes.None,
+
+        foreignKey: "castRoleId",
+        type: InputTypes.foreignKey,
       },
     }),
     [],
@@ -62,9 +82,9 @@ export const useMediaCastMembers = ({
   const { sort, onSortByColumn } = useSort(setHeadersConfig);
   const { filter, onFilter, onFilterClear } = useFilter();
 
-  const rawData = api.mediaCastMember.all.useQuery({ sort, filter });
-  const deleteRow = api.mediaCastMember.delete.useMutation();
-  const invalidate = utils.mediaCastMember.all.invalidate;
+  const rawData = api.castMember.all.useQuery({ sort, filter });
+  const deleteRow = api.castMember.delete.useMutation();
+  const invalidate = utils.castMember.all.invalidate;
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -72,13 +92,10 @@ export const useMediaCastMembers = ({
         ? []
         : rawData.data.map((row) => {
             return {
+              firstName: { value: row.person?.firstName },
+              lastName: { value: row.person?.lastName },
+              role: { value: row.castRole?.name },
               id: { value: row.id.toString() },
-              mediaId: { value: row.media.name },
-              castMemberId: {
-                value: `${row.castMember?.person?.firstName || ""} ${
-                  row.castMember?.person?.lastName || ""
-                }`,
-              },
             };
           });
     return {
@@ -88,6 +105,7 @@ export const useMediaCastMembers = ({
       onSortByColumn,
       onFilter,
       onFilterClear,
+
       isLookupMode,
       defaultValues,
       setLookupData,
