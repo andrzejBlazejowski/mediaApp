@@ -2,11 +2,11 @@ import React from "react";
 import { Button, Dialog, Flex } from "@radix-ui/themes";
 
 import { useLookup } from "~/app/_lib/hooks/useLookup";
-import { useVideoContents } from "~/app/media/video-contents/useVideoContents";
+import { useMediaList } from "~/app/media/list/useMediaList";
 import { api } from "~/utils/api";
 import { TableView } from "../TableView";
 
-export function VideoContentLookup({
+export function MediaListLookup({
   invalidate,
   id,
   mainKey,
@@ -15,19 +15,18 @@ export function VideoContentLookup({
   id: number;
   mainKey: string;
 }) {
-  const title = "manage video contents";
-  const LinkRoute = api.videoContent;
-  const lookupKey = "videoId";
+  const LinkRoute = api.mediaListMedia;
+  const title = "manage Media Lists";
 
   const { lookupData, setLookupData, onSaveLookupLinks } = useLookup({
     key: mainKey,
-    lookupKey,
+    lookupKey: "mediaListId",
     id: id.toString(),
     route: LinkRoute,
     invalidate,
   });
 
-  const { mediaIndexProps } = useVideoContents({
+  const { mediaIndexProps } = useMediaList({
     isLookupMode: true,
     defaultValues: lookupData,
     setLookupData,

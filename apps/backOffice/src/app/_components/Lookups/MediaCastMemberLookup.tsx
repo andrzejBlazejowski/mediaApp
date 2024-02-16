@@ -9,15 +9,16 @@ import { TableView } from "../TableView";
 export function MediaCastMemberLookup({
   invalidate,
   id,
+  mainKey,
 }: {
   invalidate: any;
   id: number;
+  mainKey: string;
 }) {
-  const key = "mediaId";
   const LinkRoute = api.mediaCastMember;
 
   const { lookupData, setLookupData, onSaveLookupLinks } = useLookup({
-    key,
+    key: mainKey,
     lookupKey: "castMemberId",
     id: id.toString(),
     route: LinkRoute,
