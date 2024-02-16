@@ -1,16 +1,15 @@
-"use client";
-
 import type { Dispatch } from "react";
 import { useMemo } from "react";
 
+import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
 import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
-import { title } from "./constants";
+import { title, uiSchema } from "./constants";
 
-export const useMediaCastMembers = ({
+export const useMedia = ({
   isLookupMode = false,
   defaultValues = [],
   setLookupData,
@@ -30,41 +29,57 @@ export const useMediaCastMembers = ({
         name: "id",
         label: "id",
         classNames: "w-[100px]",
-
-        filterable: true,
+        sortable: true,
         sortDirection: SortTypes.None,
       },
-      media: {
+      name: {
         orderNumber: 1,
-        name: "media",
-        label: "media",
+        name: "name",
+        label: "Name",
         classNames: "w-[100px]",
-        foreginKey: "mediaId",
         sortable: true,
-        filterable: true,
         sortDirection: SortTypes.None,
       },
-      castMember: {
+      type: {
         orderNumber: 2,
-        name: "castMember",
-        label: "cast member",
-        classNames: "w-[100px]",
-        foreginKey: "castMemberId",
+        name: "type",
+        label: "Type",
+        classNames: "w-[50px]",
         sortable: true,
-        filterable: true,
+        filterable: false,
         sortDirection: SortTypes.None,
+      },
+      isFree: {
+        orderNumber: 3,
+        name: "isFree",
+        label: "IsFree",
+        classNames: "w-[50px]",
+        sortable: false,
+        type: InputTypes.checkbox,
+        sortDirection: SortTypes.None,
+      },
+      category: {
+        orderNumber: 4,
+        name: "category",
+        label: "Category",
+        classNames: "w-[100px]",
+        sortable: true,
+        foreignKey: "mediaCategoryId",
+        sortDirection: SortTypes.None,
+        type: InputTypes.foreignKey,
       },
     }),
     [],
   );
+
   const { headersConfig, setHeadersConfig } =
     useHeadersConfig(initialHeadersConfig);
   const { sort, onSortByColumn } = useSort(setHeadersConfig);
   const { filter, onFilter, onFilterClear } = useFilter();
 
-  const rawData = api.mediaCastMember.all.useQuery({ sort, filter });
-  const deleteRow = api.mediaCastMember.delete.useMutation();
-  const invalidate = utils.mediaCastMember.all.invalidate;
+  const rawData = api.media.all.useQuery({ sort, filter });
+  const deleteRow = api.media.delete.useMutation();
+  const invalidate = utils.media.all.invalidate;
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -73,21 +88,22 @@ export const useMediaCastMembers = ({
         : rawData.data.map((row) => {
             return {
               id: { value: row.id.toString() },
-              mediaId: { value: row.media?.name ?? "" },
-              castMemberId: {
-                value: `${row.castMember?.person?.firstName || ""} ${
-                  row.castMember?.person?.lastName || ""
-                }`,
-              },
+              name: { value: row.name ?? "" },
+              type: { value: row.type ?? "" },
+              isFree: { value: row.isFree.toString() ?? "" },
+              category: { value: row.mediaCategory.name ?? "" },
             };
           });
     return {
       title: title + " list",
       data: data,
       headersConfig,
+      uiSchema: uiSchema,
+
       onSortByColumn,
       onFilter,
       onFilterClear,
+
       isLookupMode,
       defaultValues,
       setLookupData,
@@ -105,7 +121,7 @@ export const useMediaCastMembers = ({
         }
       },
     } as TableViewProps;
-  }, [rawData]);
+  }, [rawData, headersConfig]);
 
   return { mediaIndexProps };
 };

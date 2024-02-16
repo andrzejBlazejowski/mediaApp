@@ -1,5 +1,3 @@
-"use client";
-
 import type { Dispatch } from "react";
 import { useMemo } from "react";
 
@@ -8,9 +6,9 @@ import { SortTypes } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
 import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
-import { title } from "./constants";
+import { title } from "../constants";
 
-export const useMediaCastMembers = ({
+export const useMediaCategoty = ({
   isLookupMode = false,
   defaultValues = [],
   setLookupData,
@@ -30,41 +28,43 @@ export const useMediaCastMembers = ({
         name: "id",
         label: "id",
         classNames: "w-[100px]",
+        sortable: true,
 
         filterable: true,
         sortDirection: SortTypes.None,
       },
-      media: {
+      name: {
         orderNumber: 1,
-        name: "media",
-        label: "media",
+        name: "name",
+        label: "name",
         classNames: "w-[100px]",
-        foreginKey: "mediaId",
         sortable: true,
+
         filterable: true,
         sortDirection: SortTypes.None,
       },
-      castMember: {
+      description: {
         orderNumber: 2,
-        name: "castMember",
-        label: "cast member",
+        name: "description",
+        label: "description",
         classNames: "w-[100px]",
-        foreginKey: "castMemberId",
         sortable: true,
+
         filterable: true,
         sortDirection: SortTypes.None,
       },
     }),
     [],
   );
+
   const { headersConfig, setHeadersConfig } =
     useHeadersConfig(initialHeadersConfig);
   const { sort, onSortByColumn } = useSort(setHeadersConfig);
   const { filter, onFilter, onFilterClear } = useFilter();
 
-  const rawData = api.mediaCastMember.all.useQuery({ sort, filter });
-  const deleteRow = api.mediaCastMember.delete.useMutation();
-  const invalidate = utils.mediaCastMember.all.invalidate;
+  const rawData = api.mediaCategory.all.useQuery({ sort, filter });
+  const deleteRow = api.mediaCategory.delete.useMutation();
+  const invalidate = utils.mediaCategory.all.invalidate;
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -73,12 +73,8 @@ export const useMediaCastMembers = ({
         : rawData.data.map((row) => {
             return {
               id: { value: row.id.toString() },
-              mediaId: { value: row.media?.name ?? "" },
-              castMemberId: {
-                value: `${row.castMember?.person?.firstName || ""} ${
-                  row.castMember?.person?.lastName || ""
-                }`,
-              },
+              name: { value: row.name },
+              description: { value: row.description },
             };
           });
     return {
@@ -88,6 +84,7 @@ export const useMediaCastMembers = ({
       onSortByColumn,
       onFilter,
       onFilterClear,
+
       isLookupMode,
       defaultValues,
       setLookupData,
