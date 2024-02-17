@@ -6,7 +6,12 @@ import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
@@ -79,6 +84,7 @@ export default function Page() {
   const rawData = api.brandingImage.all.useQuery({ sort, filter });
   const deleteRow = api.brandingImage.delete.useMutation();
   const invalidate = utils.brandingImage.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =

@@ -6,7 +6,12 @@ import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
 import { api } from "~/utils/api";
-import { useFilter, useHeadersConfig, useSort } from "../_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "../_lib/hooks";
 import { title } from "./constants";
 
 export default function Page() {
@@ -46,6 +51,7 @@ export default function Page() {
   const rawData = api.branding.all.useQuery({ sort, filter });
   const deleteRow = api.branding.delete.useMutation();
   const invalidate = utils.branding.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =

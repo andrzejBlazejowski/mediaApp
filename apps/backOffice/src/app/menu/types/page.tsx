@@ -5,6 +5,7 @@ import React, { useMemo } from "react";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { TableView } from "~/app/_components/TableView";
 import { api } from "~/utils/api";
+import { useRedirectOnUnauthorized } from "../../_lib/hooks";
 import { title } from "./constants";
 
 export default function Page() {
@@ -13,6 +14,8 @@ export default function Page() {
   const rawData = api.menuType.all.useQuery();
   const deleteRow = api.menuType.delete.useMutation();
   const invalidate = utils.menuType.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
+
   const headersConfig = {
     id: {
       orderNumber: 0,

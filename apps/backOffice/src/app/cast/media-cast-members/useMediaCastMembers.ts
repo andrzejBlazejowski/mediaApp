@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import { useFilter, useHeadersConfig,useRedirectOnUnauthorized, useSort } from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
@@ -65,6 +65,7 @@ export const useMediaCastMembers = ({
   const rawData = api.mediaCastMember.all.useQuery({ sort, filter });
   const deleteRow = api.mediaCastMember.delete.useMutation();
   const invalidate = utils.mediaCastMember.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =

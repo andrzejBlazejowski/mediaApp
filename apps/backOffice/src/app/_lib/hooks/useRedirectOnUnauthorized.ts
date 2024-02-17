@@ -10,7 +10,7 @@ export function useRedirectOnUnauthorized(
 
   useEffect(() => {
     if (rawData?.error?.data?.httpStatus === 500) {
-      router.push("/not_suthorized");
+      router.push("/not_authorized");
     }
   }, [rawData]);
 }

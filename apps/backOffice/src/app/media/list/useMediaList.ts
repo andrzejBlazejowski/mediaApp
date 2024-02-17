@@ -1,11 +1,15 @@
 import type { Dispatch } from "react";
 import { useMemo } from "react";
 
-import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "../constants";
 
@@ -68,6 +72,8 @@ export const useMediaList = ({
   const rawData = api.mediaList.all.useQuery({ sort, filter });
   const deleteRow = api.mediaList.delete.useMutation();
   const invalidate = utils.mediaList.all.invalidate;
+
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =

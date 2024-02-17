@@ -4,7 +4,12 @@ import { useMemo } from "react";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "../constants";
 
@@ -65,6 +70,7 @@ export const useMediaCategoty = ({
   const rawData = api.mediaCategory.all.useQuery({ sort, filter });
   const deleteRow = api.mediaCategory.delete.useMutation();
   const invalidate = utils.mediaCategory.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =

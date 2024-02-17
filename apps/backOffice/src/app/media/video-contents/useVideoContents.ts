@@ -5,7 +5,12 @@ import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "../constants";
 
@@ -82,6 +87,7 @@ export const useVideoContents = ({
   const rawData = api.videoContent.all.useQuery({ sort, filter });
   const deleteRow = api.videoContent.delete.useMutation();
   const invalidate = utils.videoContent.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =

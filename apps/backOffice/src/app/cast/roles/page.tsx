@@ -5,7 +5,12 @@ import React, { useMemo } from "react";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
@@ -48,6 +53,7 @@ export default function Page() {
   const rawData = api.castRole.all.useQuery({ sort, filter });
   const deleteRow = api.castRole.delete.useMutation();
   const invalidate = utils.castRole.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =
