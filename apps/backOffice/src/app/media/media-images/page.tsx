@@ -93,7 +93,7 @@ export default function Page() {
             return {
               id: { value: row.id.toString() },
               name: { value: row.name },
-              media: { value: `${row.media.name}  ${row.media.type}` },
+              media: { value: `${row.media?.name}  ${row.media?.type}` },
               image: { value: row?.image?.name ?? "" },
               imageType: { value: row?.mediaImageType?.name ?? "" },
             };

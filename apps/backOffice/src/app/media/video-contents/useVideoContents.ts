@@ -95,9 +95,9 @@ export const useVideoContents = ({
         ? []
         : rawData.data.map((row) => {
             return {
-              media: { value: row.media.name },
-              video: { value: row.video.name },
-              type: { value: row.videoContentType.name },
+              media: { value: row.media?.name },
+              video: { value: row.video?.name },
+              type: { value: row.videoContentType?.name },
               id: { value: row.id.toString() },
             };
           });
