@@ -15,6 +15,7 @@ const getAssetsType = (type: string | null | undefined) => {
 };
 
 export function useGridData(id: number | string) {
+  debugger;
   if (!id || typeof id !== "string") throw new Error("unreachable");
   const { data } = api.expo.getVodScreenDetails.useQuery({
     id: typeof id === "string" ? parseInt(id) : id,
@@ -25,6 +26,7 @@ export function useGridData(id: number | string) {
     const title = name;
     const mediaList = vodScreen?.vodScreenMediaLists?.[0]?.mediaList;
     const assetsType = getAssetsType(mediaList?.mediaListType?.name);
+
     const assets =
       mediaList?.mediaListMedias.map(({ media }) => {
         return {

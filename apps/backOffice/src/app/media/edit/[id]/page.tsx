@@ -12,7 +12,6 @@ import FormView from "~/app/_components/FormView/FormView";
 import {
   MediaCastMemberLookup,
   MediaListLookup,
-  VideoContentLookup,
 } from "~/app/_components/Lookups";
 import { useToast } from "~/app/_components/ui/use-toast";
 import { api } from "~/utils/api";
@@ -74,7 +73,7 @@ export default function Page() {
     >
       <>
         <MediaCastMemberLookup invalidate={invalidate} id={id} mainKey={key} />
-        <VideoContentLookup invalidate={invalidate} id={id} mainKey={key} />
+        {/* <VideoContentLookup invalidate={invalidate} id={id} mainKey={key} /> */}
         <MediaListLookup invalidate={invalidate} id={id} mainKey={key} />
       </>
     </FormView>

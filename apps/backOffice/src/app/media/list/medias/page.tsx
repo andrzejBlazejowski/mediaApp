@@ -63,7 +63,7 @@ export default function Page() {
         : rawData.data.map((row) => {
             return {
               id: { value: row.id.toString() },
-              media: { value: row.media.name ?? row.mediaId },
+              media: { value: row.media?.name ?? row.mediaId },
               list: { value: row.mediaList.name ?? row.mediaListId },
             };
           });

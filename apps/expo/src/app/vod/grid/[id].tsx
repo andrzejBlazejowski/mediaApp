@@ -1,10 +1,4 @@
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
 import { Asset } from "~/app/components/";
@@ -16,6 +10,7 @@ export default function GridPage() {
   const { assets, title, assetsType } = useGridData(
     typeof id === "string" ? id : "1",
   );
+  debugger;
 
   return (
     <SafeAreaView>
