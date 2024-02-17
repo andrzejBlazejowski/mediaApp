@@ -39,7 +39,7 @@ export const userRouter = createTRPCRouter({
               and(eq(table[filter.column], filter?.value), excludeSuperAdmin)
             : and(
                 //@ts-expect-error
-                like(table[filter.column], filter?.value),
+                like(table[filter.column], `%${filter?.value}%`),
                 excludeSuperAdmin,
               )
           : excludeSuperAdmin;
@@ -84,7 +84,7 @@ export const userPrivilegeRouter = createTRPCRouter({
               and(eq(table[filter.column], filter?.value), excludeSuperAdmin)
             : and(
                 //@ts-expect-error
-                like(table[filter.column], filter?.value),
+                like(table[filter.column], `%${filter?.value}%`),
                 excludeSuperAdmin,
               )
           : not(eq(table.id, "c5637392-fc8c-48a6-a61f-3f2e0d80fcca"));

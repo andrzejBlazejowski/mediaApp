@@ -37,7 +37,7 @@ export const menuRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -97,7 +97,7 @@ export const menuLinkRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -156,7 +156,7 @@ export const menuTypeRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -213,7 +213,7 @@ export const menuLinkImageRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),

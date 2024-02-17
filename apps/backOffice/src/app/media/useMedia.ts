@@ -40,7 +40,7 @@ export const useMedia = ({
       name: {
         orderNumber: 1,
         name: "name",
-        label: "Name",
+        label: "name",
         classNames: "w-[100px]",
         sortable: true,
         sortDirection: SortTypes.None,
