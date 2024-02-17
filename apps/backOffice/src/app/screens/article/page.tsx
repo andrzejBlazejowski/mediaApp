@@ -5,7 +5,12 @@ import React, { useMemo } from "react";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
@@ -59,6 +64,7 @@ export default function Page() {
   const { filter, onFilter, onFilterClear } = useFilter();
 
   const rawData = api.articleScreen.all.useQuery({ sort, filter });
+  useRedirectOnUnauthorized(rawData);
   const deleteRow = api.articleScreen.delete.useMutation();
   const invalidate = utils.articleScreen.all.invalidate;
 
