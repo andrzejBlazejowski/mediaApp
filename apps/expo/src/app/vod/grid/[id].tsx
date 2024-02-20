@@ -10,16 +10,15 @@ export default function GridPage() {
   const { assets, title, assetsType } = useGridData(
     typeof id === "string" ? id : "1",
   );
-  debugger;
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title: title ?? "" }} />
+      <Stack.Screen key="grid stack screen" options={{ title: title ?? "" }} />
       <ScrollView>
         {assets && (
           <View style={[styles.grid]}>
             {assets.map((asset) => (
-              <View key={asset.id} style={styles.item}>
+              <View key={asset.id + (id?.toString() ?? "")} style={styles.item}>
                 <Asset
                   title={asset.name}
                   url={asset.url ?? ""}

@@ -28,6 +28,17 @@ export const useLookup = ({
     [rawData.data, rawData.isLoading],
   );
 
+  const ids = useMemo(
+    () =>
+      rawData.isLoading || !rawData.data
+        ? []
+        : rawData.data.reduce((acc: Record<string, number>, value: any) => {
+            acc[value[lookupKey] ?? value.id] = value.id;
+            return acc;
+          }, {}),
+    [rawData.data, rawData.isLoading],
+  );
+
   const [lookupData, setLookupData] = useState(defaultValues);
 
   useEffect(() => {
@@ -45,7 +56,7 @@ export const useLookup = ({
 
     if (toDelete.length > 0) {
       toDelete.forEach(async (value: number) => {
-        await deleteRow.mutateAsync(value);
+        await deleteRow.mutateAsync(ids[value]);
       });
     }
 

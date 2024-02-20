@@ -25,7 +25,7 @@ export default function ArticlePage() {
             <Card.Cover key="cover" source={{ uri: firstImageUrl }} />
           )}
           <Card.Title titleVariant="displaySmall" key="title" title={title} />
-          <Card.Content key="cover">
+          <Card.Content key="content">
             <Text variant="bodyMedium">{content}</Text>
           </Card.Content>
 
