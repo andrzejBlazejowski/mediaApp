@@ -4,15 +4,20 @@ import React, { useMemo } from "react";
 
 import type { TableViewProps } from "~/app/_components/TableView";
 import { TableView } from "~/app/_components/TableView";
+import { useToast } from "~/app/_components/ui/use-toast";
 import { api } from "~/utils/api";
+import { useRedirectOnUnauthorized } from "../../_lib/hooks";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
+  const toast = useToast();
 
   const rawData = api.menuLinkImage.all.useQuery();
   const deleteRow = api.menuLinkImage.delete.useMutation();
   const invalidate = utils.menuLinkImage.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
+
   const headersConfig = {
     id: {
       orderNumber: 0,

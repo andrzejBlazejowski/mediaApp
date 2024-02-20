@@ -3,11 +3,11 @@ import { InputTypes } from "~/app/_components/FormView/FormView.types";
 
 export const uiSchema = {
   shortDescription: {
-    classes: "w-1/2 inline-block m-2",
+    classes: "block m-2",
     type: InputTypes.textArea,
   },
-  description: {
-    classes: "w-1/2 inline-block m-2",
+  longDescription: {
+    classes: "block m-2",
     type: InputTypes.textArea,
   },
   name: {

@@ -9,6 +9,10 @@ import * as z from "zod";
 import { media } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
+import {
+  MediaCastMemberLookup,
+  MediaListLookup,
+} from "~/app/_components/Lookups";
 import { useToast } from "~/app/_components/ui/use-toast";
 import { api } from "~/utils/api";
 import { title, uiSchema } from "../../constants";
@@ -56,6 +60,8 @@ export default function Page() {
     }
   };
 
+  const key = "mediaId";
+
   return (
     <FormView
       type="edit"
@@ -64,6 +70,12 @@ export default function Page() {
       onSubmit={onSubmit}
       uiSchema={uiSchema}
       zSchema={schema}
-    />
+    >
+      <>
+        <MediaCastMemberLookup invalidate={invalidate} id={id} mainKey={key} />
+        {/* <VideoContentLookup invalidate={invalidate} id={id} mainKey={key} /> */}
+        <MediaListLookup invalidate={invalidate} id={id} mainKey={key} />
+      </>
+    </FormView>
   );
 }

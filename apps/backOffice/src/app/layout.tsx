@@ -2,8 +2,10 @@ import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 
 import "~/styles/globals.css";
+import "@radix-ui/themes/styles.css";
 
 import { headers } from "next/headers";
+import { Theme } from "@radix-ui/themes";
 
 import { auth } from "@media/auth";
 
@@ -29,21 +31,23 @@ export default async function Layout({
     <html lang="en">
       <body className={["font-sans", fontSans.variable].join(" ")}>
         <SessionProvider session={session}>
-          <ThemeProvider attribute="class" defaultTheme="dark">
-            <TRPCReactProvider headers={headers()}>
-              <TopMenu>
-                <AuthButtons />
-              </TopMenu>
+          <Theme>
+            <ThemeProvider attribute="class" defaultTheme="dark">
+              <TRPCReactProvider headers={headers()}>
+                <TopMenu>
+                  <AuthButtons />
+                </TopMenu>
 
-              {session ? (
-                children
-              ) : (
-                <h1 className="ml-36 mt-36 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                  Please log in.
-                </h1>
-              )}
-            </TRPCReactProvider>
-          </ThemeProvider>
+                {session ? (
+                  children
+                ) : (
+                  <h1 className="ml-36 mt-36 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                    Please log in.
+                  </h1>
+                )}
+              </TRPCReactProvider>
+            </ThemeProvider>
+          </Theme>
         </SessionProvider>
       </body>
     </html>

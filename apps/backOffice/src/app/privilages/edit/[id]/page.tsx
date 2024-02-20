@@ -3,7 +3,7 @@
 import { type } from "os";
 import { useCallback, useEffect, useMemo } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button, Table, TableHeader } from "@radix-ui/themes";
 import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 
@@ -13,14 +13,6 @@ import type { IFeield } from "~/app/_components/FormView/FormView.types";
 import { InputTypes } from "~/app/_components/FormView/FormView.types";
 import { FormViewItem } from "~/app/_components/FormViewItem";
 import { Form, FormField } from "~/app/_components/ui/form";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/app/_components/ui/table";
 import { api } from "~/utils/api";
 import {
   getAccessIntValue,
@@ -193,26 +185,28 @@ export default function Page() {
           </h2>
         </div>
         <form onSubmit={form.handleSubmit(onValidSubmit)} className="space-y-8">
-          <Table>
-            <TableHeader>
-              <TableRow key="privilage_header">
-                <TableHead key="header_privilageName">Privilege Name</TableHead>
-                <TableHead className="text-center" key="header_read">
+          <Table.Root>
+            <Table.Header>
+              <Table.Row key="privilage_header">
+                <TableHeader key="header_privilageName">
+                  Privilege Name
+                </TableHeader>
+                <TableHeader className="text-center" key="header_read">
                   read
-                </TableHead>
-                <TableHead className="text-center" key="header_write">
+                </TableHeader>
+                <TableHeader className="text-center" key="header_write">
                   write
-                </TableHead>
-                <TableHead className="text-center" key="header_delete">
+                </TableHeader>
+                <TableHeader className="text-center" key="header_delete">
                   delete
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                </TableHeader>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
               {privilagesHeaders.map((key) => (
-                <TableRow key={key}>
-                  <TableCell key={`${key}_name`}>{key}</TableCell>
-                  <TableCell key={`${key}_read`}>
+                <Table.Row key={key}>
+                  <Table.Cell key={`${key}_name`}>{key}</Table.Cell>
+                  <Table.Cell key={`${key}_read`}>
                     {/* <Checkbox id={`${key}_read`} /> */}
 
                     <FormField
@@ -230,8 +224,8 @@ export default function Page() {
                         });
                       }}
                     />
-                  </TableCell>
-                  <TableCell key={`${key}_write`}>
+                  </Table.Cell>
+                  <Table.Cell key={`${key}_write`}>
                     <FormField
                       {...(typeof form !== "undefined"
                         ? { control: form.control }
@@ -247,8 +241,8 @@ export default function Page() {
                         });
                       }}
                     />
-                  </TableCell>
-                  <TableCell key={`${key}_delete`}>
+                  </Table.Cell>
+                  <Table.Cell key={`${key}_delete`}>
                     <FormField
                       {...(typeof form !== "undefined"
                         ? { control: form.control }
@@ -264,11 +258,11 @@ export default function Page() {
                         });
                       }}
                     />
-                  </TableCell>
-                </TableRow>
+                  </Table.Cell>
+                </Table.Row>
               ))}
-            </TableBody>
-          </Table>
+            </Table.Body>
+          </Table.Root>
 
           <div className="flex justify-center">
             <Button type="submit">Submit</Button>

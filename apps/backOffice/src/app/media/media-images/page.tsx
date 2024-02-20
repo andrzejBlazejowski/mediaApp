@@ -5,15 +5,17 @@ import React, { useMemo } from "react";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
 export default function Page() {
   const utils = api.useUtils();
-
-  const { toast } = useToast();
-
 
   const { toast } = useToast();
 
@@ -81,6 +83,7 @@ export default function Page() {
   const rawData = api.mediaImage.all.useQuery({ sort, filter });
   const deleteRow = api.mediaImage.delete.useMutation();
   const invalidate = utils.mediaImage.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -90,7 +93,7 @@ export default function Page() {
             return {
               id: { value: row.id.toString() },
               name: { value: row.name },
-              media: { value: `${row.media.name}  ${row.media.type}` },
+              media: { value: `${row.media?.name}  ${row.media?.type}` },
               image: { value: row?.image?.name ?? "" },
               imageType: { value: row?.mediaImageType?.name ?? "" },
             };
@@ -104,7 +107,6 @@ export default function Page() {
       onFilterClear,
 
       onDeleteRow: async (id) => {
-          
         try {
           await deleteRow.mutateAsync(id);
           await invalidate();

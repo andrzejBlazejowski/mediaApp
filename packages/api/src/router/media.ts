@@ -1,3 +1,4 @@
+import type { AnyColumn } from "drizzle-orm";
 import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -21,8 +22,9 @@ export const mediaRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -44,7 +46,7 @@ export const mediaRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -89,8 +91,9 @@ export const videoContentRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -110,7 +113,7 @@ export const videoContentRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -153,8 +156,9 @@ export const videoContentTypeRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -168,7 +172,7 @@ export const videoContentTypeRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -208,8 +212,9 @@ export const mediaCategoyRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -222,7 +227,7 @@ export const mediaCategoyRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -262,8 +267,9 @@ export const mediaImageRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -319,8 +325,9 @@ export const mediaImageTypeRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -333,7 +340,7 @@ export const mediaImageTypeRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -374,8 +381,9 @@ export const mediaViewImpressionRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -392,7 +400,7 @@ export const mediaViewImpressionRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),

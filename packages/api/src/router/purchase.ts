@@ -1,3 +1,4 @@
+import type { AnyColumn } from "drizzle-orm";
 import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -17,8 +18,9 @@ export const purchaseRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -36,7 +38,7 @@ export const purchaseRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -79,8 +81,9 @@ export const purchaseItemRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -98,7 +101,7 @@ export const purchaseItemRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -140,8 +143,9 @@ export const purchaseTypeRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -156,7 +160,7 @@ export const purchaseTypeRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),

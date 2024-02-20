@@ -23,9 +23,9 @@ export function Menu() {
           focusedIcon={{ uri: menuLink.url }}
           key={menuLink.id}
           label={menuLink.name}
-          onPress={() =>
-            router.push(`/${menuLink.segment}/${menuLink.destinationId}`)
-          }
+          onPress={() => {
+            router.push(`/${menuLink.segment}/${menuLink.destinationId}`);
+          }}
         />
       ))}
     </Drawer.Section>

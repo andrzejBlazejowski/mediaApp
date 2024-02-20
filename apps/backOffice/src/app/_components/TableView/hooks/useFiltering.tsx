@@ -32,10 +32,12 @@ export const useFiltering = ({
   );
 
   const onFilterButtonPressed = useCallback(() => {
+    debugger;
     if (onFilter) {
       const headerConfig =
         headersConfig && headersConfig[currentColumnForFilter];
       if (headerConfig && typeof headerConfig.foreignKey !== "undefined") {
+        onFilter(headerConfig.foreignKey, currentFilterValue, false);
       } else {
         onFilter(currentColumnForFilter, currentFilterValue, false);
       }

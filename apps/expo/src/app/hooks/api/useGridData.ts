@@ -25,6 +25,7 @@ export function useGridData(id: number | string) {
     const title = name;
     const mediaList = vodScreen?.vodScreenMediaLists?.[0]?.mediaList;
     const assetsType = getAssetsType(mediaList?.mediaListType?.name);
+
     const assets =
       mediaList?.mediaListMedias.map(({ media }) => {
         return {
@@ -40,6 +41,7 @@ export function useGridData(id: number | string) {
           ),
         };
       }) ?? [];
+
     return { assets, title, assetsType };
   }, [data]);
 }

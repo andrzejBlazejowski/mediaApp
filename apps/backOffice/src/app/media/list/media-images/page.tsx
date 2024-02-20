@@ -2,10 +2,16 @@
 
 import React, { useMemo } from "react";
 
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import type { TableViewProps } from "~/app/_components/TableView";
+import { SortTypes, TableView } from "~/app/_components/TableView";
+import { useToast } from "~/app/_components/ui/use-toast";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
-import type { TableViewProps } from "../../~/app/_components/TableView";
-import { SortTypes, TableView } from "../../~/app/_components/TableView";
 
 export default function Page() {
   const utils = api.useUtils();
@@ -53,6 +59,7 @@ export default function Page() {
   const mediaImages = api.mediaImage.all.useQuery({ sort, filter });
   const deleteRow = api.mediaImage.delete.useMutation();
   const invalidate = utils.mediaImage.all.invalidate;
+  useRedirectOnUnauthorized(mediaImages);
 
   const mediaIndexProps = useMemo(() => {
     const data =

@@ -1,19 +1,18 @@
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import {
+  Button,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@radix-ui/themes";
 import { Pencil, Plus, Trash } from "lucide-react";
 
 import type { Row, TableViewProps } from ".";
 import { SortTypes } from ".";
-import { Button } from "../ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
 import { FilterForm, SortIcon } from "./components";
 import { useFiltering, useSortByColumn } from "./hooks/";
 
@@ -26,6 +25,9 @@ export function TableView({
   onFilter,
   onFilterClear,
   isAddButtonVisible = true,
+  isLookupMode = false,
+  defaultValues,
+  setLookupData,
 }: TableViewProps) {
   const pathname = usePathname();
   const Router = useRouter();
@@ -62,13 +64,12 @@ export function TableView({
               sortDirection = SortTypes.None,
             },
           ]) => (
-            <TableHead key={name} className={classNames}>
+            <Table.ColumnHeaderCell key={name} className={classNames}>
               <div className="flex items-center justify-evenly">
                 <span key={`head-label-${name}`}>{label}</span>
                 {sortable && (
                   <Button
                     key={`head-sort-button-${name}`}
-                    size="default"
                     onClick={() =>
                       sortByColumn({ name, sortDirection, sortable })
                     }
@@ -78,14 +79,14 @@ export function TableView({
                   </Button>
                 )}
               </div>
-            </TableHead>
+            </Table.ColumnHeaderCell>
           ),
         );
     } else if (data[0]) {
       return Object.entries(data[0]).map(([key]) => (
-        <TableHead key={key} className="w-[100px]">
+        <Table.ColumnHeaderCell key={key} className="w-[100px]">
           {key}
-        </TableHead>
+        </Table.ColumnHeaderCell>
       ));
     } else {
       return null;
@@ -133,39 +134,77 @@ export function TableView({
     return res;
   };
 
+  const onIsSelectedChange = (id: string) => {
+    if (isLookupMode && setLookupData) {
+      setLookupData((currentArray: number[]) => {
+        if (currentArray.includes(parseInt(id))) {
+          return currentArray.filter((value: number) => value !== parseInt(id));
+        } else {
+          return [...currentArray, parseInt(id)];
+        }
+      });
+    }
+    return true;
+  };
+
   return (
     <>
-      <h2 className="mt-6 scroll-m-20 border-b pb-10 text-center text-3xl font-semibold tracking-tight first:mt-0">
-        {title}
-        {isAddButtonVisible && (
-          <Button className=" ml-6" onClick={onAddRow}>
-            <Plus />
-          </Button>
-        )}
-      </h2>
-      <FilterForm
-        onColumnChange={onFilterColumnChange}
-        onValueChange={onFilterValueChange}
-        onButtonPressed={onFilterButtonPressed}
-        currentColumn={currentColumnForFilter}
-        currentValue={currentFilterValue}
-        isButtonDisabled={isFilterButtonDisabled}
-        headersConfig={headersConfig}
-        onClearButtonPressed={onClearButtonPressed}
-        isClearButtonDisabled={isClearButtonDisabled}
-      />
-      <Table>
+      {!isLookupMode && (
+        <>
+          <h2 className="mt-6 scroll-m-20 border-b pb-10 text-center text-3xl font-semibold tracking-tight first:mt-0">
+            {title}
+            {isAddButtonVisible && (
+              <Button className=" ml-6" onClick={onAddRow}>
+                <Plus />
+              </Button>
+            )}
+          </h2>
+          <FilterForm
+            onColumnChange={onFilterColumnChange}
+            onValueChange={onFilterValueChange}
+            onButtonPressed={onFilterButtonPressed}
+            currentColumn={currentColumnForFilter}
+            currentValue={currentFilterValue}
+            isButtonDisabled={isFilterButtonDisabled}
+            headersConfig={headersConfig}
+            onClearButtonPressed={onClearButtonPressed}
+            isClearButtonDisabled={isClearButtonDisabled}
+          />
+        </>
+      )}
+      <Table.Root>
         <TableHeader>
           <TableRow>
+            {isLookupMode && (
+              <Table.ColumnHeaderCell key="checkboxes" className="w-[50px]">
+                is added
+              </Table.ColumnHeaderCell>
+            )}
             {getOrderedHeaderElements()}
-            <TableHead key="actions" className="w-[100px]">
-              actions
-            </TableHead>
+            {!isLookupMode && (
+              <Table.ColumnHeaderCell key="actions" className="w-[100px]">
+                actions
+              </Table.ColumnHeaderCell>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((row, index) => (
             <TableRow key={index}>
+              {isLookupMode && (
+                <TableCell
+                  key={index + (crypto?.randomUUID() || "") + "checkbox"}
+                  className="font-medium"
+                >
+                  <Checkbox
+                    onClick={() => onIsSelectedChange(row.id?.value ?? "")}
+                    size="3"
+                    {...(defaultValues?.includes(parseInt(row.id?.value ?? "0"))
+                      ? { defaultChecked: true }
+                      : {})}
+                  />
+                </TableCell>
+              )}
               {getOrderedTableCells(row).map((field) => (
                 <TableCell
                   key={index + (crypto?.randomUUID() || "") + field.value}
@@ -174,31 +213,33 @@ export function TableView({
                   {field.value}
                 </TableCell>
               ))}
-              <TableCell key="actions" className="font-medium">
-                <Button
-                  size="icon"
-                  className=" mr-2"
-                  onClick={() => {
-                    editRow(row);
-                  }}
-                  variant="secondary"
-                >
-                  <Pencil />
-                </Button>
-                <Button
-                  size="icon"
-                  onClick={() => {
-                    deleteRow(row);
-                  }}
-                  variant="destructive"
-                >
-                  <Trash />
-                </Button>
-              </TableCell>
+              {!isLookupMode && (
+                <TableCell key="actions" className="font-medium">
+                  <Button
+                    className=" mr-2"
+                    onClick={() => {
+                      editRow(row);
+                    }}
+                    variant="soft"
+                    color="jade"
+                  >
+                    <Pencil />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      deleteRow(row);
+                    }}
+                    variant="soft"
+                    color="amber"
+                  >
+                    <Trash />
+                  </Button>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table.Root>
     </>
   );
 }

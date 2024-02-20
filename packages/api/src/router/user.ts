@@ -1,3 +1,4 @@
+import type { AnyColumn } from "drizzle-orm";
 import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -17,8 +18,9 @@ export const userRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -39,7 +41,7 @@ export const userRouter = createTRPCRouter({
               and(eq(table[filter.column], filter?.value), excludeSuperAdmin)
             : and(
                 //@ts-expect-error
-                like(table[filter.column], filter?.value),
+                like(table[filter.column], `%${filter?.value}%`),
                 excludeSuperAdmin,
               )
           : excludeSuperAdmin;
@@ -65,8 +67,9 @@ export const userPrivilegeRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -84,7 +87,7 @@ export const userPrivilegeRouter = createTRPCRouter({
               and(eq(table[filter.column], filter?.value), excludeSuperAdmin)
             : and(
                 //@ts-expect-error
-                like(table[filter.column], filter?.value),
+                like(table[filter.column], `%${filter?.value}%`),
                 excludeSuperAdmin,
               )
           : not(eq(table.id, "c5637392-fc8c-48a6-a61f-3f2e0d80fcca"));

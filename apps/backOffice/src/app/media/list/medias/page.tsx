@@ -5,7 +5,12 @@ import React, { useMemo } from "react";
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
 import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
@@ -55,6 +60,7 @@ export default function Page() {
   const rawData = api.mediaListMedia.all.useQuery({ sort, filter });
   const deleteRow = api.mediaListMedia.delete.useMutation();
   const invalidate = utils.mediaListMedia.all.invalidate;
+  useRedirectOnUnauthorized(rawData);
 
   const mediaIndexProps = useMemo(() => {
     const data =
@@ -63,7 +69,7 @@ export default function Page() {
         : rawData.data.map((row) => {
             return {
               id: { value: row.id.toString() },
-              media: { value: row.media.name ?? row.mediaId },
+              media: { value: row.media?.name ?? row.mediaId },
               list: { value: row.mediaList.name ?? row.mediaListId },
             };
           });

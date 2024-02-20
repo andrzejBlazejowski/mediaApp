@@ -64,6 +64,6 @@ export default function Page() {
       onSubmit={onSubmit}
       uiSchema={uiSchema}
       zSchema={schema}
-    />
+    ></FormView>
   );
 }

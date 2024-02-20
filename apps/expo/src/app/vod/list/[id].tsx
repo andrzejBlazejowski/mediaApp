@@ -6,6 +6,7 @@ import {
   View,
 } from "react-native";
 import { Text } from "react-native-paper";
+import * as Crypto from "expo-crypto";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
 import { Asset } from "~/app/components/";
@@ -17,20 +18,25 @@ export default function ListPage() {
   const { lists, title } = useListData(typeof id === "string" ? id : "1");
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title: title ?? "" }} />
-      <ScrollView>
+      <Stack.Screen key="list stack screen" options={{ title: title ?? "" }} />
+      <ScrollView key="list scroll view">
         {lists?.map(({ assets, type, title, listId }) => {
           return (
             <>
-              <Text variant="bodyLarge">{title}</Text>
+              <Text key="list title" variant="bodyLarge">
+                {title}
+              </Text>
               <ScrollView
                 horizontal={true}
-                key={listId + title + type}
+                key={listId + title + type + Crypto.randomUUID()}
                 style={[styles.grid]}
               >
                 {assets.map(({ name, url, id }) => {
                   return (
-                    <View key={listId + title + name + id} style={styles.item}>
+                    <View
+                      key={listId + title + name + id + Crypto.randomUUID()}
+                      style={styles.item}
+                    >
                       <Asset
                         title={name}
                         url={url ?? ""}

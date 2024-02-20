@@ -1,3 +1,4 @@
+import type { AnyColumn } from "drizzle-orm";
 import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -17,8 +18,9 @@ export const vodScreenRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -36,7 +38,7 @@ export const vodScreenRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -78,8 +80,9 @@ export const vodScreenTypeRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -92,7 +95,7 @@ export const vodScreenTypeRouter = createTRPCRouter({
             ? //@ts-expect-error
               eq(table[filter.column], filter?.value)
             : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+              like(table[filter.column], `%${filter?.value}%`),
       }),
     });
   }),
@@ -130,8 +133,9 @@ export const vodScreenMediaListRouter = createTRPCRouter({
     const { sort, filter } = input ?? { sort: [] };
     const orderBy =
       sort?.map((column) => {
-        //@ts-expect-error
-        const schemaCollumn = schemaTable[column.column];
+        const schemaCollumn = schemaTable[
+          column.column as keyof typeof schemaTable
+        ] as AnyColumn;
         return column.direction === "asc"
           ? asc(schemaCollumn)
           : desc(schemaCollumn);
@@ -146,10 +150,11 @@ export const vodScreenMediaListRouter = createTRPCRouter({
       ...(filter && {
         where: (table, { like, eq }) =>
           filter.eq
-            ? //@ts-expect-error
-              eq(table[filter.column], filter?.value)
-            : //@ts-expect-error
-              like(table[filter.column], filter?.value),
+            ? eq(table[filter.column as keyof typeof table], filter?.value)
+            : like(
+                table[filter.column as keyof typeof table],
+                `%${filter?.value}%`,
+              ),
       }),
     });
   }),

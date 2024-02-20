@@ -1,10 +1,4 @@
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
 import { Asset } from "~/app/components/";
@@ -19,12 +13,12 @@ export default function GridPage() {
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ title: title ?? "" }} />
+      <Stack.Screen key="grid stack screen" options={{ title: title ?? "" }} />
       <ScrollView>
         {assets && (
           <View style={[styles.grid]}>
             {assets.map((asset) => (
-              <View key={asset.id} style={styles.item}>
+              <View key={asset.id + (id?.toString() ?? "")} style={styles.item}>
                 <Asset
                   title={asset.name}
                   url={asset.url ?? ""}
