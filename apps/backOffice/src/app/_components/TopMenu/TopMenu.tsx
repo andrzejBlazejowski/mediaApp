@@ -337,7 +337,6 @@ export function TopMenu({ children }: { children: JSX.Element }) {
         ))}
         <ThemeToggle />
         {children}
-        {/* <AuthButtons /> */}
       </NavigationMenuList>
     </NavigationMenu>
   );
