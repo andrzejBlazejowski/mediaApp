@@ -7,7 +7,7 @@
 - fill in `NEXTAUTH_SECRET`, `AUTH_SECRET`, `JWT_SECRET`, those values can be fille in using openssl rand -base64 32, read more : https://next-auth.js.org/configuration/options#secret
 
 2. installed node version - v20.9.0
-3. pnpm version - 8.15.3
+3. installed pnpm version - 8.15.3 using `npm install -g pnpm@8.15.3`
 4. Expo env set up (install expo go : https://docs.expo.dev/get-started/installation/#requirements and follow android studio setup steps : https://docs.expo.dev/workflow/android-studio-emulator/ )
 
 # instalation and setup
@@ -22,7 +22,7 @@ plese execute these commands in project's root directory
 1. follow instalation steps
 2. `pnpm dev`
 
-# build for production :
+# build for production
 
 1. follow instalation steps
 2. `pnpm build`
