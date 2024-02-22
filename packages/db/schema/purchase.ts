@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
+import { float, index, int, mysqlTable } from "drizzle-orm/mysql-core";
 import { createInsertSchema } from "drizzle-zod";
 
 import { users } from "./auth";
@@ -12,6 +12,8 @@ export const purchases = mysqlTable(
     purchaseTypeId: int("purchaseTypeId").notNull(),
     mediaId: int("mediaId").notNull(),
     userId: int("userId").notNull(),
+    price: float("price"),
+    qty: int("qty"),
 
     ...baseColumns,
   },
