@@ -19,9 +19,7 @@ export default function PurchaseSelect(props: SelectProps) {
               name:
                 (row.user?.name ?? row.user?.id.toString()) +
                 " - " +
-                (row.purchaseItems[0]?.media.name ??
-                  row.purchaseItems[0]?.media.id.toString() ??
-                  ""),
+                (row.media.name ?? row.media.id.toString() ?? ""),
             };
           }),
     [rawData],

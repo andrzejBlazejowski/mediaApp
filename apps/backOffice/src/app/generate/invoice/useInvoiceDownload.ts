@@ -15,17 +15,22 @@ export function useInvoiceDoenload(id: number) {
     if (rawData && rawData.data) {
       const {
         purchaseItems,
+        media,
         createdAt,
         qty,
         price,
         user: { name, email, address, accountNo },
+        purchaseType,
       } = rawData.data;
       const deadLineDate = new Date(createdAt.getTime());
 
       deadLineDate.setDate(createdAt.getDate() + 14);
 
       const docDefinition = getInvoiceDefinition({
-        productName: purchaseItems[0]?.media?.name ?? "",
+        productName:
+          (media?.name ?? "") + " - " + purchaseType?.name ??
+          purchaseType?.id ??
+          "",
         invoiceNumber: `${createdAt.getFullYear()}/${createdAt.getMonth()}/${createdAt.getDay()}/${id}`,
         buyDate: createdAt.toISOString().slice(0, 10),
         paymentDeadline: deadLineDate.toISOString().slice(0, 10),

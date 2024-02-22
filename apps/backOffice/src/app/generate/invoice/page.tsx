@@ -7,17 +7,19 @@ import SelectForeignKey from "~/app/_components/FormView/SelectForeignKey/Select
 import { useInvoiceDoenload } from "./useInvoiceDownload";
 
 export default function Page() {
-  const downloadInvoice = useInvoiceDoenload(3);
   const [purchaseId, setPurchaseId] = useState("1");
+  const downloadInvoice = useInvoiceDoenload(parseInt(purchaseId));
 
   return (
     <>
-      <SelectForeignKey
-        foreignKey="purchaseId"
-        defaultValue={purchaseId}
-        onValueChange={setPurchaseId}
-      />
-      <Button onClick={downloadInvoice}>make pdf</Button>
+      <div className="flex min-h-screen flex-wrap content-center justify-center gap-10">
+        <SelectForeignKey
+          foreignKey="purchaseId"
+          defaultValue={purchaseId}
+          onValueChange={setPurchaseId}
+        />
+        <Button onClick={downloadInvoice}>get invoice</Button>
+      </div>
     </>
   );
 }

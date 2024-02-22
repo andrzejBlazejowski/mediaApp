@@ -292,12 +292,12 @@ export function getInvoiceDefinition(params: Params) {
                 alignment: "center",
               },
               {
-                text: "net cost",
+                text: "net unit price",
                 fillColor: "#DDD",
                 alignment: "center",
               },
               {
-                text: "gross cost",
+                text: "net price",
                 fillColor: "#DDD",
                 alignment: "center",
               },
@@ -312,7 +312,7 @@ export function getInvoiceDefinition(params: Params) {
                 alignment: "center",
               },
               {
-                text: "value with VAT",
+                text: "gross Price",
                 fillColor: "#DDD",
                 alignment: "center",
               },
@@ -343,11 +343,11 @@ export function getInvoiceDefinition(params: Params) {
                 alignment: "center",
               },
               {
-                text: productPrice * productQty * 0.23,
+                text: (productPrice * productQty * 0.23).toFixed(2),
                 alignment: "center",
               },
               {
-                text: productPrice * productQty * 1.23,
+                text: (productPrice * productQty * 1.23).toFixed(2),
                 alignment: "center",
               },
             ],
@@ -381,11 +381,11 @@ export function getInvoiceDefinition(params: Params) {
                 alignment: "center",
               },
               {
-                text: productPrice * productQty * 0.23,
+                text: (productPrice * productQty * 0.23).toFixed(2),
                 alignment: "center",
               },
               {
-                text: productPrice * productQty * 1.23,
+                text: (productPrice * productQty * 1.23).toFixed(2),
                 alignment: "center",
               },
             ],
@@ -528,11 +528,11 @@ export function getInvoiceDefinition(params: Params) {
                           alignment: "center",
                         },
                         {
-                          text: productPrice * productQty * 0.23,
+                          text: (productPrice * productQty * 0.23).toFixed(2),
                           alignment: "center",
                         },
                         {
-                          text: productPrice * productQty * 1.23,
+                          text: (productPrice * productQty * 1.23).toFixed(2),
                           alignment: "center",
                         },
                       ],

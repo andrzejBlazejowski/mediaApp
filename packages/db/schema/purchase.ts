@@ -29,6 +29,7 @@ export const purchasesRelations = relations(purchases, ({ many, one }) => ({
   }),
   user: one(users, { fields: [purchases.userId], references: [users.id] }),
   purchaseItems: many(purchaseItems),
+  media: one(medias, { fields: [purchases.mediaId], references: [medias.id] }),
 }));
 
 export const purchasesInsertSchema = createInsertSchema(purchases);

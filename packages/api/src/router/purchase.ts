@@ -29,6 +29,7 @@ export const purchaseRouter = createTRPCRouter({
       with: {
         purchaseType: true,
         user: true,
+        media: true,
         purchaseItems: {
           with: {
             media: true,
@@ -55,6 +56,7 @@ export const purchaseRouter = createTRPCRouter({
         with: {
           purchaseType: true,
           user: true,
+          media: true,
           purchaseItems: {
             with: {
               media: true,
