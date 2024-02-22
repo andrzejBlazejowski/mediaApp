@@ -29,6 +29,11 @@ export const purchaseRouter = createTRPCRouter({
       with: {
         purchaseType: true,
         user: true,
+        purchaseItems: {
+          with: {
+            media: true,
+          },
+        },
       },
 
       orderBy,

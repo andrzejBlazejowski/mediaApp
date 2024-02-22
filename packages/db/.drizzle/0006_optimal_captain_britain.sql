@@ -1,0 +1,1 @@
+ALTER TABLE `purchases` MODIFY COLUMN `userId` varchar(256) NOT NULL;

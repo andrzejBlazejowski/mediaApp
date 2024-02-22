@@ -32,7 +32,6 @@ export const useFiltering = ({
   );
 
   const onFilterButtonPressed = useCallback(() => {
-    debugger;
     if (onFilter) {
       const headerConfig =
         headersConfig && headersConfig[currentColumnForFilter];

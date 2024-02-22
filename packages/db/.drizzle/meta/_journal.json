@@ -43,6 +43,13 @@
       "when": 1708620449279,
       "tag": "0005_tired_multiple_man",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1708625366908,
+      "tag": "0006_optimal_captain_britain",
+      "breakpoints": true
     }
   ]
 }
