@@ -1,32 +1,45 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
+import { api } from "~/utils/api";
 import { getInvoiceDefinition } from "./definition";
 
 // @ts-ignore
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-export function useInvoiceDoenload(id: string) {
-  const docDefinition = useMemo(
-    () =>
-      getInvoiceDefinition({
-        productName: "string",
-        invoiceNumber: "string",
-        lastDayOfMonthString: "string",
-        paymentDeadline: "string",
-        buyerName: "string",
-        buyerNo: "string",
-        buyerAddress: "string",
-        productQty: 4,
-        productPrice: 3,
-      }),
-    [id],
-  );
+export function useInvoiceDoenload(id: number) {
+  const rawData = api.purchase.byId.useQuery({ id });
 
   const downloadInvoice = useCallback(() => {
-    pdfMake.createPdf(docDefinition).download();
-  }, [docDefinition]);
+    if (rawData && rawData.data) {
+      const {
+        purchaseItems,
+        createdAt,
+        qty,
+        price,
+        user: { name, email, address, accountNo },
+      } = rawData.data;
+      const deadLineDate = new Date(createdAt.getTime());
+
+      deadLineDate.setDate(createdAt.getDate() + 14);
+
+      const docDefinition = getInvoiceDefinition({
+        productName: purchaseItems[0]?.media?.name ?? "",
+        invoiceNumber: `${createdAt.getFullYear()}/${createdAt.getMonth()}/${createdAt.getDay()}/${id}`,
+        buyDate: createdAt.toISOString().slice(0, 10),
+        paymentDeadline: deadLineDate.toISOString().slice(0, 10),
+        buyerName: name ?? email ?? "",
+        buyerNo: accountNo,
+        buyerAddress: address,
+        productQty: qty ?? 1,
+        productPrice: price ?? 1,
+      });
+      pdfMake.createPdf(docDefinition).download();
+    } else {
+      return;
+    }
+  }, [rawData]);
 
   return downloadInvoice;
 }

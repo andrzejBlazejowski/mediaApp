@@ -7,7 +7,7 @@ import { getTransactionsListDefinition } from "./definition";
 // @ts-ignore
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-export function useInvoiceDoenload(id: string) {
+export function usePurchaseListDownload(id: number) {
   const docDefinition = useMemo(
     () =>
       getTransactionsListDefinition({

@@ -3,10 +3,10 @@
 import React from "react";
 import { Button } from "@radix-ui/themes";
 
-import { useInvoiceDoenload } from "./usePurchaseListDownload";
+import { usePurchaseListDownload } from "./usePurchaseListDownload";
 
 export default function Page() {
-  const downloadTransictions = useInvoiceDoenload("string");
+  const downloadTransictions = usePurchaseListDownload(1);
 
   return (
     <>

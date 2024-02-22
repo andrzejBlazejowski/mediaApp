@@ -3,7 +3,7 @@ import { TDocumentDefinitions } from "pdfmake/interfaces";
 interface Params {
   productName: string;
   invoiceNumber: string;
-  lastDayOfMonthString: string;
+  buyDate: string;
   paymentDeadline: string;
   buyerName: string;
   buyerNo: string;
@@ -16,7 +16,7 @@ export function getInvoiceDefinition(params: Params) {
   const {
     productName,
     invoiceNumber,
-    lastDayOfMonthString,
+    buyDate,
     paymentDeadline,
     buyerName,
     buyerNo,
@@ -84,7 +84,7 @@ export function getInvoiceDefinition(params: Params) {
                     body: [
                       [
                         {
-                          text: `Wrocław, ${lastDayOfMonthString}`,
+                          text: `Wrocław, ${buyDate}`,
                           alignment: "center",
                         },
                       ],
@@ -159,7 +159,7 @@ export function getInvoiceDefinition(params: Params) {
                       ],
                       [
                         {
-                          text: lastDayOfMonthString,
+                          text: buyDate,
                           alignment: "center",
                         },
                       ],
