@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { menu } from "@media/db";
+import { invoice } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
 import { useToast } from "~/app/_components/ui/use-toast";
@@ -14,9 +14,9 @@ import { title, uiSchema } from "../constants";
 export default function Page() {
   const utils = api.useUtils();
 
-  const schema = menu.menuTypesInsertSchema;
-  const route = api.menuType;
-  const util = utils.menuType;
+  const schema = invoice.invoicesInsertSchema;
+  const route = api.invoice;
+  const util = utils.invoice;
 
   const invalidate = util.all.invalidate;
   type insetType = typeof schema;
@@ -39,7 +39,6 @@ export default function Page() {
       return result;
     } catch (e) {
       toast({
-        variant: "destructive",
         title: "Action not permited",
         description: "You can not save.",
       });
