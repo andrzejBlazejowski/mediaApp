@@ -11,6 +11,7 @@ import {
   NavigationMenuTrigger,
 } from "@radix-ui/react-navigation-menu";
 import { useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 
 import { cn } from "~/app/_lib";
 import { api } from "~/utils/api";
@@ -245,6 +246,8 @@ const isReadAccess = (val = 0) => {
 export function TopMenu({ children }: { children: JSX.Element }) {
   const { data: session, status } = useSession();
   const userId = session?.user.id ?? "";
+  const { theme, setTheme } = useTheme();
+
   const rawUser = api.user.byId.useQuery({ id: userId });
   const userMenuItems = React.useMemo(() => {
     const privilages = !rawUser.data?.privilage
@@ -279,14 +282,21 @@ export function TopMenu({ children }: { children: JSX.Element }) {
     <NavigationMenu className="relative z-[1] flex w-screen justify-center">
       <Toaster />
 
-      <NavigationMenuList className="center shadow-blackA4 m-0 flex list-none rounded-[6px] bg-white p-1 shadow-[0_2px_10px]">
+      <NavigationMenuList className="center shadow-blackA4 rounded-[6px]p-1 m-0 flex list-none shadow-[0_2px_10px]">
         {Object.entries(userMenuItems).map(([key, components]) => (
           <NavigationMenuItem key={key}>
-            <NavigationMenuTrigger className="text-foreground hover:bg-violet3 focus:shadow-violet7 group flex select-none items-center justify-between gap-[2px] rounded-[4px] px-3 py-2 text-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px]">
+            <NavigationMenuTrigger className="group flex select-none items-center justify-between gap-[2px] rounded-[4px] px-3 py-2 text-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px]">
               {key}
             </NavigationMenuTrigger>
-            <NavigationMenuContent className="bg-background data-[motion=from-start]:animate-enterFromLeft data-[motion=from-end]:animate-enterFromRight data-[motion=to-start]:animate-exitToLeft data-[motion=to-end]:animate-exitToRight absolute left-0 top-0 w-full sm:w-auto">
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+            <NavigationMenuContent className=" absolute left-0 top-0 w-full sm:w-auto">
+              <ul
+                className={
+                  (theme === "dark"
+                    ? "bg-black text-white "
+                    : "bg-slate-50 text-black ") +
+                  "grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] "
+                }
+              >
                 {components.map((component) => (
                   <ListItem
                     key={component.title}
@@ -313,18 +323,18 @@ const ListItem = React.forwardRef<
 >(({ className, title, children, ...props }, ref) => {
   const href = props.href || "/";
   return (
-    <li className="bg-background">
+    <li>
       <NavigationMenuLink asChild>
         <Link
           ref={ref}
           className={cn(
-            "text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
             className,
           )}
           {...props}
           href={href}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
+          <div className="text-sm font-medium leading-none ">{title}</div>
           <p className="line-clamp-2 text-sm leading-snug">{children}</p>
         </Link>
       </NavigationMenuLink>

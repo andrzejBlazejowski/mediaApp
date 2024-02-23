@@ -22,6 +22,7 @@ export function useInvoiceDoenload(id: number) {
         purchaseType,
       } = rawData.data;
       const deadLineDate = new Date(createdAt.getTime());
+      const invoiceNo = `${createdAt.getFullYear()}/${createdAt.getMonth()}/${createdAt.getDay()}/${id}`;
 
       deadLineDate.setDate(createdAt.getDate() + 14);
 
@@ -30,7 +31,7 @@ export function useInvoiceDoenload(id: number) {
           (media?.name ?? "") + " - " + purchaseType?.name ??
           purchaseType?.id ??
           "",
-        invoiceNumber: `${createdAt.getFullYear()}/${createdAt.getMonth()}/${createdAt.getDay()}/${id}`,
+        invoiceNumber: invoiceNo,
         buyDate: createdAt.toISOString().slice(0, 10),
         paymentDeadline: deadLineDate.toISOString().slice(0, 10),
         buyerName: name ?? email ?? "",
@@ -39,7 +40,7 @@ export function useInvoiceDoenload(id: number) {
         productQty: qty ?? 1,
         productPrice: price ?? 1,
       });
-      pdfMake.createPdf(docDefinition).download("invoice");
+      pdfMake.createPdf(docDefinition).download("invoice-" + invoiceNo);
     } else {
       return;
     }

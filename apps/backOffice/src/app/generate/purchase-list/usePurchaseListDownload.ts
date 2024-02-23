@@ -47,7 +47,9 @@ export function usePurchaseListDownload({
         avaragePrice: avaragePrice.toFixed(2).toString(),
         products,
       });
-      pdfMake.createPdf(docDefinition).download("transactions-list");
+      pdfMake
+        .createPdf(docDefinition)
+        .download("transactions-list-" + dateFrom + "_" + dateTo);
     } else {
       toast({
         title: "no data to print ",

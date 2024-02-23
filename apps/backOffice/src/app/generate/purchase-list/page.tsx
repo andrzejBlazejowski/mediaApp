@@ -8,8 +8,14 @@ import { Input } from "~/app/_components/ui/input";
 import { usePurchaseListDownload } from "./usePurchaseListDownload";
 
 export default function Page() {
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
+  const dateFromDate = new Date(Date.now());
+  dateFromDate.setMonth(dateFromDate.getMonth() - 1);
+  const dateToDate = new Date(Date.now());
+
+  const [dateFrom, setDateFrom] = useState(
+    dateFromDate.toISOString().substr(0, 10),
+  );
+  const [dateTo, setDateTo] = useState(dateToDate.toISOString().substr(0, 10));
   const downloadTransictions = usePurchaseListDownload({ dateFrom, dateTo });
 
   return (

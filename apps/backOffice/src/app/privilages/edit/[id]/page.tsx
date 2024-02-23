@@ -188,18 +188,27 @@ export default function Page() {
           <Table.Root>
             <Table.Header>
               <Table.Row key="privilage_header">
-                <TableHeader key="header_privilageName">
+                <Table.ColumnHeaderCell key="header_privilageName">
                   Privilege Name
-                </TableHeader>
-                <TableHeader className="text-center" key="header_read">
+                </Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell
+                  className="text-center"
+                  key="header_read"
+                >
                   read
-                </TableHeader>
-                <TableHeader className="text-center" key="header_write">
+                </Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell
+                  className="text-center"
+                  key="header_write"
+                >
                   write
-                </TableHeader>
-                <TableHeader className="text-center" key="header_delete">
+                </Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell
+                  className="text-center"
+                  key="header_delete"
+                >
                   delete
-                </TableHeader>
+                </Table.ColumnHeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>

@@ -38,13 +38,15 @@ export default async function Layout({
                   <AuthButtons />
                 </TopMenu>
 
-                {session ? (
-                  children
-                ) : (
-                  <h1 className="ml-36 mt-36 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                    Please log in.
-                  </h1>
-                )}
+                <div className="container pt-10">
+                  {session ? (
+                    children
+                  ) : (
+                    <h1 className="ml-36 mt-36 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                      Please log in.
+                    </h1>
+                  )}
+                </div>
               </TRPCReactProvider>
             </ThemeProvider>
           </Theme>
