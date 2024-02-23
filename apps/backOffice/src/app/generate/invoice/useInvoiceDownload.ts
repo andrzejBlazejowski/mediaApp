@@ -14,7 +14,6 @@ export function useInvoiceDoenload(id: number) {
   const downloadInvoice = useCallback(() => {
     if (rawData && rawData.data) {
       const {
-        purchaseItems,
         media,
         createdAt,
         qty,
@@ -40,7 +39,7 @@ export function useInvoiceDoenload(id: number) {
         productQty: qty ?? 1,
         productPrice: price ?? 1,
       });
-      pdfMake.createPdf(docDefinition).download();
+      pdfMake.createPdf(docDefinition).download("invoice");
     } else {
       return;
     }
