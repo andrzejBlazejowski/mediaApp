@@ -1,5 +1,5 @@
 import type { AnyColumn } from "drizzle-orm";
-import { and, asc, desc, eq, gt, lt } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -60,8 +60,8 @@ export const purchaseRouter = createTRPCRouter({
       const { dateFrom, dateTo } = input;
       return ctx.db.query.purchases.findMany({
         where: and(
-          gt(schemaTable.createdAt, new Date(dateFrom)),
-          lt(schemaTable.createdAt, new Date(dateTo)),
+          gte(schemaTable.createdAt, new Date(dateFrom)),
+          lte(schemaTable.createdAt, new Date(dateTo)),
         ),
         with: {
           purchaseType: true,

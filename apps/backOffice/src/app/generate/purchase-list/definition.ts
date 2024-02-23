@@ -6,11 +6,14 @@ interface Params {
   dateTo: string;
   itemsCount: string;
   avaragePrice: string;
-  no: string;
-  date: string;
-  name: string;
-  price: string;
-  qty: string;
+  products: {
+    no: string;
+    date: string;
+    name: string;
+    price: string;
+    qty: string;
+    totalPrice: string;
+  }[];
   totalPrice: string;
 }
 
@@ -22,12 +25,17 @@ export function getTransactionsListDefinition(params: Params) {
     totalPrice,
     itemsCount,
     avaragePrice,
-    no,
-    date,
-    name,
-    price,
-    qty,
+    products,
   } = params;
+
+  const formatedProducts = products.reduce(
+    (acc, { no, date, name, price, qty, totalPrice }) => {
+      acc.push([no, date, name, price, qty, totalPrice]);
+      return acc;
+    },
+    [] as string[][],
+  );
+  // debugger;
 
   var dd: TDocumentDefinitions = {
     content: [
@@ -103,7 +111,7 @@ export function getTransactionsListDefinition(params: Params) {
                 style: "tableHeader",
               },
             ],
-            [no, date, name, price, qty, totalPrice],
+            ...formatedProducts,
           ],
         },
       },

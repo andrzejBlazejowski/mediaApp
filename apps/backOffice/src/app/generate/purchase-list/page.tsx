@@ -11,7 +11,6 @@ export default function Page() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const downloadTransictions = usePurchaseListDownload({ dateFrom, dateTo });
-  console.log(dateFrom);
 
   return (
     <>
