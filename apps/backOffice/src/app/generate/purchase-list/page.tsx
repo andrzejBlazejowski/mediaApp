@@ -10,7 +10,7 @@ import { usePurchaseListDownload } from "./usePurchaseListDownload";
 export default function Page() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
-  const downloadTransictions = usePurchaseListDownload(1);
+  const downloadTransictions = usePurchaseListDownload({ dateFrom, dateTo });
   console.log(dateFrom);
 
   return (

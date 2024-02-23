@@ -1,16 +1,25 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
+import { api } from "~/utils/api";
 import { getTransactionsListDefinition } from "./definition";
 
 // @ts-ignore
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-export function usePurchaseListDownload(id: number) {
-  const docDefinition = useMemo(
-    () =>
-      getTransactionsListDefinition({
+export function usePurchaseListDownload({
+  dateFrom,
+  dateTo,
+}: {
+  dateFrom: string;
+  dateTo: string;
+}) {
+  const rawData = api.purchase.byId.useQuery({ id });
+
+  const downloadTransiction = useCallback(() => {
+    if (rawData && rawData.data) {
+      const docDefinition = getTransactionsListDefinition({
         generationDate: "string",
         dateFrom: "string",
         dateTo: "string",
@@ -22,13 +31,12 @@ export function usePurchaseListDownload(id: number) {
         name: "string",
         price: "string",
         qty: "string",
-      }),
-    [id],
-  );
-
-  const downloadTransiction = useCallback(() => {
-    pdfMake.createPdf(docDefinition).download();
-  }, [docDefinition]);
+      });
+      pdfMake.createPdf(docDefinition).download();
+    } else {
+      return;
+    }
+  }, [docDefinition, dateFrom, dateTo]);
 
   return downloadTransiction;
 }
