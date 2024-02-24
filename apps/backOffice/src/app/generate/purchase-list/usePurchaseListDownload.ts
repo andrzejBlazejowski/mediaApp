@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
-import { useToast } from "~/app/_components/ui/use-toast";
 import { api } from "~/utils/api";
 import { getTransactionsListDefinition } from "./definition";
 
@@ -17,7 +16,6 @@ export function usePurchaseListDownload({
   dateTo: string;
 }) {
   const rawData = api.purchase.getByDateRange.useQuery({ dateFrom, dateTo });
-  const { toast } = useToast();
 
   const downloadTransiction = useCallback(() => {
     if (rawData && rawData.data && rawData.data.length > 0) {
@@ -51,10 +49,7 @@ export function usePurchaseListDownload({
         .createPdf(docDefinition)
         .download("transactions-list-" + dateFrom + "_" + dateTo);
     } else {
-      toast({
-        title: "no data to print ",
-        description: "You have selected wgond date range.",
-      });
+      alert("You have selected wgond date range.");
       return;
     }
   }, [rawData]);

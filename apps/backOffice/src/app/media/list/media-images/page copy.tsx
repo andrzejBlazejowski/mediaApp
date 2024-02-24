@@ -57,11 +57,7 @@ export default function Page() {
           await deleteRow.mutateAsync(id);
           await invalidate();
         } catch (e) {
-          toast({
-            variant: "destructive",
-            title: "Action not permited",
-            description: "You can not delete.",
-          });
+          alert("You can not delete.");
         }
       },
     } as TableViewProps;

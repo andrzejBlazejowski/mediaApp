@@ -16,7 +16,6 @@ import { useTheme } from "next-themes";
 import { cn } from "~/app/_lib";
 import { api } from "~/utils/api";
 import { ThemeToggle } from "../ThemeToggle";
-import { Toaster } from "../ui/toaster";
 
 export type MenuComponents = Record<string, MenuComponent[]>;
 
@@ -280,8 +279,6 @@ export function TopMenu({ children }: { children: JSX.Element }) {
 
   return (
     <NavigationMenu className="relative z-[1] flex w-screen justify-center">
-      <Toaster />
-
       <NavigationMenuList className="center shadow-blackA4 rounded-[6px]p-1 m-0 flex list-none shadow-[0_2px_10px]">
         {Object.entries(userMenuItems).map(([key, components]) => (
           <NavigationMenuItem key={key}>
