@@ -214,7 +214,10 @@ export function TableView({
                 </TableCell>
               ))}
               {!isLookupMode && (
-                <TableCell key="actions" className="font-medium">
+                <TableCell
+                  key="actions"
+                  className="flex space-x-4 font-medium "
+                >
                   <Button
                     className=" mr-2"
                     onClick={() => {

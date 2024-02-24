@@ -6,6 +6,7 @@ import { InputTypes } from "../FormView/FormView.types";
 import SelectForeignKey from "../FormView/SelectForeignKey/SelectForeignKey";
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
+import { useFormFieldName } from "./useFormFieldName";
 
 interface formItemProps {
   field: IFeield;
@@ -21,35 +22,38 @@ export const FormViewItem = ({
   type,
   register,
   isLabelVisible = true,
-}: formItemProps) => (
-  <FormItem className={classes}>
-    {isLabelVisible && <FormLabel>{field.name}</FormLabel>}
-    {type === InputTypes.foreignKey ? (
-      <SelectForeignKey
-        foreignKey={field.name}
-        defaultValue={field.value}
-        onValueChange={field.onChange}
-      />
-    ) : (
-      <FormControl>
-        {type === InputTypes.textArea ? (
-          <TextArea className="block w-full" {...field} />
-        ) : (
-          <Input
-            {...field}
-            type={getHtmlInputType(type)}
-            {...(type === InputTypes.checkbox &&
-              field.value && { checked: true })}
-            {...(getHtmlInputType(type) === "number" && register
-              ? register(field.name, { valueAsNumber: true })
-              : {})}
-          />
-        )}
-      </FormControl>
-    )}
-    <FormMessage />
-  </FormItem>
-);
+}: formItemProps) => {
+  const name = useFormFieldName(field.name);
+  return (
+    <FormItem className={classes}>
+      {isLabelVisible && <FormLabel className="block ">{name}</FormLabel>}
+      {type === InputTypes.foreignKey ? (
+        <SelectForeignKey
+          foreignKey={field.name}
+          defaultValue={field.value}
+          onValueChange={field.onChange}
+        />
+      ) : (
+        <FormControl>
+          {type === InputTypes.textArea ? (
+            <TextArea className="block w-full" {...field} />
+          ) : (
+            <Input
+              {...field}
+              type={getHtmlInputType(type)}
+              {...(type === InputTypes.checkbox &&
+                field.value && { checked: true })}
+              {...(getHtmlInputType(type) === "number" && register
+                ? register(field.name, { valueAsNumber: true })
+                : {})}
+            />
+          )}
+        </FormControl>
+      )}
+      <FormMessage />
+    </FormItem>
+  );
+};
 
 function getHtmlInputType(type: InputTypes = InputTypes.text) {
   switch (type) {

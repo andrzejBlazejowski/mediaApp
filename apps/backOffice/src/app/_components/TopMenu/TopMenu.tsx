@@ -195,17 +195,17 @@ const menuItems: MenuComponents = {
       href: "/menu/link-images",
     },
   ],
-  purcchase: [
+  purchase: [
     {
-      title: "purcchase",
+      title: "purchase",
       href: "/purcchase",
     },
     {
-      title: "purcchase items",
+      title: "purchase items",
       href: "/purcchase/items",
     },
     {
-      title: "purcchase types",
+      title: "purchase types",
       href: "/purcchase/types",
     },
     {
@@ -273,7 +273,7 @@ export function TopMenu({ children }: { children: JSX.Element }) {
       menuItem.dictionary = menuItems.dictionary || [];
     if (isReadAccess(privilages.menu)) menuItem.menu = menuItems.menu || [];
     if (isReadAccess(privilages.purcchase))
-      menuItem.purcchase = menuItems.purcchase || [];
+      menuItem.purchase = menuItems.purchase || [];
 
     return menuItem;
   }, [rawUser]);
