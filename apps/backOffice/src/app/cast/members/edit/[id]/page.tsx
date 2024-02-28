@@ -9,6 +9,7 @@ import * as z from "zod";
 import { cast } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
+import { CastMemberMediaLookup } from "~/app/_components/Lookups";
 import { api } from "~/utils/api";
 import { title, uiSchema } from "../../constants";
 
@@ -49,6 +50,8 @@ export default function Page() {
     }
   };
 
+  const key = "castMemberId";
+
   return (
     <FormView
       type="edit"
@@ -57,6 +60,8 @@ export default function Page() {
       onSubmit={onSubmit}
       uiSchema={uiSchema}
       zSchema={schema}
-    />
+    >
+      <CastMemberMediaLookup invalidate={invalidate} id={id} mainKey={key} />
+    </FormView>
   );
 }

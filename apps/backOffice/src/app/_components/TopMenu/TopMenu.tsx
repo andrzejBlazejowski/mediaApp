@@ -112,7 +112,7 @@ const menuItems: MenuComponents = {
       href: "/cast/roles",
     },
     {
-      title: "media cast memberss",
+      title: "media cast members",
       href: "/cast/media-cast-members",
     },
     {
