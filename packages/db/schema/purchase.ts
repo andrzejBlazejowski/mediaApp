@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { index, int, mysqlTable } from "drizzle-orm/mysql-core";
+import { float, index, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { createInsertSchema } from "drizzle-zod";
 
 import { users } from "./auth";
@@ -11,7 +11,9 @@ export const purchases = mysqlTable(
   {
     purchaseTypeId: int("purchaseTypeId").notNull(),
     mediaId: int("mediaId").notNull(),
-    userId: int("userId").notNull(),
+    userId: varchar("userId", { length: 256 }).notNull(),
+    price: float("price"),
+    qty: int("qty"),
 
     ...baseColumns,
   },
@@ -27,6 +29,7 @@ export const purchasesRelations = relations(purchases, ({ many, one }) => ({
   }),
   user: one(users, { fields: [purchases.userId], references: [users.id] }),
   purchaseItems: many(purchaseItems),
+  media: one(medias, { fields: [purchases.mediaId], references: [medias.id] }),
 }));
 
 export const purchasesInsertSchema = createInsertSchema(purchases);

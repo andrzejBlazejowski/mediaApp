@@ -4,7 +4,6 @@ import React, { useMemo } from "react";
 
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes, TableView } from "~/app/_components/TableView";
-import { useToast } from "~/app/_components/ui/use-toast";
 import {
   useFilter,
   useHeadersConfig,
@@ -15,8 +14,6 @@ import { api } from "~/utils/api";
 import { title } from "./constants";
 
 export default function Page() {
-  const { toast } = useToast();
-
   const initialHeadersConfig = useMemo(
     () => ({
       id: {
@@ -85,12 +82,9 @@ export default function Page() {
       onFilterClear,
 
       onDeleteRow: (id) => {
-        toast({
-          variant: "destructive",
-          title: "Action not permited",
-          description:
-            "You can not delete users, instead, please remove privilages for the user.",
-        });
+        alert(
+          "You can not delete users, instead, please remove privilages for the user.",
+        );
       },
     } as TableViewProps;
   }, [rawData]);

@@ -9,7 +9,7 @@ import * as z from "zod";
 import { cast } from "@media/db";
 
 import FormView from "~/app/_components/FormView/FormView";
-import { useToast } from "~/app/_components/ui/use-toast";
+import { CastMemberMediaLookup } from "~/app/_components/Lookups";
 import { api } from "~/utils/api";
 import { title, uiSchema } from "../../constants";
 
@@ -40,21 +40,17 @@ export default function Page() {
     },
   });
 
-  const { toast } = useToast();
-
   const onSubmit = async (values: z.infer<insetType>) => {
     try {
       const result = await mutateAsync(values);
       await invalidate();
       return result;
     } catch (e) {
-      toast({
-        variant: "destructive",
-        title: "Action not permited",
-        description: "You can not save.",
-      });
+      alert("You can not save.");
     }
   };
+
+  const key = "castMemberId";
 
   return (
     <FormView
@@ -64,6 +60,8 @@ export default function Page() {
       onSubmit={onSubmit}
       uiSchema={uiSchema}
       zSchema={schema}
-    />
+    >
+      <CastMemberMediaLookup invalidate={invalidate} id={id} mainKey={key} />
+    </FormView>
   );
 }

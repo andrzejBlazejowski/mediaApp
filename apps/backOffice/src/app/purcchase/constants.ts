@@ -7,11 +7,19 @@ export const uiSchema = {
     type: InputTypes.foreignKey,
   },
   mediaId: {
-    classes: "w-1/2 inline-block m-2",
+    classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
+  price: {
+    classes: "w-1/4 inline-block m-2",
+    type: InputTypes.number,
+  },
+  qty: {
+    classes: "w-1/4 inline-block m-2",
+    type: InputTypes.number,
+  },
   userId: {
-    classes: "w-1/2 inline-block m-2",
+    classes: "w-1/4 inline-block m-2",
     type: InputTypes.foreignKey,
   },
 } as IuiSchema;

@@ -3,7 +3,6 @@ import { useMemo } from "react";
 
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes } from "~/app/_components/TableView";
-import { useToast } from "~/app/_components/ui/use-toast";
 import {
   useFilter,
   useHeadersConfig,
@@ -23,8 +22,6 @@ export const useMediaCategoty = ({
   setLookupData?: Dispatch<any>;
 }) => {
   const utils = api.useUtils();
-
-  const { toast } = useToast();
 
   const initialHeadersConfig = useMemo(
     () => ({
@@ -100,11 +97,7 @@ export const useMediaCategoty = ({
           await deleteRow.mutateAsync(id);
           await invalidate();
         } catch (e) {
-          toast({
-            variant: "destructive",
-            title: "Action not permited",
-            description: "You can not delete.",
-          });
+          alert("You can not delete.");
         }
       },
     } as TableViewProps;

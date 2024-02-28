@@ -5,8 +5,12 @@ import { useMemo } from "react";
 
 import type { TableViewProps } from "~/app/_components/TableView";
 import { SortTypes } from "~/app/_components/TableView";
-import { useToast } from "~/app/_components/ui/use-toast";
-import { useFilter, useHeadersConfig,useRedirectOnUnauthorized, useSort } from "~/app/_lib/hooks";
+import {
+  useFilter,
+  useHeadersConfig,
+  useRedirectOnUnauthorized,
+  useSort,
+} from "~/app/_lib/hooks";
 import { api } from "~/utils/api";
 import { title } from "./constants";
 
@@ -20,8 +24,6 @@ export const useMediaCastMembers = ({
   setLookupData?: Dispatch<any>;
 }) => {
   const utils = api.useUtils();
-
-  const { toast } = useToast();
 
   const initialHeadersConfig = useMemo(
     () => ({
@@ -98,11 +100,7 @@ export const useMediaCastMembers = ({
           await deleteRow.mutateAsync(id);
           await invalidate();
         } catch (e) {
-          toast({
-            variant: "destructive",
-            title: "Action not permited",
-            description: "You can not delete.",
-          });
+          alert("You can not delete.");
         }
       },
     } as TableViewProps;

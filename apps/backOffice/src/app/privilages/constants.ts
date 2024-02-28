@@ -5,6 +5,7 @@ export const uiSchema = {
   name: {
     classes: "w-1/4 inline-block m-2",
     type: InputTypes.text,
+    label: "Name",
   },
   id: {
     classes: "w-1/4 inline-block m-2",

@@ -29,7 +29,7 @@ export function useDetailsData(id: number | string) {
       const { firstName, middleName, lastName, birthDate, deathDate, sex } =
         castMember.person ?? {};
       return {
-        name: `${firstName}, ${middleName}, ${lastName}`,
+        name: `${firstName ?? ""}, ${middleName ?? ""}, ${lastName ?? ""}`,
         id: id,
         role: mediaCastMember?.castMember?.castRole?.name,
         image: castMember?.castMemberImage.image.url ?? "",

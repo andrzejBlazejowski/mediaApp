@@ -67,13 +67,23 @@ export default function DetailsPage() {
                       title={castMember.name}
                     />
                     <Card.Content>
-                      <Text variant="bodySmall">{castMember.role}</Text>
-                      <Text variant="bodySmall">{castMember.gender}</Text>
-                      <Text variant="bodySmall">{castMember.birthDate}</Text>
+                      {castMember.role && (
+                        <Text variant="bodySmall">{castMember.role}</Text>
+                      )}
+                      {castMember.gender && (
+                        <Text variant="bodySmall">
+                          {castMember.gender === "1" ? "female" : "male"}
+                        </Text>
+                      )}
+                      {castMember.birthDate && (
+                        <Text variant="bodySmall">{castMember.birthDate}</Text>
+                      )}
                       {castMember.deathDate && (
                         <Text variant="bodySmall">{castMember.deathDate}</Text>
                       )}
-                      <Text variant="bodySmall">{castMember.country}</Text>
+                      {castMember.country && (
+                        <Text variant="bodySmall">{castMember.country}</Text>
+                      )}
                     </Card.Content>
                   </Card>
                 ))}

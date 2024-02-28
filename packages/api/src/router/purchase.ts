@@ -1,5 +1,5 @@
 import type { AnyColumn } from "drizzle-orm";
-import { asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { z } from "zod";
 
 import { schema } from "@media/db";
@@ -29,6 +29,12 @@ export const purchaseRouter = createTRPCRouter({
       with: {
         purchaseType: true,
         user: true,
+        media: true,
+        purchaseItems: {
+          with: {
+            media: true,
+          },
+        },
       },
 
       orderBy,
@@ -42,6 +48,33 @@ export const purchaseRouter = createTRPCRouter({
       }),
     });
   }),
+  getByDateRange: permitedProcedure
+    .input(
+      z.object({
+        dateFrom: z.string(),
+        dateTo: z.string(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      const schemaTable = schema.purchases;
+      const { dateFrom, dateTo } = input;
+      return ctx.db.query.purchases.findMany({
+        where: and(
+          gte(schemaTable.createdAt, new Date(dateFrom)),
+          lte(schemaTable.createdAt, new Date(dateTo)),
+        ),
+        with: {
+          purchaseType: true,
+          user: true,
+          media: true,
+          purchaseItems: {
+            with: {
+              media: true,
+            },
+          },
+        },
+      });
+    }),
   byId: permitedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
@@ -50,7 +83,12 @@ export const purchaseRouter = createTRPCRouter({
         with: {
           purchaseType: true,
           user: true,
-          purchaseItems: true,
+          media: true,
+          purchaseItems: {
+            with: {
+              media: true,
+            },
+          },
         },
       });
     }),

@@ -57,6 +57,7 @@ export default function Page() {
               id: { value: row.id.toString() },
               name: { value: row.name },
               description: { value: row.description },
+              menu: { value: row.menu?.name ?? "" },
             };
           });
     return {
@@ -68,11 +69,7 @@ export default function Page() {
           await deleteRow.mutateAsync(id);
           await invalidate();
         } catch (e) {
-          toast({
-            variant: "destructive",
-            title: "Action not permited",
-            description: "You can not delete.",
-          });
+          alert("You can not delete.");
         }
       },
     } as TableViewProps;
